@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v2";
+  const STORAGE_KEY = "pr_cases_v3";
   const AUTH_KEY = "pr_auth_v1";
   // SHA-256("mose2026") — demo only, not bank-grade
   const PASS_HASH = "7074818e3f7915a08a954e030e3e2adfafb6a568f631e9c097f20842205b5dd4";
@@ -13,6 +13,8 @@
     FX: "#059669",
     Deposit: "#0284c7",
     Insurance: "#e11d48",
+    swap: "#0e7490",
+    Swap: "#0e7490",
   };
   const TYPE_LABELS = {
     zh: {
@@ -22,6 +24,8 @@
       FX: "外匯",
       Deposit: "定期存款",
       Insurance: "保險",
+      swap: "保本高息",
+      Swap: "保本高息",
       Maturity: "到期",
       Coupon: "派息／票息",
       Rebalance: "再平衡",
@@ -36,12 +40,30 @@
       FX: "FX",
       Deposit: "Deposit",
       Insurance: "Insurance",
+      swap: "Swap",
+      Swap: "Swap",
       Maturity: "Maturity",
       Coupon: "Coupon",
       Rebalance: "Rebalance",
       "Insurance Gap": "Insurance Gap",
       Cash: "Cash",
       Other: "Other",
+    },
+    "zh-Hans": {
+      Fund: "基金",
+      Stock: "股票",
+      ELN: "股票挂钩",
+      FX: "外汇",
+      Deposit: "定期存款",
+      Insurance: "保险",
+      swap: "保本高息",
+      Swap: "保本高息",
+      Maturity: "到期",
+      Coupon: "派息／票息",
+      Rebalance: "再平衡",
+      "Insurance Gap": "保障缺口",
+      Cash: "现金",
+      Other: "其他",
     },
   };
 
@@ -212,7 +234,10 @@
   };
 
   function t(key) {
-    return I18N[state.lang][key] || key;
+    const pack = I18N[state.lang] || I18N.zh;
+    if (pack[key] != null) return pack[key];
+    if (state.lang === "zh-Hans" && I18N.zh[key] != null) return I18N.zh[key];
+    return key;
   }
 
   function typeLabel(type) {
@@ -264,7 +289,11 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length >= 2) {
+        if (
+          Array.isArray(parsed) &&
+          parsed.length >= 2 &&
+          parsed.some((c) => c.id === "demo-hong-yiu")
+        ) {
           state.cases = parsed;
           return;
         }
@@ -333,9 +362,17 @@
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
       el.placeholder = t(el.getAttribute("data-i18n-placeholder"));
     });
+    const nextLangLabel = state.lang === "zh" ? "EN" : state.lang === "en" ? "简" : "繁";
+    document.querySelectorAll("#btnLang, #btnLoginLang").forEach((btn) => {
+      if (btn) btn.textContent = nextLangLabel;
+    });
     const cm = document.getElementById("btnClientMode");
-    cm.textContent = state.clientMode ? t("clientModeOn") : t("clientMode");
-    cm.classList.toggle("active-toggle", state.clientMode);
+    if (cm) {
+      cm.textContent = state.clientMode ? t("clientModeOn") : t("clientMode");
+      cm.classList.toggle("active-toggle", state.clientMode);
+    }
+    document.documentElement.lang =
+      state.lang === "en" ? "en" : state.lang === "zh-Hans" ? "zh-Hans" : "zh-Hant";
   }
 
   function renderCaseSelect() {
@@ -982,24 +1019,32 @@
     if ((h.pnl_pct == null || isNaN(h.pnl_pct)) && h.cost_value) {
       h.pnl_pct = (h.pnl_value / h.cost_value) * 100;
     }
-    const valid = ["Fund", "Stock", "ELN", "FX", "Deposit", "Insurance"];
+    const valid = ["Fund", "Stock", "ELN", "FX", "Deposit", "Insurance", "swap", "Swap"];
     if (!valid.includes(h.type)) {
       const map = {
         基金: "Fund",
         股票: "Stock",
         股票掛鈎: "ELN",
+        股票挂钩: "ELN",
         外匯: "FX",
+        外汇: "FX",
         定期: "Deposit",
         定期存款: "Deposit",
         保險: "Insurance",
+        保险: "Insurance",
+        保本高息: "swap",
+        Swap: "swap",
+        SWAP: "swap",
       };
       h.type = map[h.type] || "Fund";
+    } else if (h.type === "Swap") {
+      h.type = "swap";
     }
   }
 
   function wireEvents() {
     document.getElementById("btnLang").addEventListener("click", () => {
-      state.lang = state.lang === "zh" ? "en" : "zh";
+      state.lang = state.lang === "zh" ? "en" : state.lang === "en" ? "zh-Hans" : "zh";
       renderAll();
     });
 
@@ -1104,7 +1149,7 @@
     });
 
     document.getElementById("btnLoginLang").addEventListener("click", () => {
-      state.lang = state.lang === "zh" ? "en" : "zh";
+      state.lang = state.lang === "zh" ? "en" : state.lang === "en" ? "zh-Hans" : "zh";
       applyI18n();
     });
 

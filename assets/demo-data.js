@@ -1,6 +1,30 @@
 /* Multi-client demo portfolios — overlapping products for cross-client search */
 window.PR_DEMO_CASES = [
   {
+    id: "demo-hong-yiu",
+    client_id: "****4935",
+    // Full Notion client no. masked above for public UI; internal ref ends …4935
+    display_name: "匡耀",
+    display_name_en: "Hong Yiu",
+    review_date: "2026-10-10",
+    rm_name: "Mose Lee",
+    currency: "HKD",
+    risk_profile: "Balanced",
+    risk_profile_zh: "均衡型",
+    notes: "持倉為示範拆分；Notion 目前只有總資產與一筆 swap 銷售記錄，實際明細待匯入。跟進保本高息 Swap。",
+    holdings: [
+      { product_name: "保本高息 Swap", type: "swap", quantity: 1, cost_value: 8100000, market_value: 8250000, day_change_pct: 0.08, pnl_value: 150000, pnl_pct: 1.85, currency: "HKD" },
+      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 6200000, cost_value: 6150000, market_value: 6200000, day_change_pct: 0.01, pnl_value: 50000, pnl_pct: 0.81, currency: "HKD" },
+      { product_name: "環球多元資產基金 A", type: "Fund", quantity: 24000, cost_value: 4800000, market_value: 5100000, day_change_pct: 0.35, pnl_value: 300000, pnl_pct: 6.25, currency: "HKD" },
+      { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 5950, cost_value: 2200000, market_value: 2454544.12, day_change_pct: -1.25, pnl_value: 254544.12, pnl_pct: 11.57, currency: "HKD" },
+      { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 2400000, market_value: 2500000, day_change_pct: 0.05, pnl_value: 100000, pnl_pct: 4.17, currency: "HKD" }
+    ],
+    opportunities: [
+      { id: "hy-o1", title: "保本高息 Swap 產品跟進", category: "Other", due_date: "2026-10-20", priority: "High", amount: 8250000, talking_point: "可討論續作或加碼保本高息結構；留意利率與條款。", hide_in_client_mode: false, done: false },
+      { id: "hy-o2", title: "Swap 銷售紀錄跟進（RM）", category: "Other", due_date: "2026-10-09", priority: "Medium", amount: 31162, talking_point: "Notion REV：2026-10-09 錄得 swap 相關收入 HKD 31,162（內部數字，勿向客戶展示）。", hide_in_client_mode: true, done: false }
+    ]
+  },
+  {
     id: "demo-chen",
     client_id: "C-2024-0188",
     display_name: "陳先生",

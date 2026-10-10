@@ -36,7 +36,7 @@ Notion (CRM)  →  Excel (prices / P&L)  →  CSV export  →  This web app (cli
 |-------|------|-------|
 | Product Name | Title | e.g. 環球股票基金 A |
 | Client | Relation → Clients | |
-| Type | Select | Fund / Stock / ELN / FX / Deposit / Insurance |
+| Type | Select | Fund / Stock / ELN / FX / Deposit / Insurance / **swap** (保本高息) |
 | Ticker / Code | Text | For price lookup (stocks/ETFs) |
 | Quantity / Notional | Number | Units or notional amount |
 | Currency | Select | |
@@ -109,6 +109,7 @@ Recommended sheet `Holdings_Prices` (one row per holding):
 | FX | Spot from Sheets / bank board |
 | Time deposit | Par / accrued; no market mark usually |
 | Insurance | Cash value from illustration / insurer statement |
+| swap / 保本高息 | Bank / desk MTM or structured-product quote — usually manual |
 
 ---
 
@@ -154,7 +155,18 @@ client_id,display_name,product_name,type,quantity,cost_value,market_value,day_ch
 C-2024-0188,陳先生,騰訊控股,Stock,2000,580000,824800,-1.25,244800,42.21,HKD
 ```
 
-Types must be one of: `Fund`, `Stock`, `ELN`, `FX`, `Deposit`, `Insurance`.
+Types must be one of: `Fund`, `Stock`, `ELN`, `FX`, `Deposit`, `Insurance`, `swap`.
+
+| Key | EN | 繁中 | 简中 |
+|-----|----|------|------|
+| Fund | Fund | 基金 | 基金 |
+| Stock | Stock | 股票 | 股票 |
+| ELN | ELN | 股票掛鈎 | 股票挂钩 |
+| FX | FX | 外匯 | 外汇 |
+| Deposit | Deposit | 定期存款 | 定期存款 |
+| Insurance | Insurance | 保險 | 保险 |
+| **swap** | Swap | 保本高息 | 保本高息 |
+
 
 ---
 
@@ -187,3 +199,11 @@ Demo overlapping products (see `assets/demo-data.js`):
 | 美金定期存款 5.1% 3M | 陳先生, 李太太, 何先生 |
 | 美股掛鈎票據 12M (NVDA) | 陳先生, 王女士, 何先生 |
 | 萬用壽險（現金價值） | 陳先生, 何先生 |
+
+
+## Demo client: Hong Yiu / 匡耀
+
+- Display: Hong Yiu / 匡耀
+- Client no. on UI: masked `****4935` (do not publish full account numbers)
+- Notion TOTAL AMT ≈ HKD 24,504,544 — holdings in demo are a **placeholder split** including one `swap` line「保本高息 Swap」; real line-level detail pending CSV/Notion import
+- REV note (RM-only opportunity): swap-related revenue recorded 2026-10-09 — hidden in client mode

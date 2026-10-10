@@ -42,3 +42,12 @@ opportunity,priority,High
 opportunity,amount,2000000
 opportunity,talking_point,可談續存或轉短債
 opportunity,hide_in_client_mode,false
+holding,product_name,保本高息 Swap 示範
+holding,type,swap
+holding,quantity,1
+holding,cost_value,3000000
+holding,market_value,3045000
+holding,day_change_pct,0.05
+holding,pnl_value,45000
+holding,pnl_pct,1.50
+holding,currency,HKD

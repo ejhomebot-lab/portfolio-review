@@ -418,6 +418,7 @@ table.holdings td.num { text-align: right; }
 .type-FX { background: #ecfdf5; color: #065f46; }
 .type-Deposit { background: #e0f2fe; color: #075985; }
 .type-Insurance { background: #ffe4e6; color: #9f1239; }
+.type-swap, .type-Swap { background: #ecfeff; color: #0e7490; }
 
 /* Movers */
 .movers {
