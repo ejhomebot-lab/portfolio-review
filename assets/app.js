@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v7";
+  const STORAGE_KEY = "pr_cases_v8";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
@@ -632,6 +632,7 @@
               (c.holdings || []).some((h) => h.fdId === "ETNSI36463")
           ) &&
           parsed.some((c) => c.id === "demo-lau") &&
+          parsed.some((c) => c.id === "demo-wei-min") &&
           parsed.some((c) => c.segment);
         if (ok) {
           state.cases = parsed;

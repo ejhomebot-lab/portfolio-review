@@ -46,6 +46,72 @@ window.PR_DEMO_CASES = [
     ]
   },
   {
+    id: "demo-wei-min",
+    segment: "Affluent",
+    client_id: "****4578",
+    // Notion client no. masked; ends …4578
+    display_name: "魏敏",
+    display_name_en: "WEI MIN",
+    review_date: "2026-10-10",
+    rm_name: "Mose Lee",
+    currency: "HKD",
+    risk_profile: "Conservative",
+    risk_profile_zh: "保守型",
+    notes: "Notion TOTAL AMT HKD 740,400.18。2026-09-07 認購滙豐超短期債券基金（每月派息）HKD 500,000。ET Wealth／交行列表暫未匹配 fdId，基金資料以銀行頁＋複製名稱為主；市值含示範小幅派息累計。",
+    holdings: [
+      {
+        product_name: "滙豐環球投資基金 — 超短期債券（每月派息）PM2HKD",
+        type: "Fund",
+        fund_code: "PM2HKD",
+        // ISIN LU2334458945 — BOCOM/ET Wealth search returned no fdId mapping
+        quantity: 50000,
+        cost_value: 500000,
+        market_value: 503500,
+        day_change_pct: 0.02,
+        pnl_value: 3500,
+        pnl_pct: 0.7,
+        currency: "HKD",
+        start_date: "2026-09-07",
+        currency_note: "HSBC GIF Ultra Short Duration Bond · monthly dividend"
+      },
+      {
+        product_name: "港元活期／待機資金",
+        type: "Deposit",
+        quantity: 236900.18,
+        cost_value: 236900.18,
+        market_value: 236900.18,
+        day_change_pct: 0,
+        pnl_value: 0,
+        pnl_pct: 0,
+        currency: "HKD"
+      }
+    ],
+    opportunities: [
+      {
+        id: "wm-o1",
+        title: "超短債持倉檢視／續投",
+        category: "Other",
+        due_date: "2026-10-20",
+        priority: "Medium",
+        amount: 500000,
+        talking_point: "滙豐超短期債券基金（每月派息）於 2026-09-07 投入 HKD 50 萬；可討論現金管理與派息再投資。",
+        hide_in_client_mode: false,
+        done: false
+      },
+      {
+        id: "wm-o2",
+        title: "ut（超短債）銷售紀錄（RM）",
+        category: "Other",
+        due_date: "2026-09-04",
+        priority: "Low",
+        amount: 8750,
+        talking_point: "Notion REV：2026-09-04 錄得 ut（超短債）相關收入 HKD 8,750（內部數字，勿向客戶展示）。",
+        hide_in_client_mode: true,
+        done: false
+      }
+    ]
+  },
+  {
     id: "demo-lau",
     segment: "Priority",
     client_id: "C-2026-0088",
