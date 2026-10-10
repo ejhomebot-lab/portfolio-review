@@ -1,0 +1,44 @@
+section,field,value
+meta,client_id,C-2025-0042
+meta,display_name,李太太
+meta,display_name_en,Mrs. Lee (Sample CSV)
+meta,review_date,2026-10-10
+meta,rm_name,Mose Lee
+meta,currency,HKD
+meta,risk_profile,Conservative
+meta,risk_profile_zh,保守型
+meta,notes,CSV 匯入示範個案
+holding,product_name,環球債券基金
+holding,type,Fund
+holding,quantity,5000
+holding,cost_value,1000000
+holding,market_value,1035000
+holding,day_change_pct,0.15
+holding,pnl_value,35000
+holding,pnl_pct,3.50
+holding,currency,HKD
+holding,product_name,港元定期 3.0% 12M
+holding,type,Deposit
+holding,quantity,2000000
+holding,cost_value,2000000
+holding,market_value,2030000
+holding,day_change_pct,0.01
+holding,pnl_value,30000
+holding,pnl_pct,1.50
+holding,currency,HKD
+holding,product_name,友邦保險 (1299.HK)
+holding,type,Stock
+holding,quantity,1000
+holding,cost_value,62000
+holding,market_value,58500
+holding,day_change_pct,-0.60
+holding,pnl_value,-3500
+holding,pnl_pct,-5.65
+holding,currency,HKD
+opportunity,title,港元定期 90 日後到期
+opportunity,category,Maturity
+opportunity,due_date,2027-01-08
+opportunity,priority,High
+opportunity,amount,2000000
+opportunity,talking_point,可談續存或轉短債
+opportunity,hide_in_client_mode,false

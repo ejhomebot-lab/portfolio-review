@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>投資組合檢視 · Portfolio Review</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <!-- Login gate -->
+  <div id="loginGate" class="login-gate" aria-modal="true" role="dialog">
+    <div class="login-card">
+      <div class="login-brand">
+        <div class="brand-mark">PR</div>
+        <div>
+          <strong data-i18n="brandEn">Portfolio Review</strong>
+          <span data-i18n="brandSub">客戶投資組合檢視</span>
+        </div>
+      </div>
+      <h1 data-i18n="loginTitle">登入</h1>
+      <p class="login-hint" data-i18n="loginHint">請輸入密碼以開啟投資組合檢視（示範用，非銀行級保安）</p>
+      <form id="loginForm" autocomplete="off">
+        <label class="login-label" for="loginPassword" data-i18n="password">密碼</label>
+        <input type="password" id="loginPassword" name="password" required autofocus />
+        <p id="loginError" class="login-error hidden" data-i18n="loginError">密碼不正確</p>
+        <button type="submit" class="btn btn-gold login-submit" data-i18n="loginBtn">進入</button>
+      </form>
+      <button type="button" class="btn btn-ghost login-lang" id="btnLoginLang" data-i18n="lang">EN</button>
+    </div>
+  </div>
+
+  <div id="appShell" class="app-shell hidden">
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-mark">PR</div>
+        <div class="brand-text">
+          <strong data-i18n="brandEn">Portfolio Review</strong>
+          <span data-i18n="brandSub">客戶投資組合檢視</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="search-wrap">
+          <input type="search" id="globalSearch" class="search-input"
+                 data-i18n-placeholder="searchPh"
+                 placeholder="搜尋客戶或產品…" autocomplete="off" />
+          <div id="searchDropdown" class="search-dropdown hidden"></div>
+        </div>
+        <button type="button" class="btn btn-ghost" id="btnLang" data-i18n="lang">EN</button>
+        <button type="button" class="btn btn-ghost" id="btnClientMode" data-i18n="clientMode">客戶模式</button>
+        <button type="button" class="btn btn-ghost" id="btnImport" data-i18n="importCsv">匯入 Excel／CSV</button>
+        <button type="button" class="btn btn-gold" id="btnPdf" data-i18n="exportPdf">匯出 PDF</button>
+        <button type="button" class="btn btn-ghost" id="btnLogout" data-i18n="logout">登出</button>
+        <input type="file" id="fileInput" accept=".csv,text/csv" class="hidden" />
+      </div>
+    </div>
+    <nav class="nav-tabs" aria-label="Sections">
+      <button type="button" class="nav-tab active" data-target="#sec-cover">Cover</button>
+      <button type="button" class="nav-tab" data-target="#sec-snap">Snapshot</button>
+      <button type="button" class="nav-tab" data-target="#sec-alloc">Allocation</button>
+      <button type="button" class="nav-tab" data-target="#sec-hold">Holdings</button>
+      <button type="button" class="nav-tab" data-target="#sec-movers">Movers</button>
+      <button type="button" class="nav-tab" data-target="#sec-opp">Opportunities</button>
+      <button type="button" class="nav-tab" data-target="#sec-notes">Notes</button>
+    </nav>
+  </header>
+
+  <main>
+    <div class="case-bar">
+      <label for="caseSelect"><strong data-i18n="caseLabel">個案</strong></label>
+      <select id="caseSelect"></select>
+      <button type="button" class="btn btn-outline btn-sm" id="btnDemo" data-i18n="loadDemo">重載示範</button>
+      <button type="button" class="btn btn-outline btn-sm" id="btnClear" data-i18n="clearCases">清除本機個案</button>
+    </div>
+
+    <div id="clientBanner" class="client-mode-banner hidden" data-i18n="clientBanner">
+      客戶模式：已隱藏內部銷售備註與 RM 專用提示
+    </div>
+
+    <!-- Product holders (cross-client search result) -->
+    <section class="section hidden" id="sec-product-holders">
+      <div class="toolbar" style="margin-bottom:16px">
+        <h2 class="section-title" style="margin:0" id="productHoldersTitle">產品持有人</h2>
+        <button type="button" class="btn btn-outline btn-sm" id="btnCloseHolders" data-i18n="backToReview">返回客戶檢視</button>
+      </div>
+      <p class="holders-sub" id="productHoldersSub"></p>
+      <div class="table-wrap">
+        <table class="holdings">
+          <thead>
+            <tr>
+              <th data-i18n="client">客戶</th>
+              <th data-i18n="colType">類型</th>
+              <th class="num" data-i18n="colQty">數量／名義</th>
+              <th class="num" data-i18n="colMv">市值</th>
+              <th class="num" data-i18n="colPnlPct">盈虧 %</th>
+              <th class="num" data-i18n="colDay">升跌 %</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="productHoldersBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div id="reviewSections">
+    <!-- Cover -->
+    <section class="section cover" id="sec-cover">
+      <div class="cover-grid">
+        <div>
+          <p class="subtitle" data-i18n="coverSub">Portfolio Review · 客戶會議用</p>
+          <h1 data-i18n="coverTitle">投資組合檢視</h1>
+          <div class="meta-list">
+            <div><span class="label" data-i18n="client">客戶</span><strong id="coverName">—</strong></div>
+            <div><span class="label" data-i18n="reviewDate">檢視日期</span><span id="coverDate">—</span></div>
+            <div><span class="label" data-i18n="rm">客戶經理</span><span id="coverRm">—</span></div>
+            <div><span class="label" data-i18n="risk">風險取向</span><span id="coverRisk">—</span></div>
+            <div><span class="label" data-i18n="currency">貨幣</span><span id="coverCcy">—</span></div>
+          </div>
+        </div>
+        <div class="aum-box">
+          <div class="label" data-i18n="aumLabel">管理資產總值 AUM</div>
+          <div class="value" id="coverAum">—</div>
+          <div class="hint" data-i18n="aumHint">持倉市值合計</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-snap">
+      <h2 class="section-title" data-i18n="snapTitle">組合快照</h2>
+      <div class="cards">
+        <div class="card">
+          <div class="label" data-i18n="totalAssets">總資產</div>
+          <div class="value" id="snapAum">—</div>
+        </div>
+        <div class="card">
+          <div class="label" data-i18n="periodPnl">期間盈虧</div>
+          <div class="value" id="snapPnl">—</div>
+          <div class="sub" id="snapPnlSub"></div>
+        </div>
+        <div class="card">
+          <div class="label" data-i18n="dayChg">近期升跌</div>
+          <div class="value" id="snapDay">—</div>
+        </div>
+        <div class="card">
+          <div class="label" data-i18n="holdingCount">持倉數目</div>
+          <div class="value" id="snapCount">—</div>
+          <div class="sub" id="snapCountSub"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-alloc">
+      <h2 class="section-title" data-i18n="allocTitle">資產配置</h2>
+      <div class="alloc-wrap">
+        <div class="donut-wrap">
+          <canvas id="allocChart" width="200" height="200"></canvas>
+          <div class="donut-center">
+            <div>
+              <strong id="donutTotal">—</strong>
+              <span id="donutLabel">合計</span>
+            </div>
+          </div>
+        </div>
+        <div class="legend" id="allocLegend"></div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-hold">
+      <h2 class="section-title" data-i18n="holdingsTitle">持倉明細</h2>
+      <div class="toolbar">
+        <div class="filters" id="typeFilters"></div>
+      </div>
+      <div class="table-wrap">
+        <table class="holdings">
+          <thead>
+            <tr>
+              <th data-sort="product_name"><span data-i18n="colProduct">產品</span><span class="sort-ind">↕</span></th>
+              <th data-sort="type"><span data-i18n="colType">類型</span><span class="sort-ind">↕</span></th>
+              <th data-sort="quantity" class="num"><span data-i18n="colQty">數量／名義</span><span class="sort-ind">↕</span></th>
+              <th data-sort="cost_value" class="num"><span data-i18n="colCost">成本</span><span class="sort-ind">↕</span></th>
+              <th data-sort="market_value" class="num"><span data-i18n="colMv">市值</span><span class="sort-ind">↕</span></th>
+              <th data-sort="pnl_value" class="num"><span data-i18n="colPnl">盈虧 $</span><span class="sort-ind">↕</span></th>
+              <th data-sort="pnl_pct" class="num"><span data-i18n="colPnlPct">盈虧 %</span><span class="sort-ind">↕</span></th>
+              <th data-sort="day_change_pct" class="num"><span data-i18n="colDay">升跌 %</span><span class="sort-ind">↕</span></th>
+            </tr>
+          </thead>
+          <tbody id="holdingsBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="sec-movers">
+      <h2 class="section-title" data-i18n="moversTitle">升跌焦點</h2>
+      <div class="movers">
+        <div class="mover-col">
+          <h3 class="pos">▲ <span data-i18n="gainers">表現較佳</span></h3>
+          <div id="gainersList"></div>
+        </div>
+        <div class="mover-col">
+          <h3 class="neg">▼ <span data-i18n="losers">表現較弱</span></h3>
+          <div id="losersList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="sec-opp">
+      <h2 class="section-title" data-i18n="oppTitle">跟進機會</h2>
+      <div class="opp-list" id="oppList"></div>
+    </section>
+
+    <section class="section" id="sec-notes">
+      <h2 class="section-title" data-i18n="notesTitle">會議備註／下一步</h2>
+      <textarea id="notesArea" class="notes-area" data-i18n-placeholder="notesPlaceholder" placeholder="記錄客戶意向、下次行動…"></textarea>
+    </section>
+    </div><!-- /reviewSections -->
+
+    <p class="disclaimer" data-i18n="disclaimer">
+      本文件只供參考，並非投資建議、要約或招攬。過往表現並不代表將來表現。產品價格、基金 NAV 及結構性產品估值或有延遲或由銀行報價提供。投資涉及風險，請細閱有關銷售文件。資料僅供客戶經理與客戶會面討論之用。
+    </p>
+  </main>
+  </div><!-- /appShell -->
+
+  <div id="toast" class="toast" role="status"></div>
+  <script src="assets/demo-data.js"></script>
+  <script src="assets/app.js"></script>
+</body>
+</html>
