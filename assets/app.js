@@ -740,6 +740,8 @@
     const risk =
       state.lang === "zh" && c.risk_profile_zh ? c.risk_profile_zh : c.risk_profile;
     document.getElementById("coverName").textContent = name;
+    const cidEl = document.getElementById("coverClientId");
+    if (cidEl) cidEl.textContent = c.client_id || "—";
     document.getElementById("coverDate").textContent = c.review_date || "—";
     document.getElementById("coverRm").textContent = c.rm_name || "—";
     document.getElementById("coverRisk").textContent = risk || "—";
