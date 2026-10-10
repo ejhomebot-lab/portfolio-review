@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>投資組合檢視 · Portfolio Review</title>
-  <link rel="stylesheet" href="assets/styles.css?v=18" />
+  <link rel="stylesheet" href="assets/styles.css?v=19" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -56,9 +56,25 @@
         <div class="export-menu-wrap">
           <button type="button" class="btn btn-ghost" id="btnExportMenu" data-i18n="exportReports" aria-haspopup="true" aria-expanded="false">導出報表</button>
           <div id="exportMenu" class="export-menu hidden" role="menu">
+            <div class="export-group" data-i18n="exportGroupCore">核心報表</div>
             <button type="button" class="export-item" data-report="maturity90" role="menuitem" data-i18n="reportMaturity90">未來3個月到期客戶報表</button>
             <button type="button" class="export-item" data-report="funds" role="menuitem" data-i18n="reportFunds">基金報表</button>
             <button type="button" class="export-item" data-report="eln90" role="menuitem" data-i18n="reportEln90">股票掛鈎未來3個月到期</button>
+            <div class="export-group" data-i18n="exportGroupMaturity">到期／產品</div>
+            <button type="button" class="export-item" data-report="swap30" role="menuitem" data-i18n="reportSwap30">Swap 1個月內到期</button>
+            <button type="button" class="export-item" data-report="swap90" role="menuitem" data-i18n="reportSwap90">Swap 3個月內到期</button>
+            <button type="button" class="export-item" data-report="swap180" role="menuitem" data-i18n="reportSwap180">Swap 6個月內到期</button>
+            <button type="button" class="export-item" data-report="depositMat" role="menuitem" data-i18n="reportDeposit">定期存款到期報表</button>
+            <button type="button" class="export-item" data-report="insurance" role="menuitem" data-i18n="reportInsurance">保險跟進報表</button>
+            <div class="export-group" data-i18n="exportGroupRisk">風險／表現</div>
+            <button type="button" class="export-item" data-report="losses" role="menuitem" data-i18n="reportLosses">虧損持倉（P&amp;L&lt;0）</button>
+            <button type="button" class="export-item" data-report="highAum" role="menuitem" data-i18n="reportHighAum">高 AUM／重點客戶排名</button>
+            <button type="button" class="export-item" data-report="pnlRank" role="menuitem" data-i18n="reportPnlRank">期間盈虧排名</button>
+            <button type="button" class="export-item" data-report="concentration" role="menuitem" data-i18n="reportConcentration">產品集中度（超配）</button>
+            <button type="button" class="export-item" data-report="fxExposure" role="menuitem" data-i18n="reportFx">外匯／貨幣敞口</button>
+            <div class="export-group" data-i18n="exportGroupOther">其他</div>
+            <button type="button" class="export-item" data-report="singleProduct" role="menuitem" data-i18n="reportSingle">單一產品持有人</button>
+            <button type="button" class="export-item" data-report="opportunities" role="menuitem" data-i18n="reportOpps">機會清單導出</button>
           </div>
         </div>
         <button type="button" class="btn btn-gold" id="btnPdf" data-i18n="exportPdf">匯出 PDF</button>
@@ -107,6 +123,53 @@
           <span data-i18n="advRisk">風險取向</span>
           <select id="advRisk">
             <option value="">—</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advSegment">客戶層級</span>
+          <select id="advSegment">
+            <option value="">—</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advCurrency">貨幣</span>
+          <select id="advCurrency">
+            <option value="">—</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advPnlSign">盈虧方向</span>
+          <select id="advPnlSign">
+            <option value="" data-i18n="advAny">全部</option>
+            <option value="profit" data-i18n="advPnlProfit">整體盈利</option>
+            <option value="loss" data-i18n="advPnlLoss">整體虧損</option>
+            <option value="hasLoss" data-i18n="advPnlHasLoss">有虧損持倉</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advHasOpp">有跟進機會</span>
+          <select id="advHasOpp">
+            <option value="" data-i18n="advAny">全部</option>
+            <option value="yes" data-i18n="advYes">是</option>
+            <option value="no" data-i18n="advNo">否</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advProductMix">產品組合</span>
+          <select id="advProductMix">
+            <option value="" data-i18n="advAny">全部</option>
+            <option value="single" data-i18n="advMixSingle">單一產品</option>
+            <option value="multi" data-i18n="advMixMulti">多元產品</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advSort">排序</span>
+          <select id="advSort">
+            <option value="aum_desc" data-i18n="advSortAumDesc">AUM 高→低</option>
+            <option value="aum_asc" data-i18n="advSortAumAsc">AUM 低→高</option>
+            <option value="name" data-i18n="advSortName">客戶名稱</option>
+            <option value="pnl_pct" data-i18n="advSortPnl">盈虧 % 高→低</option>
+            <option value="maturity" data-i18n="advSortMaturity">最近到期</option>
           </select>
         </label>
         <label class="adv-field">
@@ -264,8 +327,18 @@
   </main>
   </div><!-- /appShell -->
 
+  <div id="singleProductPicker" class="picker-modal hidden" role="dialog">
+    <div class="picker-card">
+      <h3 data-i18n="reportSinglePick">選擇產品</h3>
+      <select id="singleProductSelect"></select>
+      <div class="adv-actions" style="margin-top:12px">
+        <button type="button" class="btn btn-gold" id="btnSingleProductGo" data-i18n="advApply">套用篩選</button>
+        <button type="button" class="btn btn-outline" id="btnSingleProductCancel" data-i18n="advClear">取消</button>
+      </div>
+    </div>
+  </div>
   <div id="toast" class="toast" role="status"></div>
-  <script src="assets/demo-data.js?v=18"></script>
-  <script src="assets/app.js?v=18"></script>
+  <script src="assets/demo-data.js?v=19"></script>
+  <script src="assets/app.js?v=19"></script>
 </body>
 </html>

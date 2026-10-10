@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v6";
+  const STORAGE_KEY = "pr_cases_v7";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
@@ -191,6 +191,43 @@
       fundAsOf: "估值日",
       fundDiv: "最近派息",
       fundPortalNote: "基金資料經交通銀行香港／環富通公開介面盡力更新 NAV；若瀏覽器限制則顯示快取或僅開啟銀行基金頁。請於銀行頁同意條款後以基金名稱或代碼搜尋（非 ISIN）。",
+      exportGroupCore: "核心報表",
+      exportGroupMaturity: "到期／產品",
+      exportGroupRisk: "風險／表現",
+      exportGroupOther: "其他",
+      reportSwap30: "Swap／保本高息 — 1個月內到期",
+      reportSwap90: "Swap／保本高息 — 3個月內到期",
+      reportSwap180: "Swap／保本高息 — 6個月內到期",
+      reportDeposit: "定期存款到期報表",
+      reportInsurance: "保險跟進報表",
+      reportLosses: "虧損持倉（P&L < 0）",
+      reportHighAum: "高 AUM／重點客戶排名",
+      reportPnlRank: "期間盈虧排名",
+      reportConcentration: "產品集中度（超配）",
+      reportFx: "外匯／貨幣敞口摘要",
+      reportSingle: "單一產品持有人",
+      reportSinglePick: "選擇產品以列出持有人",
+      reportOpps: "機會清單導出",
+      advSegment: "客戶層級",
+      advCurrency: "貨幣",
+      advPnlSign: "盈虧方向",
+      advPnlProfit: "整體盈利",
+      advPnlLoss: "整體虧損",
+      advPnlHasLoss: "有虧損持倉",
+      advHasOpp: "有跟進機會",
+      advYes: "是",
+      advNo: "否",
+      advProductMix: "產品組合",
+      advMixSingle: "單一產品",
+      advMixMulti: "多元產品",
+      advSort: "排序",
+      advSortAumDesc: "AUM 高→低",
+      advSortAumAsc: "AUM 低→高",
+      advSortName: "客戶名稱",
+      advSortPnl: "盈虧 % 高→低",
+      advSortMaturity: "最近到期",
+      colSegment: "層級",
+      colWeight: "佔比 %",
       total: "合計",
     },
     en: {
@@ -310,6 +347,43 @@
       fundAsOf: "As of",
       fundDiv: "Last dividend",
       fundPortalNote: "Fund data is enriched best-effort via BOCOM HK / ET Wealth public APIs. If the browser blocks the request, cached values or the bank portal link are used. On the bank page, agree to terms then search by fund name or fund code (not ISIN).",
+      exportGroupCore: "Core reports",
+      exportGroupMaturity: "Maturity / product",
+      exportGroupRisk: "Risk / performance",
+      exportGroupOther: "Other",
+      reportSwap30: "Swap — mature within 1 month",
+      reportSwap90: "Swap — mature within 3 months",
+      reportSwap180: "Swap — mature within 6 months",
+      reportDeposit: "Time-deposit maturities",
+      reportInsurance: "Insurance follow-ups",
+      reportLosses: "Loss-making holdings (P&L < 0)",
+      reportHighAum: "High AUM / key clients",
+      reportPnlRank: "Period P&L ranking",
+      reportConcentration: "Concentration (overweight types)",
+      reportFx: "FX / currency exposure",
+      reportSingle: "Single-product holders",
+      reportSinglePick: "Pick a product to list holders",
+      reportOpps: "Opportunities checklist",
+      advSegment: "Segment",
+      advCurrency: "Currency",
+      advPnlSign: "P&L direction",
+      advPnlProfit: "Overall profit",
+      advPnlLoss: "Overall loss",
+      advPnlHasLoss: "Has losing holding",
+      advHasOpp: "Has opportunity",
+      advYes: "Yes",
+      advNo: "No",
+      advProductMix: "Product mix",
+      advMixSingle: "Single product",
+      advMixMulti: "Multi product",
+      advSort: "Sort by",
+      advSortAumDesc: "AUM high→low",
+      advSortAumAsc: "AUM low→high",
+      advSortName: "Client name",
+      advSortPnl: "P&L % high→low",
+      advSortMaturity: "Nearest maturity",
+      colSegment: "Segment",
+      colWeight: "Weight %",
       total: "Total",
     },
   };
@@ -409,6 +483,43 @@
     fundAsOf: "估值日",
     fundDiv: "最近派息",
     fundPortalNote: "基金资料经交通银行香港／环富通公开接口尽力更新 NAV；若浏览器限制则显示缓存或仅打开银行基金页。请于银行页同意条款后以基金名称或代码搜寻（非 ISIN）。",
+    exportGroupCore: "核心报表",
+    exportGroupMaturity: "到期／产品",
+    exportGroupRisk: "风险／表现",
+    exportGroupOther: "其他",
+    reportSwap30: "Swap／保本高息 — 1个月内到期",
+    reportSwap90: "Swap／保本高息 — 3个月内到期",
+    reportSwap180: "Swap／保本高息 — 6个月内到期",
+    reportDeposit: "定期存款到期报表",
+    reportInsurance: "保险跟进报表",
+    reportLosses: "亏损持仓（P&L < 0）",
+    reportHighAum: "高 AUM／重点客户排名",
+    reportPnlRank: "期间盈亏排名",
+    reportConcentration: "产品集中度（超配）",
+    reportFx: "外汇／货币敞口摘要",
+    reportSingle: "单一产品持有人",
+    reportSinglePick: "选择产品以列出持有人",
+    reportOpps: "机会清单导出",
+    advSegment: "客户层级",
+    advCurrency: "货币",
+    advPnlSign: "盈亏方向",
+    advPnlProfit: "整体盈利",
+    advPnlLoss: "整体亏损",
+    advPnlHasLoss: "有亏损持仓",
+    advHasOpp: "有跟进机会",
+    advYes: "是",
+    advNo: "否",
+    advProductMix: "产品组合",
+    advMixSingle: "单一产品",
+    advMixMulti: "多元产品",
+    advSort: "排序",
+    advSortAumDesc: "AUM 高→低",
+    advSortAumAsc: "AUM 低→高",
+    advSortName: "客户名称",
+    advSortPnl: "盈亏 % 高→低",
+    advSortMaturity: "最近到期",
+    colSegment: "层级",
+    colWeight: "占比 %",
     total: "合计",
     clientBanner: "客户模式：已隐藏内部销售备注与 RM 专用提示",
   });
@@ -437,6 +548,12 @@
       aumMax: null,
       productType: "",
       risk: "",
+      segment: "",
+      currency: "",
+      pnlSign: "",
+      hasOpp: "",
+      productMix: "",
+      sort: "aum_desc",
       matFrom: "",
       matTo: "",
     },
@@ -513,7 +630,9 @@
             (c) =>
               c.id === "demo-chen" &&
               (c.holdings || []).some((h) => h.fdId === "ETNSI36463")
-          );
+          ) &&
+          parsed.some((c) => c.id === "demo-lau") &&
+          parsed.some((c) => c.segment);
         if (ok) {
           state.cases = parsed;
           return;
@@ -1040,7 +1159,9 @@
             <div class="meta">
               <span>${escapeHtml(c.client_id || "")}</span>
               <span>${riskLabel(c.risk_profile)}</span>
+              <span>${escapeHtml(c.segment || "")}</span>
               <span>AUM ${fmtMoneyFull(aum, c.currency || "HKD")}</span>
+              <span class="${pnlClass(casePnl(c).pnl)}">${fmtPct(casePnl(c).pnlPct)}</span>
               ${mats.length ? `<span>${t("advNextMaturity")}: ${mats[0]}</span>` : ""}
               <span>${escapeHtml(types)}</span>
             </div>
@@ -1068,8 +1189,11 @@
           client_id: c.client_id || "",
           product: h.product_name,
           type: h.type,
+          start: h.start_date || "",
           maturity: h.maturity_date,
           quantity: h.quantity,
+          usd_notional: h.usd_notional,
+          expected_yield_pct: h.expected_yield_pct,
           cost_value: h.cost_value,
           market_value: h.market_value,
           pnl_value: h.pnl_value,
@@ -1124,122 +1248,334 @@
   }
 
   function buildReport(kind) {
+    const simpleTable = (title, filename, headers, rows, mapCsv, mapHtml, headHtml) => ({
+      title,
+      filename,
+      headers,
+      csvRows: rows.map(mapCsv),
+      htmlRows: rows.map(mapHtml),
+      tableHead: headHtml,
+    });
+
     if (kind === "maturity90") {
       const rows = collectMaturityRows(90, null);
-      return {
-        title: t("reportMaturity90"),
-        filename: "maturities-90d.csv",
-        headers: [
-          t("colClient"),
-          "Client ID",
-          t("colProduct"),
-          t("colType"),
-          t("colSwapMaturity"),
-          t("colMv"),
-          t("colPnl"),
-          t("currency"),
-        ],
-        csvRows: rows.map((r) => [
-          r.client,
-          r.client_id,
-          r.product,
-          typeLabel(r.type),
-          r.maturity,
-          r.market_value,
-          r.pnl_value,
-          r.currency,
-        ]),
-        htmlRows: rows.map(
-          (r) =>
-            `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${typeLabel(
-              r.type
-            )}</td><td>${r.maturity}</td><td class="num">${fmtMoneyFull(
-              r.market_value
-            )}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td></tr>`
-        ),
-        tableHead: `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t(
-          "colType"
-        )}</th><th>${t("colSwapMaturity")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th></tr>`,
-      };
+      return simpleTable(
+        t("reportMaturity90"),
+        "maturities-90d.csv",
+        [t("colClient"), "ID", t("colProduct"), t("colType"), t("colSwapMaturity"), t("colMv"), t("colPnl"), t("currency")],
+        rows,
+        (r) => [r.client, r.client_id, r.product, typeLabel(r.type), r.maturity, r.market_value, r.pnl_value, r.currency],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${typeLabel(r.type)}</td><td>${r.maturity}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colType")}</th><th>${t("colSwapMaturity")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th></tr>`
+      );
     }
     if (kind === "funds") {
       const rows = collectFundRows();
-      return {
-        title: t("reportFunds"),
-        filename: "funds-report.csv",
-        headers: [
-          t("colClient"),
-          t("colProduct"),
-          "Fund code",
-          t("colQty"),
-          t("colCost"),
-          t("colMv"),
-          t("colPnl"),
-          t("colPnlPct"),
-        ],
-        csvRows: rows.map((r) => [
-          r.client,
-          r.product,
-          r.fund_code,
-          r.quantity,
-          r.cost_value,
-          r.market_value,
-          r.pnl_value,
-          r.pnl_pct,
-        ]),
-        htmlRows: rows.map(
-          (r) =>
-            `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(
-              r.product
-            )}</td><td>${escapeHtml(r.fund_code)}</td><td class="num">${fmtMoneyFull(
-              r.quantity
-            )}</td><td class="num">${fmtMoneyFull(r.cost_value)}</td><td class="num">${fmtMoneyFull(
-              r.market_value
-            )}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td><td class="num">${fmtPct(
-              r.pnl_pct
-            )}</td></tr>`
-        ),
-        tableHead: `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>Code</th><th>${t(
-          "colQty"
-        )}</th><th>${t("colCost")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th><th>${t(
-          "colPnlPct"
-        )}</th></tr>`,
-      };
+      return simpleTable(
+        t("reportFunds"),
+        "funds-report.csv",
+        [t("colClient"), t("colProduct"), "Fund code", t("colQty"), t("colCost"), t("colMv"), t("colPnl"), t("colPnlPct")],
+        rows,
+        (r) => [r.client, r.product, r.fund_code, r.quantity, r.cost_value, r.market_value, r.pnl_value, r.pnl_pct],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${escapeHtml(r.fund_code)}</td><td class="num">${fmtMoneyFull(r.quantity)}</td><td class="num">${fmtMoneyFull(r.cost_value)}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td><td class="num">${fmtPct(r.pnl_pct)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>Code</th><th>${t("colQty")}</th><th>${t("colCost")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th><th>${t("colPnlPct")}</th></tr>`
+      );
     }
     if (kind === "eln90") {
       const rows = collectMaturityRows(90, (h) => h.type === "ELN" || h.type === "ELI");
-      return {
-        title: t("reportEln90"),
-        filename: "eln-maturities-90d.csv",
-        headers: [
-          t("colClient"),
-          t("colProduct"),
-          t("colSwapMaturity"),
-          t("colMv"),
-          t("colPnl"),
-          t("currency"),
-        ],
-        csvRows: rows.map((r) => [
-          r.client,
-          r.product,
-          r.maturity,
-          r.market_value,
-          r.pnl_value,
-          r.currency,
-        ]),
-        htmlRows: rows.map(
-          (r) =>
-            `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${
-              r.maturity
-            }</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num">${fmtMoneyFull(
-              r.pnl_value
-            )}</td></tr>`
-        ),
-        tableHead: `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t(
-          "colSwapMaturity"
-        )}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th></tr>`,
-      };
+      return simpleTable(
+        t("reportEln90"),
+        "eln-maturities-90d.csv",
+        [t("colClient"), t("colProduct"), t("colSwapMaturity"), t("colMv"), t("colPnl"), t("currency")],
+        rows,
+        (r) => [r.client, r.product, r.maturity, r.market_value, r.pnl_value, r.currency],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${r.maturity}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colSwapMaturity")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th></tr>`
+      );
     }
+
+    const swapPred = (h) => h.type === "swap" || h.type === "Swap";
+    if (kind === "swap30" || kind === "swap90" || kind === "swap180") {
+      const days = kind === "swap30" ? 30 : kind === "swap90" ? 90 : 180;
+      const titleKey = kind === "swap30" ? "reportSwap30" : kind === "swap90" ? "reportSwap90" : "reportSwap180";
+      const rows = collectMaturityRows(days, swapPred);
+      return simpleTable(
+        t(titleKey),
+        `swap-maturities-${days}d.csv`,
+        [t("colClient"), t("colProduct"), t("colSwapStart"), t("colSwapMaturity"), t("colSwapPrincipal"), t("colMv"), t("colSwapRate")],
+        rows,
+        (r) => [r.client, r.product, r.start || "", r.maturity, r.usd_notional || r.quantity, r.market_value, r.expected_yield_pct],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${r.maturity}</td><td class="num">${fmtMoneyFull(r.market_value)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colSwapMaturity")}</th><th>${t("colMv")}</th></tr>`
+      );
+    }
+
+    if (kind === "depositMat") {
+      const rows = collectMaturityRows(180, (h) => h.type === "Deposit");
+      return simpleTable(
+        t("reportDeposit"),
+        "deposit-maturities.csv",
+        [t("colClient"), t("colProduct"), t("colSwapMaturity"), t("colMv"), t("currency")],
+        rows,
+        (r) => [r.client, r.product, r.maturity, r.market_value, r.currency],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${r.maturity}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td>${r.currency}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colSwapMaturity")}</th><th>${t("colMv")}</th><th>${t("currency")}</th></tr>`
+      );
+    }
+
+    if (kind === "insurance") {
+      const rows = [];
+      state.cases.forEach((c) => {
+        (c.holdings || [])
+          .filter((h) => h.type === "Insurance")
+          .forEach((h) => {
+            const related = (c.opportunities || []).filter(
+              (o) => o.category === "Insurance Gap" || /保險|寿险|壽險|insurance/i.test(o.title || "")
+            );
+            rows.push({
+              client: clientDisplayName(c),
+              product: h.product_name,
+              market_value: h.market_value,
+              pnl_value: h.pnl_value,
+              opp: related.map((o) => o.title).join("；") || "—",
+              due: related.map((o) => o.due_date).filter(Boolean).join(", ") || "—",
+            });
+          });
+      });
+      return simpleTable(
+        t("reportInsurance"),
+        "insurance-followup.csv",
+        [t("colClient"), t("colProduct"), t("colMv"), t("colPnl"), t("oppTitle"), t("colSwapMaturity")],
+        rows,
+        (r) => [r.client, r.product, r.market_value, r.pnl_value, r.opp, r.due],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td>${escapeHtml(r.opp)}</td><td>${escapeHtml(r.due)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colMv")}</th><th>${t("oppTitle")}</th><th>${t("advNextMaturity")}</th></tr>`
+      );
+    }
+
+    if (kind === "losses") {
+      const rows = [];
+      state.cases.forEach((c) => {
+        (c.holdings || [])
+          .filter((h) => (Number(h.pnl_value) || 0) < 0)
+          .forEach((h) => {
+            rows.push({
+              client: clientDisplayName(c),
+              product: h.product_name,
+              type: h.type,
+              cost_value: h.cost_value,
+              market_value: h.market_value,
+              pnl_value: h.pnl_value,
+              pnl_pct: h.pnl_pct,
+            });
+          });
+      });
+      rows.sort((a, b) => a.pnl_value - b.pnl_value);
+      return simpleTable(
+        t("reportLosses"),
+        "loss-holdings.csv",
+        [t("colClient"), t("colProduct"), t("colType"), t("colCost"), t("colMv"), t("colPnl"), t("colPnlPct")],
+        rows,
+        (r) => [r.client, r.product, typeLabel(r.type), r.cost_value, r.market_value, r.pnl_value, r.pnl_pct],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${typeLabel(r.type)}</td><td class="num">${fmtMoneyFull(r.cost_value)}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num neg">${fmtMoneyFull(r.pnl_value)}</td><td class="num neg">${fmtPct(r.pnl_pct)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colType")}</th><th>${t("colCost")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th><th>${t("colPnlPct")}</th></tr>`
+      );
+    }
+
+    if (kind === "highAum") {
+      const rows = state.cases
+        .map((c) => ({
+          client: clientDisplayName(c),
+          client_id: c.client_id || "",
+          segment: c.segment || "",
+          aum: caseAum(c),
+          pnlPct: casePnl(c).pnlPct,
+          holdings: (c.holdings || []).length,
+        }))
+        .sort((a, b) => b.aum - a.aum);
+      return simpleTable(
+        t("reportHighAum"),
+        "high-aum-clients.csv",
+        [t("colClient"), "ID", t("colSegment"), "AUM", t("colPnlPct"), t("holdingCount")],
+        rows,
+        (r) => [r.client, r.client_id, r.segment, r.aum, r.pnlPct, r.holdings],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.segment)}</td><td class="num">${fmtMoneyFull(r.aum)}</td><td class="num ${pnlClass(r.pnlPct)}">${fmtPct(r.pnlPct)}</td><td class="num">${r.holdings}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colSegment")}</th><th>AUM</th><th>${t("colPnlPct")}</th><th>${t("holdingCount")}</th></tr>`
+      );
+    }
+
+    if (kind === "pnlRank") {
+      const clientRows = state.cases
+        .map((c) => {
+          const p = casePnl(c);
+          return { level: "client", name: clientDisplayName(c), product: "—", pnl: p.pnl, pnlPct: p.pnlPct };
+        })
+        .sort((a, b) => b.pnlPct - a.pnlPct);
+      const prodRows = [];
+      state.cases.forEach((c) => {
+        (c.holdings || []).forEach((h) => {
+          prodRows.push({
+            level: "product",
+            name: clientDisplayName(c),
+            product: h.product_name,
+            pnl: h.pnl_value,
+            pnlPct: h.pnl_pct,
+          });
+        });
+      });
+      prodRows.sort((a, b) => (b.pnlPct || 0) - (a.pnlPct || 0));
+      const rows = clientRows.concat(prodRows.slice(0, 25));
+      return simpleTable(
+        t("reportPnlRank"),
+        "pnl-ranking.csv",
+        ["Level", t("colClient"), t("colProduct"), t("colPnl"), t("colPnlPct")],
+        rows,
+        (r) => [r.level, r.name, r.product, r.pnl, r.pnlPct],
+        (r) =>
+          `<tr><td>${r.level}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.product)}</td><td class="num ${pnlClass(r.pnl)}">${fmtMoneyFull(r.pnl)}</td><td class="num ${pnlClass(r.pnlPct)}">${fmtPct(r.pnlPct)}</td></tr>`,
+        `<tr><th>Level</th><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colPnl")}</th><th>${t("colPnlPct")}</th></tr>`
+      );
+    }
+
+    if (kind === "concentration") {
+      const rows = [];
+      state.cases.forEach((c) => {
+        const aum = caseAum(c) || 1;
+        const byType = {};
+        (c.holdings || []).forEach((h) => {
+          const ty = h.type === "Swap" ? "swap" : h.type;
+          byType[ty] = (byType[ty] || 0) + (Number(h.market_value) || 0);
+        });
+        Object.keys(byType).forEach((ty) => {
+          const w = (byType[ty] / aum) * 100;
+          if (w >= 35) {
+            rows.push({
+              client: clientDisplayName(c),
+              type: ty,
+              weight: w,
+              value: byType[ty],
+            });
+          }
+        });
+      });
+      rows.sort((a, b) => b.weight - a.weight);
+      return simpleTable(
+        t("reportConcentration"),
+        "concentration-overweight.csv",
+        [t("colClient"), t("colType"), t("colWeight"), t("colMv")],
+        rows,
+        (r) => [r.client, typeLabel(r.type), r.weight.toFixed(2), r.value],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${typeLabel(r.type)}</td><td class="num">${r.weight.toFixed(1)}%</td><td class="num">${fmtMoneyFull(r.value)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colType")}</th><th>${t("colWeight")}</th><th>${t("colMv")}</th></tr>`
+      );
+    }
+
+    if (kind === "fxExposure") {
+      const rows = [];
+      state.cases.forEach((c) => {
+        const byCcy = {};
+        (c.holdings || []).forEach((h) => {
+          const ccy = h.currency || c.currency || "HKD";
+          byCcy[ccy] = (byCcy[ccy] || 0) + (Number(h.market_value) || 0);
+        });
+        const aum = caseAum(c) || 1;
+        Object.keys(byCcy).forEach((ccy) => {
+          rows.push({
+            client: clientDisplayName(c),
+            currency: ccy,
+            value: byCcy[ccy],
+            weight: (byCcy[ccy] / aum) * 100,
+            isFx: ccy !== "HKD" || (c.holdings || []).some((h) => h.type === "FX"),
+          });
+        });
+      });
+      rows.sort((a, b) => b.value - a.value);
+      return simpleTable(
+        t("reportFx"),
+        "fx-currency-exposure.csv",
+        [t("colClient"), t("currency"), t("colMv"), t("colWeight")],
+        rows,
+        (r) => [r.client, r.currency, r.value, r.weight.toFixed(2)],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${r.currency}</td><td class="num">${fmtMoneyFull(r.value)}</td><td class="num">${r.weight.toFixed(1)}%</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("currency")}</th><th>${t("colMv")}</th><th>${t("colWeight")}</th></tr>`
+      );
+    }
+
+    if (kind === "singleProduct") {
+      // rows filled after product pick — placeholder empty triggers picker
+      return { needsProductPick: true };
+    }
+
+    if (kind === "singleProductRun") {
+      const product = state._singleProductName;
+      const rows = [];
+      state.cases.forEach((c) => {
+        (c.holdings || [])
+          .filter((h) => h.product_name === product)
+          .forEach((h) => {
+            rows.push({
+              client: clientDisplayName(c),
+              product: h.product_name,
+              type: h.type,
+              quantity: h.quantity,
+              market_value: h.market_value,
+              pnl_pct: h.pnl_pct,
+            });
+          });
+      });
+      // Also include clients whose ONLY holding is this product
+      return simpleTable(
+        t("reportSingle") + " — " + product,
+        "single-product-holders.csv",
+        [t("colClient"), t("colProduct"), t("colType"), t("colQty"), t("colMv"), t("colPnlPct")],
+        rows,
+        (r) => [r.client, r.product, typeLabel(r.type), r.quantity, r.market_value, r.pnl_pct],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${typeLabel(r.type)}</td><td class="num">${fmtMoneyFull(r.quantity)}</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num">${fmtPct(r.pnl_pct)}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colType")}</th><th>${t("colQty")}</th><th>${t("colMv")}</th><th>${t("colPnlPct")}</th></tr>`
+      );
+    }
+
+    if (kind === "opportunities") {
+      const rows = [];
+      state.cases.forEach((c) => {
+        (c.opportunities || []).forEach((o) => {
+          rows.push({
+            client: clientDisplayName(c),
+            title: o.title,
+            category: o.category,
+            priority: o.priority,
+            due_date: o.due_date || "",
+            amount: o.amount,
+            done: o.done ? "Y" : "N",
+            talking: o.talking_point || "",
+            hide: o.hide_in_client_mode ? "RM" : "",
+          });
+        });
+      });
+      rows.sort((a, b) => (a.due_date || "9999").localeCompare(b.due_date || "9999"));
+      return simpleTable(
+        t("reportOpps"),
+        "opportunities.csv",
+        [t("colClient"), "Title", "Category", "Priority", "Due", "Amount", "Done", "Talking point"],
+        rows,
+        (r) => [r.client, r.title, r.category, r.priority, r.due_date, r.amount, r.done, r.talking],
+        (r) =>
+          `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.title)}</td><td>${escapeHtml(r.category || "")}</td><td>${escapeHtml(r.priority || "")}</td><td>${escapeHtml(r.due_date)}</td><td class="num">${r.amount != null ? fmtMoneyFull(r.amount) : "—"}</td><td>${r.done}</td></tr>`,
+        `<tr><th>${t("colClient")}</th><th>Title</th><th>Category</th><th>Priority</th><th>Due</th><th>Amount</th><th>Done</th></tr>`
+      );
+    }
+
     return null;
   }
 
@@ -1280,12 +1616,46 @@
     toast(t("reportGenerated"));
   }
 
+  function openSingleProductPicker() {
+    const products = new Map();
+    state.cases.forEach((c) => {
+      (c.holdings || []).forEach((h) => {
+        if (!h.product_name) return;
+        products.set(h.product_name, (products.get(h.product_name) || 0) + 1);
+      });
+    });
+    const sel = document.getElementById("singleProductSelect");
+    const modal = document.getElementById("singleProductPicker");
+    if (!sel || !modal) {
+      // fallback: first product with 2+ holders or any
+      const sorted = [...products.entries()].sort((a, b) => b[1] - a[1]);
+      state._singleProductName = sorted[0] && sorted[0][0];
+      const report = buildReport("singleProductRun");
+      if (report) showReportPrint(report);
+      return;
+    }
+    sel.innerHTML = [...products.entries()]
+      .sort((a, b) => a[0].localeCompare(b[0], "zh"))
+      .map(([name, n]) => `<option value="${escapeHtml(name)}">${escapeHtml(name)} (${n})</option>`)
+      .join("");
+    modal.classList.remove("hidden");
+    applyI18n();
+  }
+
   function runExportReport(kind) {
-    const report = buildReport(kind);
-    if (!report) return;
-    showReportPrint(report);
     document.getElementById("exportMenu")?.classList.add("hidden");
     document.getElementById("btnExportMenu")?.classList.remove("active-toggle");
+    if (kind === "singleProduct") {
+      openSingleProductPicker();
+      return;
+    }
+    const report = buildReport(kind);
+    if (!report) return;
+    if (report.needsProductPick) {
+      openSingleProductPicker();
+      return;
+    }
+    showReportPrint(report);
   }
 
   async function fetchFundSummary(fdId) {
@@ -1475,35 +1845,64 @@
     return map[risk] ? t(map[risk]) : risk || "—";
   }
 
+  function casePnl(c) {
+    const cost = (c.holdings || []).reduce((s, h) => s + (Number(h.cost_value) || 0), 0);
+    const aum = caseAum(c);
+    return { pnl: aum - cost, pnlPct: cost ? ((aum - cost) / cost) * 100 : 0 };
+  }
+
   function populateAdvSelects() {
     const typeSel = document.getElementById("advProductType");
     const riskSel = document.getElementById("advRisk");
+    const segSel = document.getElementById("advSegment");
+    const ccySel = document.getElementById("advCurrency");
     if (!typeSel || !riskSel) return;
     const types = new Set();
     const risks = new Set();
+    const segs = new Set();
+    const ccys = new Set();
     state.cases.forEach((c) => {
       if (c.risk_profile) risks.add(c.risk_profile);
+      if (c.segment) segs.add(c.segment);
+      if (c.currency) ccys.add(c.currency);
       (c.holdings || []).forEach((h) => {
         if (h.type) types.add(h.type === "Swap" ? "swap" : h.type);
+        if (h.currency) ccys.add(h.currency);
       });
     });
     const typeOrder = ["Fund", "Stock", "ELN", "FX", "Deposit", "Insurance", "swap"];
     const sortedTypes = [...types].sort(
-      (a, b) => (typeOrder.indexOf(a) + 99) - (typeOrder.indexOf(b) + 99) || a.localeCompare(b)
+      (a, b) => typeOrder.indexOf(a) - typeOrder.indexOf(b) || a.localeCompare(b)
     );
-    const curType = state.advFilters.productType || typeSel.value;
-    const curRisk = state.advFilters.risk || riskSel.value;
+    const f = state.advFilters;
     typeSel.innerHTML =
       `<option value="">${t("advAny")}</option>` +
       sortedTypes.map((ty) => `<option value="${ty}">${typeLabel(ty)}</option>`).join("");
     riskSel.innerHTML =
       `<option value="">${t("advAny")}</option>` +
-      [...risks]
-        .sort()
-        .map((r) => `<option value="${r}">${riskLabel(r)}</option>`)
-        .join("");
-    typeSel.value = curType;
-    riskSel.value = curRisk;
+      [...risks].sort().map((r) => `<option value="${r}">${riskLabel(r)}</option>`).join("");
+    if (segSel) {
+      segSel.innerHTML =
+        `<option value="">${t("advAny")}</option>` +
+        [...segs].sort().map((s) => `<option value="${s}">${s}</option>`).join("");
+      segSel.value = f.segment || "";
+    }
+    if (ccySel) {
+      ccySel.innerHTML =
+        `<option value="">${t("advAny")}</option>` +
+        [...ccys].sort().map((s) => `<option value="${s}">${s}</option>`).join("");
+      ccySel.value = f.currency || "";
+    }
+    typeSel.value = f.productType || "";
+    riskSel.value = f.risk || "";
+    const pnlSel = document.getElementById("advPnlSign");
+    const oppSel = document.getElementById("advHasOpp");
+    const mixSel = document.getElementById("advProductMix");
+    const sortSel = document.getElementById("advSort");
+    if (pnlSel) pnlSel.value = f.pnlSign || "";
+    if (oppSel) oppSel.value = f.hasOpp || "";
+    if (mixSel) mixSel.value = f.productMix || "";
+    if (sortSel) sortSel.value = f.sort || "aum_desc";
   }
 
   function readAdvFiltersFromForm() {
@@ -1514,6 +1913,12 @@
       aumMax: maxV === "" ? null : Number(maxV),
       productType: document.getElementById("advProductType").value || "",
       risk: document.getElementById("advRisk").value || "",
+      segment: (document.getElementById("advSegment") || {}).value || "",
+      currency: (document.getElementById("advCurrency") || {}).value || "",
+      pnlSign: (document.getElementById("advPnlSign") || {}).value || "",
+      hasOpp: (document.getElementById("advHasOpp") || {}).value || "",
+      productMix: (document.getElementById("advProductMix") || {}).value || "",
+      sort: (document.getElementById("advSort") || {}).value || "aum_desc",
       matFrom: document.getElementById("advMatFrom").value || "",
       matTo: document.getElementById("advMatTo").value || "",
     };
@@ -1526,6 +1931,11 @@
       f.aumMax != null ||
       !!f.productType ||
       !!f.risk ||
+      !!f.segment ||
+      !!f.currency ||
+      !!f.pnlSign ||
+      !!f.hasOpp ||
+      !!f.productMix ||
       !!f.matFrom ||
       !!f.matTo
     );
@@ -1536,6 +1946,13 @@
     if (f.aumMin != null && !isNaN(f.aumMin) && aum < f.aumMin) return false;
     if (f.aumMax != null && !isNaN(f.aumMax) && aum > f.aumMax) return false;
     if (f.risk && c.risk_profile !== f.risk) return false;
+    if (f.segment && c.segment !== f.segment) return false;
+    if (f.currency) {
+      const hasCcy =
+        c.currency === f.currency ||
+        (c.holdings || []).some((h) => h.currency === f.currency);
+      if (!hasCcy) return false;
+    }
     if (f.productType) {
       const want = f.productType === "Swap" ? "swap" : f.productType;
       const has = (c.holdings || []).some((h) => {
@@ -1544,6 +1961,16 @@
       });
       if (!has) return false;
     }
+    if (f.productMix === "single" && (c.holdings || []).length !== 1) return false;
+    if (f.productMix === "multi" && (c.holdings || []).length < 2) return false;
+    const opps = (c.opportunities || []).filter((o) => !o.done);
+    if (f.hasOpp === "yes" && !opps.length) return false;
+    if (f.hasOpp === "no" && opps.length) return false;
+    const { pnl } = casePnl(c);
+    if (f.pnlSign === "profit" && pnl <= 0) return false;
+    if (f.pnlSign === "loss" && pnl >= 0) return false;
+    if (f.pnlSign === "hasLoss" && !(c.holdings || []).some((h) => (h.pnl_value || 0) < 0))
+      return false;
     if (f.matFrom || f.matTo) {
       const mats = caseMaturities(c);
       if (!mats.length) return false;
@@ -1557,13 +1984,31 @@
     return true;
   }
 
+  function sortClientsAdv(list) {
+    const sort = state.advFilters.sort || "aum_desc";
+    return list.slice().sort((a, b) => {
+      if (sort === "name") {
+        return clientDisplayName(a).localeCompare(clientDisplayName(b), "zh");
+      }
+      if (sort === "pnl_pct") {
+        return casePnl(b).pnlPct - casePnl(a).pnlPct;
+      }
+      if (sort === "maturity") {
+        const ma = caseMaturities(a)[0] || "9999";
+        const mb = caseMaturities(b)[0] || "9999";
+        return ma.localeCompare(mb);
+      }
+      if (sort === "aum_asc") return caseAum(a) - caseAum(b);
+      return caseAum(b) - caseAum(a);
+    });
+  }
+
   function filterClientsAdvanced(keyword) {
-    const f = state.advFilters;
     const q = (keyword || "").trim().toLowerCase();
-    return state.cases.filter((c) => {
-      if (advFiltersActive() && !clientMatchesAdv(c, f)) return false;
+    const filtered = state.cases.filter((c) => {
+      if (advFiltersActive() && !clientMatchesAdv(c, state.advFilters)) return false;
       if (!q) return true;
-      const names = [c.display_name, c.display_name_en, c.client_id]
+      const names = [c.display_name, c.display_name_en, c.client_id, c.segment]
         .filter(Boolean)
         .map((x) => String(x).toLowerCase());
       if (names.some((n) => n.includes(q))) return true;
@@ -1571,18 +2016,15 @@
         (h.product_name || "").toLowerCase().includes(q)
       );
     });
+    return sortClientsAdv(filtered);
   }
 
   function renderAdvResults() {
     const box = document.getElementById("advResults");
     if (!box) return;
-    if (!advFiltersActive() && !(document.getElementById("globalSearch").value || "").trim()) {
-      // still show if user clicked apply with empty? show all or hide
-    }
     const kw = document.getElementById("globalSearch").value || "";
     const matches = filterClientsAdvanced(kw);
-    const active = advFiltersActive() || !!kw.trim();
-    if (!active) {
+    if (!state._forceAdvResults && !matches.length && !advFiltersActive() && !kw.trim()) {
       box.classList.add("hidden");
       box.innerHTML = "";
       return;
@@ -1640,11 +2082,10 @@
         state.advFilters.aumMin != null ? state.advFilters.aumMin : "";
       document.getElementById("advAumMax").value =
         state.advFilters.aumMax != null ? state.advFilters.aumMax : "";
-      document.getElementById("advProductType").value = state.advFilters.productType || "";
-      document.getElementById("advRisk").value = state.advFilters.risk || "";
       document.getElementById("advMatFrom").value = state.advFilters.matFrom || "";
       document.getElementById("advMatTo").value = state.advFilters.matTo || "";
-      if (advFiltersActive()) renderAdvResults();
+      populateAdvSelects();
+      if (advFiltersActive() || state.advFilters.sort) renderAdvResults();
     }
   }
 
@@ -2149,10 +2590,29 @@
         }
       });
     }
+
+    const spGo = document.getElementById("btnSingleProductGo");
+    const spCancel = document.getElementById("btnSingleProductCancel");
+    if (spGo) {
+      spGo.addEventListener("click", () => {
+        const sel = document.getElementById("singleProductSelect");
+        state._singleProductName = sel.value;
+        document.getElementById("singleProductPicker").classList.add("hidden");
+        const report = buildReport("singleProductRun");
+        if (report) showReportPrint(report);
+      });
+    }
+    if (spCancel) {
+      spCancel.addEventListener("click", () => {
+        document.getElementById("singleProductPicker").classList.add("hidden");
+      });
+    }
     document.getElementById("btnAdvApply").addEventListener("click", () => {
       readAdvFiltersFromForm();
       state.advOpen = true;
+      state._forceAdvResults = true;
       renderAdvResults();
+      state._forceAdvResults = false;
       toast(t("advResults"));
     });
     document.getElementById("btnAdvClear").addEventListener("click", () => {
@@ -2161,15 +2621,32 @@
         aumMax: null,
         productType: "",
         risk: "",
+        segment: "",
+        currency: "",
+        pnlSign: "",
+        hasOpp: "",
+        productMix: "",
+        sort: "aum_desc",
         matFrom: "",
         matTo: "",
       };
-      ["advAumMin", "advAumMax", "advProductType", "advRisk", "advMatFrom", "advMatTo"].forEach(
-        (id) => {
-          const el = document.getElementById(id);
-          if (el) el.value = "";
-        }
-      );
+      [
+        "advAumMin",
+        "advAumMax",
+        "advProductType",
+        "advRisk",
+        "advSegment",
+        "advCurrency",
+        "advPnlSign",
+        "advHasOpp",
+        "advProductMix",
+        "advSort",
+        "advMatFrom",
+        "advMatTo",
+      ].forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.value = id === "advSort" ? "aum_desc" : "";
+      });
       populateAdvSelects();
       document.getElementById("advResults").classList.add("hidden");
       document.getElementById("advResults").innerHTML = "";

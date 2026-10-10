@@ -2,6 +2,7 @@
 window.PR_DEMO_CASES = [
   {
     id: "demo-hong-yiu",
+    segment: "Private",
     client_id: "****4935",
     // Full Notion client no. masked above for public UI; internal ref ends …4935
     display_name: "匡耀",
@@ -45,7 +46,27 @@ window.PR_DEMO_CASES = [
     ]
   },
   {
+    id: "demo-lau",
+    segment: "Priority",
+    client_id: "C-2026-0088",
+    display_name: "劉小姐",
+    display_name_en: "Ms. Lau (Demo)",
+    review_date: "2026-10-10",
+    rm_name: "Mose Lee",
+    currency: "HKD",
+    risk_profile: "Aggressive",
+    risk_profile_zh: "進取型",
+    notes: "單一股票集中；可談分散。",
+    holdings: [
+      { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 4000, cost_value: 1400000, market_value: 1649600, day_change_pct: -1.25, pnl_value: 249600, pnl_pct: 17.83, currency: "HKD" }
+    ],
+    opportunities: [
+      { id: "c5-o1", title: "單一股票集中度偏高", category: "Rebalance", due_date: "2026-10-30", priority: "High", amount: 1649600, talking_point: "僅持騰訊，建議分散至基金或籃子。", hide_in_client_mode: false, done: false }
+    ]
+  },
+  {
     id: "demo-chen",
+    segment: "Affluent",
     client_id: "C-2024-0188",
     display_name: "陳先生",
     display_name_en: "Mr. Chan (Demo)",
@@ -63,6 +84,7 @@ window.PR_DEMO_CASES = [
       { product_name: "恒生科技 ETF (3033.HK)", type: "Stock", quantity: 10000, cost_value: 420000, market_value: 398000, day_change_pct: -0.85, pnl_value: -22000, pnl_pct: -5.24, currency: "HKD" },
       { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 1000000, market_value: 972000, day_change_pct: -0.4, pnl_value: -28000, pnl_pct: -2.8, currency: "USD", start_date: "2025-12-20", maturity_date: "2026-12-20" },
       { product_name: "USD/HKD 遠期套保", type: "FX", quantity: 500000, cost_value: 500000, market_value: 512500, day_change_pct: 0.12, pnl_value: 12500, pnl_pct: 2.5, currency: "USD" },
+      { product_name: "保本高息 Swap 1M", type: "swap", quantity: 500000, cost_value: 3910000, market_value: 3910000, day_change_pct: 0.01, pnl_value: 0, pnl_pct: 0, currency: "HKD", start_date: "2026-10-05", maturity_date: "2026-11-05", tenor_days: 31, expected_yield_pct: 3.8, usd_notional: 500000, usd_gain: 4500, maturity_usd: 504500, currency_note: "USD 500,000 short tenor" },
       { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 800000, cost_value: 800000, market_value: 806800, day_change_pct: 0.02, pnl_value: 6800, pnl_pct: 0.85, currency: "USD", start_date: "2026-08-26", maturity_date: "2026-11-24" },
       { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 1200000, cost_value: 1200000, market_value: 1214400, day_change_pct: 0.01, pnl_value: 14400, pnl_pct: 1.2, currency: "HKD", start_date: "2026-09-15", maturity_date: "2027-03-15" },
       { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 1500000, market_value: 1582000, day_change_pct: 0.05, pnl_value: 82000, pnl_pct: 5.47, currency: "USD" }
@@ -74,6 +96,7 @@ window.PR_DEMO_CASES = [
   },
   {
     id: "demo-wong",
+    segment: "Affluent",
     client_id: "C-2023-0441",
     display_name: "王女士",
     display_name_en: "Ms. Wong (Demo)",
@@ -96,6 +119,7 @@ window.PR_DEMO_CASES = [
   },
   {
     id: "demo-lee",
+    segment: "Priority",
     client_id: "C-2025-0042",
     display_name: "李太太",
     display_name_en: "Mrs. Lee (Demo)",
@@ -119,6 +143,7 @@ window.PR_DEMO_CASES = [
   },
   {
     id: "demo-ho",
+    segment: "Private",
     client_id: "C-2022-1107",
     display_name: "何先生",
     display_name_en: "Mr. Ho (Demo)",
@@ -129,6 +154,7 @@ window.PR_DEMO_CASES = [
     risk_profile_zh: "均衡型",
     notes: "保險與結構性產品為主；關注票息。",
     holdings: [
+      { product_name: "保本高息 Swap 6M", type: "swap", quantity: 800000, cost_value: 6260000, market_value: 6285000, day_change_pct: 0.03, pnl_value: 25000, pnl_pct: 0.4, currency: "HKD", start_date: "2026-09-20", maturity_date: "2027-03-20", tenor_days: 181, expected_yield_pct: 4.2, usd_notional: 800000, usd_gain: 16800, maturity_usd: 816800, currency_note: "USD 800,000 6M" },
       { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 2200000, market_value: 2356000, day_change_pct: 0.05, pnl_value: 156000, pnl_pct: 7.09, currency: "USD" },
       { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 400000, cost_value: 400000, market_value: 403400, day_change_pct: 0.02, pnl_value: 3400, pnl_pct: 0.85, currency: "USD", start_date: "2026-09-10", maturity_date: "2026-12-10" },
       { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 750000, market_value: 729000, day_change_pct: -0.4, pnl_value: -21000, pnl_pct: -2.8, currency: "USD", start_date: "2026-02-15", maturity_date: "2027-02-15" },

@@ -1071,3 +1071,38 @@ button.brand:focus-visible {
 @media print {
   .no-print-actions { display: none !important; }
 }
+
+.export-menu { max-height: 70vh; overflow-y: auto; min-width: 280px; }
+.export-group {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px 12px 4px;
+}
+.picker-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: rgba(11,31,58,0.45);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+.picker-modal.hidden { display: none !important; }
+.picker-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  width: min(400px, 100%);
+  box-shadow: var(--shadow);
+}
+.picker-card h3 { margin: 0 0 12px; color: var(--navy); }
+.picker-card select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+}
