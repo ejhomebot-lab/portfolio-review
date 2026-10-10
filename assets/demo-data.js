@@ -11,16 +11,36 @@ window.PR_DEMO_CASES = [
     currency: "HKD",
     risk_profile: "Balanced",
     risk_profile_zh: "均衡型",
-    notes: "持倉為示範拆分；Notion 目前只有總資產與一筆 swap 銷售記錄，實際明細待匯入。跟進保本高息 Swap。",
+    // Notion TOTAL AMT ~24,504,544; current book = HKD swap principal below
+    notes: "保本高息 Swap（3M）：2026-10-09 → 2027-01-11（94 日）。USD 名義 3,054,386.39 @ spot 7.8420 = HKD 本金 23,952,498.07；HKD FD 3.41%；遠期 7.829097；組合預期收益率 4.00%。到期 HKD 24,162,846.94／USD 3,086,287.85。Notion TOTAL AMT 約 24,504,544（含其他未拆明細）。",
     holdings: [
-      { product_name: "保本高息 Swap", type: "swap", quantity: 1, cost_value: 8100000, market_value: 8250000, day_change_pct: 0.08, pnl_value: 150000, pnl_pct: 1.85, currency: "HKD" },
-      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 6200000, cost_value: 6150000, market_value: 6200000, day_change_pct: 0.01, pnl_value: 50000, pnl_pct: 0.81, currency: "HKD" },
-      { product_name: "環球多元資產基金 A", type: "Fund", quantity: 24000, cost_value: 4800000, market_value: 5100000, day_change_pct: 0.35, pnl_value: 300000, pnl_pct: 6.25, currency: "HKD" },
-      { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 5950, cost_value: 2200000, market_value: 2454544.12, day_change_pct: -1.25, pnl_value: 254544.12, pnl_pct: 11.57, currency: "HKD" },
-      { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 2400000, market_value: 2500000, day_change_pct: 0.05, pnl_value: 100000, pnl_pct: 4.17, currency: "HKD" }
+      {
+        product_name: "保本高息 Swap 3M",
+        type: "swap",
+        quantity: 3054386.39,
+        cost_value: 23952498.07,
+        market_value: 23952498.07,
+        day_change_pct: 0.02,
+        pnl_value: 0,
+        pnl_pct: 0,
+        currency: "HKD",
+        start_date: "2026-10-09",
+        maturity_date: "2027-01-11",
+        tenor_days: 94,
+        expected_yield_pct: 4.0,
+        usd_notional: 3054386.39,
+        spot_fx: 7.8420,
+        forward_fx: 7.829097,
+        hkd_fd_rate_pct: 3.41,
+        hkd_interest: 210348.87,
+        maturity_hkd: 24162846.94,
+        usd_gain: 31901.46,
+        maturity_usd: 3086287.85,
+        currency_note: "USD 3,054,386.39 @ 7.8420 ↔ HKD"
+      }
     ],
     opportunities: [
-      { id: "hy-o1", title: "保本高息 Swap 產品跟進", category: "Other", due_date: "2026-10-20", priority: "High", amount: 8250000, talking_point: "可討論續作或加碼保本高息結構；留意利率與條款。", hide_in_client_mode: false, done: false },
+      { id: "hy-o1", title: "Swap 到期續作（2027-01-11）", category: "Maturity", due_date: "2027-01-11", priority: "High", amount: 23952498.07, talking_point: "3M 保本高息 Swap 將於 2027-01-11 到期（預期組合收益率 4.00%／到期 HKD 約 24.16M）。可預先談 rollover 或轉其他保本高息結構。", hide_in_client_mode: false, done: false },
       { id: "hy-o2", title: "Swap 銷售紀錄跟進（RM）", category: "Other", due_date: "2026-10-09", priority: "Medium", amount: 31162, talking_point: "Notion REV：2026-10-09 錄得 swap 相關收入 HKD 31,162（內部數字，勿向客戶展示）。", hide_in_client_mode: true, done: false }
     ]
   },

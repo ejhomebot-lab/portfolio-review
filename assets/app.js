@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v3";
+  const STORAGE_KEY = "pr_cases_v4";
   const AUTH_KEY = "pr_auth_v1";
   // SHA-256("mose2026") — demo only, not bank-grade
   const PASS_HASH = "7074818e3f7915a08a954e030e3e2adfafb6a568f631e9c097f20842205b5dd4";
@@ -138,6 +138,9 @@
       openReview: "開啟檢視",
       backToReview: "返回客戶檢視",
       holdersCount: "位客戶持有",
+      yieldLabel: "預期收益率",
+      maturityLabel: "到期",
+      startLabel: "起息",
       total: "合計",
     },
     en: {
@@ -210,6 +213,9 @@
       openReview: "Open review",
       backToReview: "Back to client review",
       holdersCount: "clients hold this",
+      yieldLabel: "Expected yield",
+      maturityLabel: "Maturity",
+      startLabel: "Start",
       total: "Total",
     },
   };
@@ -255,12 +261,13 @@
     return sign + (ccy ? ccy + " " : "") + body;
   }
 
-  function fmtMoneyFull(n, ccy) {
+  function fmtMoneyFull(n, ccy, digits) {
     if (n == null || isNaN(n)) return "—";
+    const d = digits == null ? (Math.abs(n % 1) > 1e-9 ? 2 : 0) : digits;
     const formatted = new Intl.NumberFormat("en-HK", {
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).format(Math.round(n));
+      minimumFractionDigits: d,
+      maximumFractionDigits: d,
+    }).format(n);
     return (ccy ? ccy + " " : "") + formatted;
   }
 
@@ -292,7 +299,11 @@
         if (
           Array.isArray(parsed) &&
           parsed.length >= 2 &&
-          parsed.some((c) => c.id === "demo-hong-yiu")
+          parsed.some(
+            (c) =>
+              c.id === "demo-hong-yiu" &&
+              (c.holdings || []).some((h) => h.type === "swap" && h.maturity_date === "2027-01-11")
+          )
         ) {
           state.cases = parsed;
           return;
@@ -526,15 +537,28 @@
     });
   }
 
+  function holdingSubline(h) {
+    const bits = [];
+    if (h.start_date) bits.push(t("startLabel") + " " + h.start_date);
+    if (h.maturity_date) bits.push(t("maturityLabel") + " " + h.maturity_date);
+    if (h.tenor_days) bits.push(h.tenor_days + "d");
+    if (h.expected_yield_pct != null) bits.push(t("yieldLabel") + " " + fmtPct(h.expected_yield_pct));
+    if (h.currency_note) bits.push(h.currency_note);
+    return bits.length
+      ? `<div class="holding-sub">${bits.map(escapeHtml).join(" · ")}</div>`
+      : "";
+  }
+
   function renderHoldings(c) {
     const list = filteredHoldings(c);
     const tbody = document.getElementById("holdingsBody");
     tbody.innerHTML = list
       .map((h) => {
+        const qtyDigits = h.type === "swap" || h.type === "Swap" ? 2 : undefined;
         return `<tr>
-          <td><strong>${escapeHtml(h.product_name)}</strong></td>
-          <td><span class="type-badge type-${h.type}">${typeLabel(h.type)}</span></td>
-          <td class="num">${fmtMoneyFull(h.quantity)}</td>
+          <td><strong>${escapeHtml(h.product_name)}</strong>${holdingSubline(h)}</td>
+          <td><span class="type-badge type-${escapeHtml(h.type)}">${typeLabel(h.type)}</span></td>
+          <td class="num">${fmtMoneyFull(h.quantity, "", qtyDigits)}</td>
           <td class="num">${fmtMoneyFull(h.cost_value)}</td>
           <td class="num">${fmtMoneyFull(h.market_value)}</td>
           <td class="num ${pnlClass(h.pnl_value)}">${fmtMoneyFull(h.pnl_value)}</td>

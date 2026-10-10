@@ -205,5 +205,10 @@ Demo overlapping products (see `assets/demo-data.js`):
 
 - Display: Hong Yiu / 匡耀
 - Client no. on UI: masked `****4935` (do not publish full account numbers)
-- Notion TOTAL AMT ≈ HKD 24,504,544 — holdings in demo are a **placeholder split** including one `swap` line「保本高息 Swap」; real line-level detail pending CSV/Notion import
-- REV note (RM-only opportunity): swap-related revenue recorded 2026-10-09 — hidden in client mode
+- Notion TOTAL AMT ≈ HKD 24,504,544 (reference); **book AUM** from Swap HKD principal **23,952,498.07**
+- Real Swap sheet (3M, 94 days): start **2026-10-09**, maturity **2027-01-11**
+  - USD notional 3,054,386.39 @ spot 7.8420 → HKD principal 23,952,498.07
+  - HKD FD 3.41%; interest 210,348.87; maturity HKD 24,162,846.94
+  - Forward 7.829097; USD gain 31,901.46; maturity USD 3,086,287.85
+  - Portfolio / expected yield **4.00%**
+- Opportunity: maturity rollover 2027-01-11; RM-only REV note 2026-10-09 hidden in client mode
