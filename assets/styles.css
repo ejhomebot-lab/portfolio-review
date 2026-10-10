@@ -813,3 +813,80 @@ table.holdings td.num { text-align: right; }
   max-width: 9em;
   vertical-align: bottom;
 }
+
+.adv-panel { margin-bottom: 20px; }
+.adv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 14px;
+}
+.adv-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.adv-field input, .adv-field select {
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  background: #fff;
+}
+.adv-field input:focus, .adv-field select:focus {
+  outline: 2px solid rgba(196,163,90,0.4);
+  border-color: var(--gold);
+}
+.adv-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+.adv-results { margin-top: 12px; }
+.adv-results-meta {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+.adv-client-card {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+  background: #fafbfc;
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  font-family: inherit;
+}
+.adv-client-card:hover { border-color: var(--gold); background: #fff8e7; }
+.adv-client-card strong { display: block; font-size: 14px; color: var(--navy); }
+.adv-client-card .meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#btnAdvSearch.active-toggle {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+@media (max-width: 900px) {
+  .adv-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .adv-grid { grid-template-columns: 1fr; }
+}
+@media print {
+  .adv-panel, #btnAdvSearch { display: none !important; }
+}

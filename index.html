@@ -47,6 +47,7 @@
                  placeholder="搜尋客戶或產品…" autocomplete="off" />
           <div id="searchDropdown" class="search-dropdown hidden"></div>
         </div>
+        <button type="button" class="btn btn-ghost" id="btnAdvSearch" data-i18n="advSearch">進階搜尋</button>
         <button type="button" class="btn btn-ghost" id="btnLang" data-i18n="lang">EN</button>
         <button type="button" class="btn btn-ghost" id="btnClientMode" data-i18n="clientMode">客戶模式</button>
         <button type="button" class="btn btn-ghost" id="btnImport" data-i18n="importCsv">匯入 Excel／CSV</button>
@@ -73,6 +74,45 @@
       <button type="button" class="btn btn-outline btn-sm" id="btnDemo" data-i18n="loadDemo">重載示範</button>
       <button type="button" class="btn btn-outline btn-sm" id="btnClear" data-i18n="clearCases">清除本機個案</button>
     </div>
+
+    <section class="section adv-panel hidden" id="advPanel">
+      <h2 class="section-title" data-i18n="advSearchTitle">進階搜尋</h2>
+      <div class="adv-grid">
+        <label class="adv-field">
+          <span data-i18n="advAumMin">AUM 下限</span>
+          <input type="number" id="advAumMin" min="0" step="100000" placeholder="e.g. 5000000" />
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advAumMax">AUM 上限</span>
+          <input type="number" id="advAumMax" min="0" step="100000" placeholder="e.g. 30000000" />
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advProductType">產品類型</span>
+          <select id="advProductType">
+            <option value="">—</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advRisk">風險取向</span>
+          <select id="advRisk">
+            <option value="">—</option>
+          </select>
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advMatFrom">到期日起</span>
+          <input type="date" id="advMatFrom" />
+        </label>
+        <label class="adv-field">
+          <span data-i18n="advMatTo">到期日止</span>
+          <input type="date" id="advMatTo" />
+        </label>
+      </div>
+      <div class="adv-actions">
+        <button type="button" class="btn btn-gold" id="btnAdvApply" data-i18n="advApply">套用篩選</button>
+        <button type="button" class="btn btn-outline" id="btnAdvClear" data-i18n="advClear">清除篩選</button>
+      </div>
+      <div id="advResults" class="adv-results hidden"></div>
+    </section>
 
     <div id="clientBanner" class="client-mode-banner hidden" data-i18n="clientBanner">
       客戶模式：已隱藏內部銷售備註與 RM 專用提示

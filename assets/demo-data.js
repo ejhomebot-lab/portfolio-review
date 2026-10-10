@@ -63,8 +63,8 @@ window.PR_DEMO_CASES = [
       { product_name: "恒生科技 ETF (3033.HK)", type: "Stock", quantity: 10000, cost_value: 420000, market_value: 398000, day_change_pct: -0.85, pnl_value: -22000, pnl_pct: -5.24, currency: "HKD" },
       { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 1000000, market_value: 972000, day_change_pct: -0.4, pnl_value: -28000, pnl_pct: -2.8, currency: "USD" },
       { product_name: "USD/HKD 遠期套保", type: "FX", quantity: 500000, cost_value: 500000, market_value: 512500, day_change_pct: 0.12, pnl_value: 12500, pnl_pct: 2.5, currency: "USD" },
-      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 800000, cost_value: 800000, market_value: 806800, day_change_pct: 0.02, pnl_value: 6800, pnl_pct: 0.85, currency: "USD" },
-      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 1200000, cost_value: 1200000, market_value: 1214400, day_change_pct: 0.01, pnl_value: 14400, pnl_pct: 1.2, currency: "HKD" },
+      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 800000, cost_value: 800000, market_value: 806800, day_change_pct: 0.02, pnl_value: 6800, pnl_pct: 0.85, currency: "USD", start_date: "2026-08-26", maturity_date: "2026-11-24" },
+      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 1200000, cost_value: 1200000, market_value: 1214400, day_change_pct: 0.01, pnl_value: 14400, pnl_pct: 1.2, currency: "HKD", start_date: "2026-09-15", maturity_date: "2027-03-15" },
       { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 1500000, market_value: 1582000, day_change_pct: 0.05, pnl_value: 82000, pnl_pct: 5.47, currency: "USD" }
     ],
     opportunities: [
@@ -87,7 +87,7 @@ window.PR_DEMO_CASES = [
       { product_name: "環球多元資產基金 A", type: "Fund", quantity: 6000, cost_value: 1200000, market_value: 1290000, day_change_pct: 0.35, pnl_value: 90000, pnl_pct: 7.5, currency: "HKD" },
       { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 3500, cost_value: 980000, market_value: 1443400, day_change_pct: -1.25, pnl_value: 463400, pnl_pct: 47.29, currency: "HKD" },
       { product_name: "恒生科技 ETF (3033.HK)", type: "Stock", quantity: 20000, cost_value: 900000, market_value: 796000, day_change_pct: -0.85, pnl_value: -104000, pnl_pct: -11.56, currency: "HKD" },
-      { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 500000, market_value: 486000, day_change_pct: -0.4, pnl_value: -14000, pnl_pct: -2.8, currency: "USD" },
+      { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 500000, market_value: 486000, day_change_pct: -0.4, pnl_value: -14000, pnl_pct: -2.8, currency: "USD", start_date: "2026-02-28", maturity_date: "2027-02-28" },
       { product_name: "滙豐控股 (0005.HK)", type: "Stock", quantity: 8000, cost_value: 440000, market_value: 500000, day_change_pct: 0.48, pnl_value: 60000, pnl_pct: 13.64, currency: "HKD" }
     ],
     opportunities: [
@@ -108,8 +108,8 @@ window.PR_DEMO_CASES = [
     holdings: [
       { product_name: "亞洲高收益債券基金", type: "Fund", quantity: 4000, cost_value: 800000, market_value: 772000, day_change_pct: -0.22, pnl_value: -28000, pnl_pct: -3.5, currency: "HKD" },
       { product_name: "環球多元資產基金 A", type: "Fund", quantity: 2500, cost_value: 500000, market_value: 537500, day_change_pct: 0.35, pnl_value: 37500, pnl_pct: 7.5, currency: "HKD" },
-      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 1500000, cost_value: 1500000, market_value: 1512750, day_change_pct: 0.02, pnl_value: 12750, pnl_pct: 0.85, currency: "USD" },
-      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 2000000, cost_value: 2000000, market_value: 2024000, day_change_pct: 0.01, pnl_value: 24000, pnl_pct: 1.2, currency: "HKD" },
+      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 1500000, cost_value: 1500000, market_value: 1512750, day_change_pct: 0.02, pnl_value: 12750, pnl_pct: 0.85, currency: "USD", start_date: "2026-08-26", maturity_date: "2026-11-24" },
+      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 2000000, cost_value: 2000000, market_value: 2024000, day_change_pct: 0.01, pnl_value: 24000, pnl_pct: 1.2, currency: "HKD", start_date: "2026-10-01", maturity_date: "2027-04-01" },
       { product_name: "港元定期存款 3.0% 12M", type: "Deposit", quantity: 1000000, cost_value: 1000000, market_value: 1015000, day_change_pct: 0.01, pnl_value: 15000, pnl_pct: 1.5, currency: "HKD" }
     ],
     opportunities: [
@@ -130,8 +130,8 @@ window.PR_DEMO_CASES = [
     notes: "保險與結構性產品為主；關注票息。",
     holdings: [
       { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 2200000, market_value: 2356000, day_change_pct: 0.05, pnl_value: 156000, pnl_pct: 7.09, currency: "USD" },
-      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 400000, cost_value: 400000, market_value: 403400, day_change_pct: 0.02, pnl_value: 3400, pnl_pct: 0.85, currency: "USD" },
-      { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 750000, market_value: 729000, day_change_pct: -0.4, pnl_value: -21000, pnl_pct: -2.8, currency: "USD" },
+      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 400000, cost_value: 400000, market_value: 403400, day_change_pct: 0.02, pnl_value: 3400, pnl_pct: 0.85, currency: "USD", start_date: "2026-09-10", maturity_date: "2026-12-10" },
+      { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 750000, market_value: 729000, day_change_pct: -0.4, pnl_value: -21000, pnl_pct: -2.8, currency: "USD", start_date: "2026-02-15", maturity_date: "2027-02-15" },
       { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 800, cost_value: 240000, market_value: 329920, day_change_pct: -1.25, pnl_value: 89920, pnl_pct: 37.47, currency: "HKD" },
       { product_name: "USD/HKD 遠期套保", type: "FX", quantity: 200000, cost_value: 200000, market_value: 205000, day_change_pct: 0.12, pnl_value: 5000, pnl_pct: 2.5, currency: "USD" }
     ],

@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v4";
+  const STORAGE_KEY = "pr_cases_v5";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
@@ -150,6 +150,25 @@
       colSwapRate: "利率（組合收益率）",
       colSwapMaturityAmt: "到期本加息（到期日所得美元）",
       swapTableTitle: "保本高息 Swap",
+      advSearch: "進階搜尋",
+      advSearchTitle: "進階搜尋條件",
+      advAumMin: "AUM 下限（HKD）",
+      advAumMax: "AUM 上限（HKD）",
+      advProductType: "產品類型",
+      advRisk: "風險取向",
+      advMatFrom: "到期日起",
+      advMatTo: "到期日止",
+      advApply: "套用篩選",
+      advClear: "清除篩選",
+      advResults: "篩選結果",
+      advMatchCount: "位客戶符合",
+      advNoMatch: "沒有符合條件的客戶",
+      advNextMaturity: "最近到期",
+      advAny: "全部",
+      riskConservative: "保守型",
+      riskBalanced: "均衡型",
+      riskGrowth: "增長型",
+      riskAggressive: "進取型",
       total: "合計",
     },
     en: {
@@ -232,6 +251,25 @@
       colSwapRate: "Rate (portfolio yield)",
       colSwapMaturityAmt: "Principal + interest at maturity (USD)",
       swapTableTitle: "Principal-protected Swap",
+      advSearch: "Advanced search",
+      advSearchTitle: "Advanced filters",
+      advAumMin: "AUM min (HKD)",
+      advAumMax: "AUM max (HKD)",
+      advProductType: "Product type",
+      advRisk: "Risk profile",
+      advMatFrom: "Maturity from",
+      advMatTo: "Maturity to",
+      advApply: "Apply filters",
+      advClear: "Clear filters",
+      advResults: "Filter results",
+      advMatchCount: "clients match",
+      advNoMatch: "No clients match these filters",
+      advNextMaturity: "Next maturity",
+      advAny: "Any",
+      riskConservative: "Conservative",
+      riskBalanced: "Balanced",
+      riskGrowth: "Growth",
+      riskAggressive: "Aggressive",
       total: "Total",
     },
   };
@@ -294,6 +332,25 @@
     colSwapRate: "利率（组合收益率）",
     colSwapMaturityAmt: "到期本加息（到期日所得美元）",
     swapTableTitle: "保本高息 Swap",
+    advSearch: "进阶搜寻",
+    advSearchTitle: "进阶搜寻条件",
+    advAumMin: "AUM 下限（HKD）",
+    advAumMax: "AUM 上限（HKD）",
+    advProductType: "产品类型",
+    advRisk: "风险取向",
+    advMatFrom: "到期日起",
+    advMatTo: "到期日止",
+    advApply: "套用筛选",
+    advClear: "清除筛选",
+    advResults: "筛选结果",
+    advMatchCount: "位客户符合",
+    advNoMatch: "没有符合条件的客户",
+    advNextMaturity: "最近到期",
+    advAny: "全部",
+    riskConservative: "保守型",
+    riskBalanced: "均衡型",
+    riskGrowth: "增长型",
+    riskAggressive: "进取型",
     total: "合计",
     clientBanner: "客户模式：已隐藏内部销售备注与 RM 专用提示",
   });
@@ -316,6 +373,15 @@
     authenticated: false,
     viewMode: "review", // review | holders
     holdersProduct: null,
+    advOpen: false,
+    advFilters: {
+      aumMin: null,
+      aumMax: null,
+      productType: "",
+      risk: "",
+      matFrom: "",
+      matTo: "",
+    },
   };
 
   function t(key) {
@@ -381,7 +447,12 @@
           parsed.some(
             (c) =>
               c.id === "demo-hong-yiu" &&
-              (c.holdings || []).some((h) => h.type === "swap" && h.maturity_date === "2027-01-11")
+              (c.holdings || []).some((h) => h.type === "swap" && h.maturity_date === "2027-01-11") &&
+            parsed.some(
+              (c) =>
+                c.id === "demo-chen" &&
+                (c.holdings || []).some((h) => h.maturity_date === "2026-11-24")
+            )
           )
         ) {
           state.cases = parsed;
@@ -463,6 +534,12 @@
     }
     document.documentElement.lang =
       state.lang === "en" ? "en" : state.lang === "zh-Hans" ? "zh-Hans" : "zh-Hant";
+    if (state.advOpen) {
+      populateAdvSelects();
+      if (advFiltersActive() || (document.getElementById("globalSearch") || {}).value) {
+        renderAdvResults();
+      }
+    }
   }
 
   function renderCaseSelect() {
@@ -883,6 +960,205 @@
     });
   }
 
+
+  function caseAum(c) {
+    return (c.holdings || []).reduce((s, h) => s + (Number(h.market_value) || 0), 0);
+  }
+
+  function caseMaturities(c) {
+    return (c.holdings || [])
+      .map((h) => h.maturity_date)
+      .filter(Boolean)
+      .sort();
+  }
+
+  function riskLabel(risk) {
+    const map = {
+      Conservative: "riskConservative",
+      Balanced: "riskBalanced",
+      Growth: "riskGrowth",
+      Aggressive: "riskAggressive",
+    };
+    return map[risk] ? t(map[risk]) : risk || "—";
+  }
+
+  function populateAdvSelects() {
+    const typeSel = document.getElementById("advProductType");
+    const riskSel = document.getElementById("advRisk");
+    if (!typeSel || !riskSel) return;
+    const types = new Set();
+    const risks = new Set();
+    state.cases.forEach((c) => {
+      if (c.risk_profile) risks.add(c.risk_profile);
+      (c.holdings || []).forEach((h) => {
+        if (h.type) types.add(h.type === "Swap" ? "swap" : h.type);
+      });
+    });
+    const typeOrder = ["Fund", "Stock", "ELN", "FX", "Deposit", "Insurance", "swap"];
+    const sortedTypes = [...types].sort(
+      (a, b) => (typeOrder.indexOf(a) + 99) - (typeOrder.indexOf(b) + 99) || a.localeCompare(b)
+    );
+    const curType = state.advFilters.productType || typeSel.value;
+    const curRisk = state.advFilters.risk || riskSel.value;
+    typeSel.innerHTML =
+      `<option value="">${t("advAny")}</option>` +
+      sortedTypes.map((ty) => `<option value="${ty}">${typeLabel(ty)}</option>`).join("");
+    riskSel.innerHTML =
+      `<option value="">${t("advAny")}</option>` +
+      [...risks]
+        .sort()
+        .map((r) => `<option value="${r}">${riskLabel(r)}</option>`)
+        .join("");
+    typeSel.value = curType;
+    riskSel.value = curRisk;
+  }
+
+  function readAdvFiltersFromForm() {
+    const minV = document.getElementById("advAumMin").value;
+    const maxV = document.getElementById("advAumMax").value;
+    state.advFilters = {
+      aumMin: minV === "" ? null : Number(minV),
+      aumMax: maxV === "" ? null : Number(maxV),
+      productType: document.getElementById("advProductType").value || "",
+      risk: document.getElementById("advRisk").value || "",
+      matFrom: document.getElementById("advMatFrom").value || "",
+      matTo: document.getElementById("advMatTo").value || "",
+    };
+  }
+
+  function advFiltersActive() {
+    const f = state.advFilters;
+    return (
+      f.aumMin != null ||
+      f.aumMax != null ||
+      !!f.productType ||
+      !!f.risk ||
+      !!f.matFrom ||
+      !!f.matTo
+    );
+  }
+
+  function clientMatchesAdv(c, f) {
+    const aum = caseAum(c);
+    if (f.aumMin != null && !isNaN(f.aumMin) && aum < f.aumMin) return false;
+    if (f.aumMax != null && !isNaN(f.aumMax) && aum > f.aumMax) return false;
+    if (f.risk && c.risk_profile !== f.risk) return false;
+    if (f.productType) {
+      const want = f.productType === "Swap" ? "swap" : f.productType;
+      const has = (c.holdings || []).some((h) => {
+        const ty = h.type === "Swap" ? "swap" : h.type;
+        return ty === want;
+      });
+      if (!has) return false;
+    }
+    if (f.matFrom || f.matTo) {
+      const mats = caseMaturities(c);
+      if (!mats.length) return false;
+      const ok = mats.some((d) => {
+        if (f.matFrom && d < f.matFrom) return false;
+        if (f.matTo && d > f.matTo) return false;
+        return true;
+      });
+      if (!ok) return false;
+    }
+    return true;
+  }
+
+  function filterClientsAdvanced(keyword) {
+    const f = state.advFilters;
+    const q = (keyword || "").trim().toLowerCase();
+    return state.cases.filter((c) => {
+      if (advFiltersActive() && !clientMatchesAdv(c, f)) return false;
+      if (!q) return true;
+      const names = [c.display_name, c.display_name_en, c.client_id]
+        .filter(Boolean)
+        .map((x) => String(x).toLowerCase());
+      if (names.some((n) => n.includes(q))) return true;
+      return (c.holdings || []).some((h) =>
+        (h.product_name || "").toLowerCase().includes(q)
+      );
+    });
+  }
+
+  function renderAdvResults() {
+    const box = document.getElementById("advResults");
+    if (!box) return;
+    if (!advFiltersActive() && !(document.getElementById("globalSearch").value || "").trim()) {
+      // still show if user clicked apply with empty? show all or hide
+    }
+    const kw = document.getElementById("globalSearch").value || "";
+    const matches = filterClientsAdvanced(kw);
+    const active = advFiltersActive() || !!kw.trim();
+    if (!active) {
+      box.classList.add("hidden");
+      box.innerHTML = "";
+      return;
+    }
+    box.classList.remove("hidden");
+    if (!matches.length) {
+      box.innerHTML = `<div class="adv-results-meta">${t("advNoMatch")}</div>`;
+      return;
+    }
+    const cards = matches
+      .map((c) => {
+        const aum = caseAum(c);
+        const mats = caseMaturities(c);
+        const types = [
+          ...new Set(
+            (c.holdings || []).map((h) => (h.type === "Swap" ? "swap" : h.type))
+          ),
+        ]
+          .map(typeLabel)
+          .join(" · ");
+        return `<button type="button" class="adv-client-card" data-open-case="${escapeHtml(c.id)}">
+          <div>
+            <strong>${escapeHtml(clientDisplayName(c))}</strong>
+            <div class="meta">
+              <span>${escapeHtml(c.client_id || "")}</span>
+              <span>${riskLabel(c.risk_profile)}</span>
+              <span>AUM ${fmtMoneyFull(aum, c.currency || "HKD")}</span>
+              ${mats.length ? `<span>${t("advNextMaturity")}: ${mats[0]}</span>` : ""}
+              <span>${escapeHtml(types)}</span>
+            </div>
+          </div>
+          <span class="btn-link">${t("openReview")}</span>
+        </button>`;
+      })
+      .join("");
+    box.innerHTML =
+      `<div class="adv-results-meta">${t("advResults")} · ${matches.length} ${t("advMatchCount")}</div>` +
+      cards;
+    box.querySelectorAll("[data-open-case]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        state.currentId = btn.getAttribute("data-open-case");
+        state.typeFilter = "all";
+        showReviewView();
+        renderAll();
+        document.getElementById("sec-cover").scrollIntoView({ behavior: "smooth" });
+      });
+    });
+  }
+
+  function syncAdvPanel() {
+    const panel = document.getElementById("advPanel");
+    const btn = document.getElementById("btnAdvSearch");
+    if (!panel) return;
+    panel.classList.toggle("hidden", !state.advOpen);
+    if (btn) btn.classList.toggle("active-toggle", state.advOpen);
+    if (state.advOpen) {
+      populateAdvSelects();
+      document.getElementById("advAumMin").value =
+        state.advFilters.aumMin != null ? state.advFilters.aumMin : "";
+      document.getElementById("advAumMax").value =
+        state.advFilters.aumMax != null ? state.advFilters.aumMax : "";
+      document.getElementById("advProductType").value = state.advFilters.productType || "";
+      document.getElementById("advRisk").value = state.advFilters.risk || "";
+      document.getElementById("advMatFrom").value = state.advFilters.matFrom || "";
+      document.getElementById("advMatTo").value = state.advFilters.matTo || "";
+      if (advFiltersActive()) renderAdvResults();
+    }
+  }
+
   function runSearch(query) {
     const q = (query || "").trim().toLowerCase();
     const dd = document.getElementById("searchDropdown");
@@ -893,6 +1169,7 @@
     }
     const clients = [];
     state.cases.forEach((c) => {
+      if (advFiltersActive() && !clientMatchesAdv(c, state.advFilters)) return;
       const names = [c.display_name, c.display_name_en, c.client_id]
         .filter(Boolean)
         .map((x) => String(x).toLowerCase());
@@ -996,6 +1273,7 @@
     const c = currentCase();
     renderCaseSelect();
     renderBanner();
+    syncAdvPanel();
     if (state.viewMode === "holders" && state.holdersProduct) {
       document.getElementById("reviewSections").classList.add("hidden");
       document.getElementById("sec-product-holders").classList.remove("hidden");
@@ -1343,11 +1621,45 @@
       }
     });
 
+    document.getElementById("btnAdvSearch").addEventListener("click", () => {
+      state.advOpen = !state.advOpen;
+      syncAdvPanel();
+      applyI18n();
+    });
+    document.getElementById("btnAdvApply").addEventListener("click", () => {
+      readAdvFiltersFromForm();
+      state.advOpen = true;
+      renderAdvResults();
+      toast(t("advResults"));
+    });
+    document.getElementById("btnAdvClear").addEventListener("click", () => {
+      state.advFilters = {
+        aumMin: null,
+        aumMax: null,
+        productType: "",
+        risk: "",
+        matFrom: "",
+        matTo: "",
+      };
+      ["advAumMin", "advAumMax", "advProductType", "advRisk", "advMatFrom", "advMatTo"].forEach(
+        (id) => {
+          const el = document.getElementById(id);
+          if (el) el.value = "";
+        }
+      );
+      populateAdvSelects();
+      document.getElementById("advResults").classList.add("hidden");
+      document.getElementById("advResults").innerHTML = "";
+    });
+
     const searchInput = document.getElementById("globalSearch");
     let searchTimer = null;
     searchInput.addEventListener("input", () => {
       clearTimeout(searchTimer);
-      searchTimer = setTimeout(() => runSearch(searchInput.value), 150);
+      searchTimer = setTimeout(() => {
+        runSearch(searchInput.value);
+        if (state.advOpen && advFiltersActive()) renderAdvResults();
+      }, 150);
     });
     searchInput.addEventListener("focus", () => {
       if (searchInput.value.trim()) runSearch(searchInput.value);
