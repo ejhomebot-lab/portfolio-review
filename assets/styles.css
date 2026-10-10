@@ -919,3 +919,155 @@ table.holdings td.num { text-align: right; }
     min-height: 40px;
   }
 }
+
+/* Brand as home button */
+button.brand {
+  appearance: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+  padding: 0;
+}
+button.brand:hover .brand-text strong { color: var(--gold-soft); }
+button.brand:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+
+/* Export reports menu */
+.export-menu-wrap { position: relative; }
+.export-menu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  min-width: 260px;
+  background: #fff;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 40px rgba(11,31,58,0.2);
+  z-index: 160;
+  padding: 6px;
+}
+.export-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: transparent;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--navy);
+}
+.export-item:hover { background: #f0f4f8; }
+#btnExportMenu.active-toggle {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
+}
+
+/* Home overview */
+.home-lead {
+  margin: -4px 0 16px;
+  font-size: 13px;
+  color: var(--muted);
+}
+.home-client-list { display: grid; gap: 10px; }
+.home-panel.hidden { display: none !important; }
+
+.fund-link {
+  display: inline-block;
+  margin-top: 4px;
+  margin-right: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #1a56db;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+}
+.fund-copy {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  text-decoration: underline;
+}
+.fund-portal-note {
+  margin-top: 12px;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* Printable report sheet */
+.report-print-root {
+  display: none;
+}
+@media print {
+  .report-print-root.print-active {
+    display: block !important;
+  }
+  body.printing-report .app-header,
+  body.printing-report .case-bar,
+  body.printing-report .adv-panel,
+  body.printing-report #sec-home,
+  body.printing-report #reviewSections,
+  body.printing-report #clientBanner,
+  body.printing-report .disclaimer,
+  body.printing-report .export-menu-wrap,
+  body.printing-report .search-cluster,
+  body.printing-report #btnAdvSearchBar {
+    display: none !important;
+  }
+  body.printing-report .report-print-root.print-active {
+    display: block !important;
+  }
+  .report-sheet {
+    padding: 12px;
+  }
+  .report-sheet h1 {
+    font-size: 18px;
+    margin: 0 0 8px;
+  }
+  .report-sheet .meta {
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 12px;
+  }
+}
+@media screen {
+  .report-print-root { display: none !important; }
+}
+
+.fund-enrich {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 600;
+}
+.fund-spark { flex: 0 0 auto; }
+.no-print-actions { margin-top: 12px; }
+@media print {
+  .no-print-actions { display: none !important; }
+}

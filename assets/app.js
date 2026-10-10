@@ -2,12 +2,16 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v5";
+  const STORAGE_KEY = "pr_cases_v6";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
   // SHA-256("mose2026") — demo only, not bank-grade
   const PASS_HASH = "7074818e3f7915a08a954e030e3e2adfafb6a568f631e9c097f20842205b5dd4";
+  const BOCOM_FUND_PORTAL =
+    "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2004980/2005004/2008356/2631959.shtml?channelId=2004980";
+  const ETWEALTH_BASE = "https://fc11.etwealth.com/wfc-bocom-v3/ws";
+  const fundEnrichCache = {};
   const TYPE_COLORS = {
     Fund: "#1a56db",
     Stock: "#d97706",
@@ -169,6 +173,24 @@
       riskBalanced: "均衡型",
       riskGrowth: "增長型",
       riskAggressive: "進取型",
+      homeTitle: "客戶一覽",
+      homeLead: "選擇客戶開始投資組合檢視，或使用搜尋／進階篩選。",
+      exportReports: "導出報表",
+      reportMaturity90: "未來3個月到期客戶報表",
+      reportFunds: "基金報表",
+      reportEln90: "股票掛鈎未來3個月到期",
+      reportCsv: "下載 CSV",
+      reportPdf: "列印／PDF",
+      reportEmpty: "此報表暫無資料",
+      reportGenerated: "報表已準備",
+      colClient: "客戶",
+      fundInfo: "基金資料",
+      fundCopyName: "複製名稱",
+      fundCopied: "已複製基金名稱",
+      fundNav: "最新 NAV",
+      fundAsOf: "估值日",
+      fundDiv: "最近派息",
+      fundPortalNote: "基金資料經交通銀行香港／環富通公開介面盡力更新 NAV；若瀏覽器限制則顯示快取或僅開啟銀行基金頁。請於銀行頁同意條款後以基金名稱或代碼搜尋（非 ISIN）。",
       total: "合計",
     },
     en: {
@@ -270,6 +292,24 @@
       riskBalanced: "Balanced",
       riskGrowth: "Growth",
       riskAggressive: "Aggressive",
+      homeTitle: "Client overview",
+      homeLead: "Pick a client to start a portfolio review, or use search / advanced filters.",
+      exportReports: "Export reports",
+      reportMaturity90: "Maturities in next 3 months",
+      reportFunds: "Fund holdings report",
+      reportEln90: "ELN maturing in next 3 months",
+      reportCsv: "Download CSV",
+      reportPdf: "Print / PDF",
+      reportEmpty: "No rows for this report",
+      reportGenerated: "Report ready",
+      colClient: "Client",
+      fundInfo: "Fund info",
+      fundCopyName: "Copy name",
+      fundCopied: "Fund name copied",
+      fundNav: "Latest NAV",
+      fundAsOf: "As of",
+      fundDiv: "Last dividend",
+      fundPortalNote: "Fund data is enriched best-effort via BOCOM HK / ET Wealth public APIs. If the browser blocks the request, cached values or the bank portal link are used. On the bank page, agree to terms then search by fund name or fund code (not ISIN).",
       total: "Total",
     },
   };
@@ -351,6 +391,24 @@
     riskBalanced: "均衡型",
     riskGrowth: "增长型",
     riskAggressive: "进取型",
+    homeTitle: "客户一览",
+    homeLead: "选择客户开始投资组合检视，或使用搜寻／进阶筛选。",
+    exportReports: "导出报表",
+    reportMaturity90: "未来3个月到期客户报表",
+    reportFunds: "基金报表",
+    reportEln90: "股票挂钩未来3个月到期",
+    reportCsv: "下载 CSV",
+    reportPdf: "列印／PDF",
+    reportEmpty: "此报表暂无资料",
+    reportGenerated: "报表已准备",
+    colClient: "客户",
+    fundInfo: "基金资料",
+    fundCopyName: "复制名称",
+    fundCopied: "已复制基金名称",
+    fundNav: "最新 NAV",
+    fundAsOf: "估值日",
+    fundDiv: "最近派息",
+    fundPortalNote: "基金资料经交通银行香港／环富通公开接口尽力更新 NAV；若浏览器限制则显示缓存或仅打开银行基金页。请于银行页同意条款后以基金名称或代码搜寻（非 ISIN）。",
     total: "合计",
     clientBanner: "客户模式：已隐藏内部销售备注与 RM 专用提示",
   });
@@ -371,7 +429,7 @@
     sortDir: "desc",
     chart: null,
     authenticated: false,
-    viewMode: "review", // review | holders
+    viewMode: "home", // home | review | holders
     holdersProduct: null,
     advOpen: false,
     advFilters: {
@@ -441,20 +499,22 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        if (
+        const ok =
           Array.isArray(parsed) &&
           parsed.length >= 2 &&
           parsed.some(
             (c) =>
               c.id === "demo-hong-yiu" &&
-              (c.holdings || []).some((h) => h.type === "swap" && h.maturity_date === "2027-01-11") &&
-            parsed.some(
-              (c) =>
-                c.id === "demo-chen" &&
-                (c.holdings || []).some((h) => h.maturity_date === "2026-11-24")
-            )
-          )
-        ) {
+              (c.holdings || []).some(
+                (h) => h.type === "swap" && h.maturity_date === "2027-01-05"
+              )
+          ) &&
+          parsed.some(
+            (c) =>
+              c.id === "demo-chen" &&
+              (c.holdings || []).some((h) => h.fdId === "ETNSI36463")
+          );
+        if (ok) {
           state.cases = parsed;
           return;
         }
@@ -710,9 +770,28 @@
       <th data-sort="day_change_pct" class="num">${t("colDay")}<span class="sort-ind">↕</span></th>
     </tr></thead>`;
     const body = list
-      .map(
-        (h) => `<tr>
-          <td><strong>${escapeHtml(h.product_name)}</strong></td>
+      .map((h) => {
+        let fundBits = "";
+        if (h.type === "Fund") {
+          const code = h.fund_code ? ` (${escapeHtml(h.fund_code)})` : "";
+          fundBits = `<div>
+            <button type="button" class="fund-link" data-fund-portal="${escapeHtml(
+              h.product_name
+            )}" data-fund-code="${escapeHtml(h.fund_code || "")}">${t("fundInfo")}</button>
+            <button type="button" class="fund-copy" data-copy-fund="${escapeHtml(
+              h.product_name
+            )}">${t("fundCopyName")}</button>
+          </div>`;
+          if (h.fdId) {
+            fundBits += `<div class="fund-enrich-slot" data-fund-enrich="${escapeHtml(
+              h.fdId
+            )}"></div>`;
+          } else {
+            fundBits += `<div class="holding-sub">${escapeHtml(h.product_name)}${code}</div>`;
+          }
+        }
+        return `<tr>
+          <td><strong>${escapeHtml(h.product_name)}</strong>${fundBits}</td>
           <td><span class="type-badge type-${escapeHtml(h.type)}">${typeLabel(h.type)}</span></td>
           <td class="num">${fmtMoneyFull(h.quantity)}</td>
           <td class="num">${fmtMoneyFull(h.cost_value)}</td>
@@ -720,8 +799,8 @@
           <td class="num ${pnlClass(h.pnl_value)}">${fmtMoneyFull(h.pnl_value)}</td>
           <td class="num ${pnlClass(h.pnl_pct)}">${fmtPct(h.pnl_pct)}</td>
           <td class="num ${pnlClass(h.day_change_pct)}">${fmtPct(h.day_change_pct)}</td>
-        </tr>`
-      )
+        </tr>`;
+      })
       .join("");
     return `<div class="table-wrap"><table class="holdings">${head}<tbody>${body}</tbody></table></div>`;
   }
@@ -781,6 +860,23 @@
         renderHoldings(currentCase());
       });
     });
+    wrap.querySelectorAll("[data-fund-portal]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        window.open(BOCOM_FUND_PORTAL, "_blank", "noopener");
+      });
+    });
+    wrap.querySelectorAll("[data-copy-fund]").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        const name = btn.getAttribute("data-copy-fund");
+        try {
+          await navigator.clipboard.writeText(name);
+          toast(t("fundCopied"));
+        } catch (e) {
+          toast(name);
+        }
+      });
+    });
+    enrichFundCells();
   }
 
   function renderMovers(c) {
@@ -892,6 +988,403 @@
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;");
+  }
+
+
+  function reportAsOfDate() {
+    return "2026-10-10"; // demo clock aligned with review_date
+  }
+
+  function addDaysISO(iso, days) {
+    const d = new Date(iso + "T00:00:00");
+    d.setDate(d.getDate() + days);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function goHome() {
+    state.viewMode = "home";
+    state.holdersProduct = null;
+    state.advOpen = false;
+    state.typeFilter = "all";
+    document.getElementById("exportMenu")?.classList.add("hidden");
+    document.getElementById("btnExportMenu")?.classList.remove("active-toggle");
+    renderAll();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function openClientReview(caseId) {
+    state.currentId = caseId;
+    state.typeFilter = "all";
+    state.viewMode = "review";
+    state.holdersProduct = null;
+    renderAll();
+    document.getElementById("sec-cover")?.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function renderHome() {
+    const el = document.getElementById("homeClientList");
+    if (!el) return;
+    const list = state.cases.slice().sort((a, b) => caseAum(b) - caseAum(a));
+    el.innerHTML = list
+      .map((c) => {
+        const aum = caseAum(c);
+        const mats = caseMaturities(c);
+        const types = [
+          ...new Set((c.holdings || []).map((h) => (h.type === "Swap" ? "swap" : h.type))),
+        ]
+          .map(typeLabel)
+          .join(" · ");
+        return `<button type="button" class="adv-client-card" data-home-case="${escapeHtml(c.id)}">
+          <div>
+            <strong>${escapeHtml(clientDisplayName(c))}</strong>
+            <div class="meta">
+              <span>${escapeHtml(c.client_id || "")}</span>
+              <span>${riskLabel(c.risk_profile)}</span>
+              <span>AUM ${fmtMoneyFull(aum, c.currency || "HKD")}</span>
+              ${mats.length ? `<span>${t("advNextMaturity")}: ${mats[0]}</span>` : ""}
+              <span>${escapeHtml(types)}</span>
+            </div>
+          </div>
+          <span class="btn-link">${t("openReview")}</span>
+        </button>`;
+      })
+      .join("");
+    el.querySelectorAll("[data-home-case]").forEach((btn) => {
+      btn.addEventListener("click", () => openClientReview(btn.getAttribute("data-home-case")));
+    });
+  }
+
+  function collectMaturityRows(withinDays, typeFilterFn) {
+    const start = reportAsOfDate();
+    const end = addDaysISO(start, withinDays);
+    const rows = [];
+    state.cases.forEach((c) => {
+      (c.holdings || []).forEach((h) => {
+        if (!h.maturity_date) return;
+        if (h.maturity_date < start || h.maturity_date > end) return;
+        if (typeFilterFn && !typeFilterFn(h)) return;
+        rows.push({
+          client: clientDisplayName(c),
+          client_id: c.client_id || "",
+          product: h.product_name,
+          type: h.type,
+          maturity: h.maturity_date,
+          quantity: h.quantity,
+          cost_value: h.cost_value,
+          market_value: h.market_value,
+          pnl_value: h.pnl_value,
+          pnl_pct: h.pnl_pct,
+          currency: h.currency || c.currency || "HKD",
+        });
+      });
+    });
+    rows.sort((a, b) => a.maturity.localeCompare(b.maturity) || a.client.localeCompare(b.client));
+    return rows;
+  }
+
+  function collectFundRows() {
+    const rows = [];
+    state.cases.forEach((c) => {
+      (c.holdings || []).forEach((h) => {
+        if (h.type !== "Fund") return;
+        rows.push({
+          client: clientDisplayName(c),
+          client_id: c.client_id || "",
+          product: h.product_name,
+          fund_code: h.fund_code || "",
+          fdId: h.fdId || "",
+          quantity: h.quantity,
+          cost_value: h.cost_value,
+          market_value: h.market_value,
+          pnl_value: h.pnl_value,
+          pnl_pct: h.pnl_pct,
+          currency: h.currency || "HKD",
+        });
+      });
+    });
+    rows.sort((a, b) => a.client.localeCompare(b.client) || a.product.localeCompare(b.product));
+    return rows;
+  }
+
+  function csvEscape(v) {
+    const s = v == null ? "" : String(v);
+    if (/[",\n]/.test(s)) return '"' + s.replace(/"/g, '""') + '"';
+    return s;
+  }
+
+  function downloadCsv(filename, headers, rows) {
+    const lines = [headers.join(",")];
+    rows.forEach((r) => lines.push(r.map(csvEscape).join(",")));
+    const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
+  function buildReport(kind) {
+    if (kind === "maturity90") {
+      const rows = collectMaturityRows(90, null);
+      return {
+        title: t("reportMaturity90"),
+        filename: "maturities-90d.csv",
+        headers: [
+          t("colClient"),
+          "Client ID",
+          t("colProduct"),
+          t("colType"),
+          t("colSwapMaturity"),
+          t("colMv"),
+          t("colPnl"),
+          t("currency"),
+        ],
+        csvRows: rows.map((r) => [
+          r.client,
+          r.client_id,
+          r.product,
+          typeLabel(r.type),
+          r.maturity,
+          r.market_value,
+          r.pnl_value,
+          r.currency,
+        ]),
+        htmlRows: rows.map(
+          (r) =>
+            `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${typeLabel(
+              r.type
+            )}</td><td>${r.maturity}</td><td class="num">${fmtMoneyFull(
+              r.market_value
+            )}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td></tr>`
+        ),
+        tableHead: `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t(
+          "colType"
+        )}</th><th>${t("colSwapMaturity")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th></tr>`,
+      };
+    }
+    if (kind === "funds") {
+      const rows = collectFundRows();
+      return {
+        title: t("reportFunds"),
+        filename: "funds-report.csv",
+        headers: [
+          t("colClient"),
+          t("colProduct"),
+          "Fund code",
+          t("colQty"),
+          t("colCost"),
+          t("colMv"),
+          t("colPnl"),
+          t("colPnlPct"),
+        ],
+        csvRows: rows.map((r) => [
+          r.client,
+          r.product,
+          r.fund_code,
+          r.quantity,
+          r.cost_value,
+          r.market_value,
+          r.pnl_value,
+          r.pnl_pct,
+        ]),
+        htmlRows: rows.map(
+          (r) =>
+            `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(
+              r.product
+            )}</td><td>${escapeHtml(r.fund_code)}</td><td class="num">${fmtMoneyFull(
+              r.quantity
+            )}</td><td class="num">${fmtMoneyFull(r.cost_value)}</td><td class="num">${fmtMoneyFull(
+              r.market_value
+            )}</td><td class="num">${fmtMoneyFull(r.pnl_value)}</td><td class="num">${fmtPct(
+              r.pnl_pct
+            )}</td></tr>`
+        ),
+        tableHead: `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>Code</th><th>${t(
+          "colQty"
+        )}</th><th>${t("colCost")}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th><th>${t(
+          "colPnlPct"
+        )}</th></tr>`,
+      };
+    }
+    if (kind === "eln90") {
+      const rows = collectMaturityRows(90, (h) => h.type === "ELN" || h.type === "ELI");
+      return {
+        title: t("reportEln90"),
+        filename: "eln-maturities-90d.csv",
+        headers: [
+          t("colClient"),
+          t("colProduct"),
+          t("colSwapMaturity"),
+          t("colMv"),
+          t("colPnl"),
+          t("currency"),
+        ],
+        csvRows: rows.map((r) => [
+          r.client,
+          r.product,
+          r.maturity,
+          r.market_value,
+          r.pnl_value,
+          r.currency,
+        ]),
+        htmlRows: rows.map(
+          (r) =>
+            `<tr><td>${escapeHtml(r.client)}</td><td>${escapeHtml(r.product)}</td><td>${
+              r.maturity
+            }</td><td class="num">${fmtMoneyFull(r.market_value)}</td><td class="num">${fmtMoneyFull(
+              r.pnl_value
+            )}</td></tr>`
+        ),
+        tableHead: `<tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t(
+          "colSwapMaturity"
+        )}</th><th>${t("colMv")}</th><th>${t("colPnl")}</th></tr>`,
+      };
+    }
+    return null;
+  }
+
+  function showReportPrint(report) {
+    let root = document.getElementById("reportPrintRoot");
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "reportPrintRoot";
+      root.className = "report-print-root";
+      document.body.appendChild(root);
+    }
+    root.innerHTML = `<div class="report-sheet section">
+      <h1>${escapeHtml(report.title)}</h1>
+      <div class="meta">As of ${reportAsOfDate()} · RM Mose Lee · Portfolio Review</div>
+      <div class="table-wrap"><table class="holdings"><thead>${report.tableHead}</thead><tbody>${
+      report.htmlRows.join("") || `<tr><td colspan="8">${t("reportEmpty")}</td></tr>`
+    }</tbody></table></div>
+      <div style="margin-top:12px;display:flex;gap:8px" class="no-print-actions">
+        <button type="button" class="btn btn-gold" id="btnReportPdf">${t("reportPdf")}</button>
+        <button type="button" class="btn btn-outline" id="btnReportCsv">${t("reportCsv")}</button>
+      </div>
+    </div>`;
+    root.classList.add("print-active");
+    root.style.display = "block";
+    document.getElementById("btnReportPdf").onclick = () => {
+      document.body.classList.add("printing-report");
+      window.print();
+      setTimeout(() => document.body.classList.remove("printing-report"), 500);
+    };
+    document.getElementById("btnReportCsv").onclick = () => {
+      if (!report.csvRows.length) {
+        toast(t("reportEmpty"));
+        return;
+      }
+      downloadCsv(report.filename, report.headers, report.csvRows);
+    };
+    root.scrollIntoView({ behavior: "smooth", block: "start" });
+    toast(t("reportGenerated"));
+  }
+
+  function runExportReport(kind) {
+    const report = buildReport(kind);
+    if (!report) return;
+    showReportPrint(report);
+    document.getElementById("exportMenu")?.classList.add("hidden");
+    document.getElementById("btnExportMenu")?.classList.remove("active-toggle");
+  }
+
+  async function fetchFundSummary(fdId) {
+    if (!fdId) return null;
+    if (fundEnrichCache[fdId]) return fundEnrichCache[fdId];
+    try {
+      const url = `${ETWEALTH_BASE}/getFdSummary?fdId=${encodeURIComponent(fdId)}&lang=zh_TW`;
+      const res = await fetch(url, { method: "GET", mode: "cors" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      const row = Array.isArray(data) ? data[0] : data;
+      fundEnrichCache[fdId] = row;
+      return row;
+    } catch (e) {
+      fundEnrichCache[fdId] = null;
+      return null;
+    }
+  }
+
+  async function fetchFundDiv(fdId) {
+    try {
+      const url = `${ETWEALTH_BASE}/getDivHistory?fdId=${encodeURIComponent(fdId)}&lang=zh_TW`;
+      const res = await fetch(url, { mode: "cors" });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data || data === "NO_DATA_FOUND") return null;
+      const arr = Array.isArray(data) ? data : data.list || [];
+      return arr[0] || null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  async function fetchFundSpark(fdId) {
+    try {
+      const url = `${ETWEALTH_BASE}/getPriceChartData?fdId=${encodeURIComponent(
+        fdId
+      )}&jsArray=true&period=6&lang=zh_TW`;
+      const res = await fetch(url, { mode: "cors" });
+      if (!res.ok) return null;
+      const data = await res.json();
+      return Array.isArray(data) ? data.slice(-30) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function sparkSvg(points) {
+    if (!points || points.length < 2) return "";
+    const vals = points.map((p) => Number(p[1])).filter((n) => !isNaN(n));
+    if (vals.length < 2) return "";
+    const min = Math.min(...vals);
+    const max = Math.max(...vals);
+    const w = 72;
+    const h = 22;
+    const span = max - min || 1;
+    const coords = vals
+      .map((v, i) => {
+        const x = (i / (vals.length - 1)) * w;
+        const y = h - ((v - min) / span) * (h - 2) - 1;
+        return x.toFixed(1) + "," + y.toFixed(1);
+      })
+      .join(" ");
+    const up = vals[vals.length - 1] >= vals[0];
+    return `<svg class="fund-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline fill="none" stroke="${
+      up ? "#0d7a4f" : "#c0392b"
+    }" stroke-width="1.5" points="${coords}"/></svg>`;
+  }
+
+  function enrichFundCells() {
+    document.querySelectorAll("[data-fund-enrich]").forEach(async (el) => {
+      const fdId = el.getAttribute("data-fund-enrich");
+      const summary = await fetchFundSummary(fdId);
+      const div = await fetchFundDiv(fdId);
+      const spark = await fetchFundSpark(fdId);
+      if (!summary && !div && !spark) {
+        el.innerHTML = `<span class="holding-sub">${t("fundInfo")}: portal</span>`;
+        return;
+      }
+      const nav =
+        summary && summary.fdPrice != null
+          ? `${t("fundNav")} ${summary.fdCcy || ""} ${Number(summary.fdPrice).toFixed(4)}`
+          : "";
+      const asof = summary && summary.asOfDate ? `${t("fundAsOf")} ${summary.asOfDate}` : "";
+      let divTxt = "";
+      if (div) {
+        const amt = div.dividAmt != null ? div.dividAmt : div.amount;
+        const dt = div.exDate || div.payDate || "";
+        if (amt != null) divTxt = `${t("fundDiv")} ${amt}${dt ? " @ " + dt : ""}`;
+      }
+      el.innerHTML = `<div class="fund-enrich">${sparkSvg(spark)}<span>${[
+        nav,
+        asof,
+        divTxt,
+      ]
+        .filter(Boolean)
+        .map(escapeHtml)
+        .join(" · ")}</span></div>`;
+    });
   }
 
   function showReviewView() {
@@ -1129,13 +1622,7 @@
       `<div class="adv-results-meta">${t("advResults")} · ${matches.length} ${t("advMatchCount")}</div>` +
       cards;
     box.querySelectorAll("[data-open-case]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        state.currentId = btn.getAttribute("data-open-case");
-        state.typeFilter = "all";
-        showReviewView();
-        renderAll();
-        document.getElementById("sec-cover").scrollIntoView({ behavior: "smooth" });
-      });
+      btn.addEventListener("click", () => openClientReview(btn.getAttribute("data-open-case")));
     });
   }
 
@@ -1219,13 +1706,9 @@
     dd.classList.remove("hidden");
     dd.querySelectorAll("[data-search-client]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        state.currentId = btn.getAttribute("data-search-client");
-        state.typeFilter = "all";
         document.getElementById("globalSearch").value = "";
         dd.classList.add("hidden");
-        showReviewView();
-        renderAll();
-        document.getElementById("sec-cover").scrollIntoView({ behavior: "smooth" });
+        openClientReview(btn.getAttribute("data-search-client"));
       });
     });
     dd.querySelectorAll("[data-search-product]").forEach((btn) => {
@@ -1276,13 +1759,24 @@
     renderCaseSelect();
     renderBanner();
     syncAdvPanel();
-    if (state.viewMode === "holders" && state.holdersProduct) {
-      document.getElementById("reviewSections").classList.add("hidden");
-      document.getElementById("sec-product-holders").classList.remove("hidden");
+    const homeEl = document.getElementById("sec-home");
+    const reviewEl = document.getElementById("reviewSections");
+    const holdersEl = document.getElementById("sec-product-holders");
+    if (state.viewMode === "home") {
+      if (homeEl) homeEl.classList.remove("hidden");
+      if (reviewEl) reviewEl.classList.add("hidden");
+      if (holdersEl) holdersEl.classList.add("hidden");
+      renderHome();
+    } else if (state.viewMode === "holders" && state.holdersProduct) {
+      if (homeEl) homeEl.classList.add("hidden");
+      if (reviewEl) reviewEl.classList.add("hidden");
+      if (holdersEl) holdersEl.classList.remove("hidden");
       renderProductHolders(state.holdersProduct);
     } else {
-      document.getElementById("sec-product-holders").classList.add("hidden");
-      document.getElementById("reviewSections").classList.remove("hidden");
+      state.viewMode = "review";
+      if (homeEl) homeEl.classList.add("hidden");
+      if (holdersEl) holdersEl.classList.add("hidden");
+      if (reviewEl) reviewEl.classList.remove("hidden");
       renderCover(c);
       renderSnapshot(c);
       renderAllocation(c);
@@ -1551,10 +2045,7 @@
     });
 
     document.getElementById("caseSelect").addEventListener("change", (e) => {
-      state.currentId = e.target.value;
-      state.typeFilter = "all";
-      showReviewView();
-      renderAll();
+      openClientReview(e.target.value);
     });
 
     document.getElementById("notesArea").addEventListener("change", (e) => {
@@ -1580,7 +2071,7 @@
     document.querySelectorAll(".nav-tab").forEach((tab) => {
       tab.addEventListener("click", () => {
         if (state.viewMode !== "review") {
-          showReviewView();
+          state.viewMode = "review";
           renderAll();
         }
         document.querySelectorAll(".nav-tab").forEach((x) => x.classList.remove("active"));
@@ -1634,6 +2125,30 @@
     document.getElementById("btnAdvSearch").addEventListener("click", toggleAdvPanel);
     const barBtn = document.getElementById("btnAdvSearchBar");
     if (barBtn) barBtn.addEventListener("click", toggleAdvPanel);
+
+    document.getElementById("btnHome").addEventListener("click", () => goHome());
+
+    const exportBtn = document.getElementById("btnExportMenu");
+    const exportMenu = document.getElementById("exportMenu");
+    if (exportBtn && exportMenu) {
+      exportBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const open = exportMenu.classList.toggle("hidden") === false;
+        exportBtn.classList.toggle("active-toggle", open);
+        exportBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+      exportMenu.querySelectorAll("[data-report]").forEach((item) => {
+        item.addEventListener("click", () => {
+          runExportReport(item.getAttribute("data-report"));
+        });
+      });
+      document.addEventListener("click", (ev) => {
+        if (!exportBtn.contains(ev.target) && !exportMenu.contains(ev.target)) {
+          exportMenu.classList.add("hidden");
+          exportBtn.classList.remove("active-toggle");
+        }
+      });
+    }
     document.getElementById("btnAdvApply").addEventListener("click", () => {
       readAdvFiltersFromForm();
       state.advOpen = true;
@@ -1693,7 +2208,10 @@
     wireEvents();
     applyI18n();
     applyAuthUI();
-    if (state.authenticated) renderAll();
+    if (state.authenticated) {
+      state.viewMode = "home";
+      renderAll();
+    }
   }
 
   if (document.readyState === "loading") {

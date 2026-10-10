@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>投資組合檢視 · Portfolio Review</title>
-  <link rel="stylesheet" href="assets/styles.css?v=16" />
+  <link rel="stylesheet" href="assets/styles.css?v=18" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -33,13 +33,13 @@
   <div id="appShell" class="app-shell hidden">
   <header class="app-header">
     <div class="header-inner">
-      <div class="brand">
+      <button type="button" class="brand" id="btnHome" title="Home">
         <div class="brand-mark">PR</div>
         <div class="brand-text">
           <strong data-i18n="brandEn">Portfolio Review</strong>
           <span data-i18n="brandSub">客戶投資組合檢視</span>
         </div>
-      </div>
+      </button>
       <div class="header-actions">
         <div class="search-cluster">
           <div class="search-wrap">
@@ -53,6 +53,14 @@
         <button type="button" class="btn btn-ghost" id="btnLang" data-i18n="lang">EN</button>
         <button type="button" class="btn btn-ghost" id="btnClientMode" data-i18n="clientMode">客戶模式</button>
         <button type="button" class="btn btn-ghost" id="btnImport" data-i18n="importCsv">匯入 Excel／CSV</button>
+        <div class="export-menu-wrap">
+          <button type="button" class="btn btn-ghost" id="btnExportMenu" data-i18n="exportReports" aria-haspopup="true" aria-expanded="false">導出報表</button>
+          <div id="exportMenu" class="export-menu hidden" role="menu">
+            <button type="button" class="export-item" data-report="maturity90" role="menuitem" data-i18n="reportMaturity90">未來3個月到期客戶報表</button>
+            <button type="button" class="export-item" data-report="funds" role="menuitem" data-i18n="reportFunds">基金報表</button>
+            <button type="button" class="export-item" data-report="eln90" role="menuitem" data-i18n="reportEln90">股票掛鈎未來3個月到期</button>
+          </div>
+        </div>
         <button type="button" class="btn btn-gold" id="btnPdf" data-i18n="exportPdf">匯出 PDF</button>
         <button type="button" class="btn btn-ghost" id="btnLogout" data-i18n="logout">登出</button>
         <input type="file" id="fileInput" accept=".csv,text/csv" class="hidden" />
@@ -115,6 +123,13 @@
         <button type="button" class="btn btn-outline" id="btnAdvClear" data-i18n="advClear">清除篩選</button>
       </div>
       <div id="advResults" class="adv-results hidden"></div>
+    </section>
+
+    
+    <section class="section home-panel" id="sec-home">
+      <h2 class="section-title" data-i18n="homeTitle">客戶一覽</h2>
+      <p class="home-lead" data-i18n="homeLead">選擇客戶開始投資組合檢視，或使用搜尋／進階篩選。</p>
+      <div id="homeClientList" class="home-client-list"></div>
     </section>
 
     <div id="clientBanner" class="client-mode-banner hidden" data-i18n="clientBanner">
@@ -215,6 +230,7 @@
         <div class="filters" id="typeFilters"></div>
       </div>
       <div id="holdingsTables"></div>
+      <p class="fund-portal-note" id="fundPortalNote" data-i18n="fundPortalNote">基金資料連結通往交通銀行香港基金資訊頁；自動抓取 NAV 可能受條款／第三方限制，目前提供深層連結與基金名稱複製。</p>
     </section>
 
     <section class="section" id="sec-movers">
@@ -249,7 +265,7 @@
   </div><!-- /appShell -->
 
   <div id="toast" class="toast" role="status"></div>
-  <script src="assets/demo-data.js?v=16"></script>
-  <script src="assets/app.js?v=16"></script>
+  <script src="assets/demo-data.js?v=18"></script>
+  <script src="assets/app.js?v=18"></script>
 </body>
 </html>
