@@ -800,3 +800,16 @@ table.holdings td.num { text-align: right; }
   line-height: 1.35;
   max-width: 360px;
 }
+
+.swap-table-heading {
+  margin: 16px 0 10px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--navy);
+}
+.holdings-swap th {
+  white-space: normal;
+  line-height: 1.25;
+  max-width: 9em;
+  vertical-align: bottom;
+}

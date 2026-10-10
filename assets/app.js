@@ -3,6 +3,8 @@
   "use strict";
 
   const STORAGE_KEY = "pr_cases_v4";
+  /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
+  const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
   // SHA-256("mose2026") — demo only, not bank-grade
   const PASS_HASH = "7074818e3f7915a08a954e030e3e2adfafb6a568f631e9c097f20842205b5dd4";
@@ -141,6 +143,13 @@
       yieldLabel: "預期收益率",
       maturityLabel: "到期",
       startLabel: "起息",
+      colSwapStart: "起息日",
+      colSwapMaturity: "到期日",
+      colSwapPrincipal: "本金（美元存款金額）",
+      colSwapInterest: "利息（美元收益）",
+      colSwapRate: "利率（組合收益率）",
+      colSwapMaturityAmt: "到期本加息（到期日所得美元）",
+      swapTableTitle: "保本高息 Swap",
       total: "合計",
     },
     en: {
@@ -216,9 +225,79 @@
       yieldLabel: "Expected yield",
       maturityLabel: "Maturity",
       startLabel: "Start",
+      colSwapStart: "Start date",
+      colSwapMaturity: "Maturity date",
+      colSwapPrincipal: "Principal (USD deposit)",
+      colSwapInterest: "Interest (USD gain)",
+      colSwapRate: "Rate (portfolio yield)",
+      colSwapMaturityAmt: "Principal + interest at maturity (USD)",
+      swapTableTitle: "Principal-protected Swap",
       total: "Total",
     },
   };
+  I18N["zh-Hans"] = Object.assign({}, I18N.zh, {
+    brandSub: "客户投资组合检视",
+    importCsv: "导入 Excel／CSV",
+    exportPdf: "导出 PDF",
+    clientMode: "客户模式",
+    clientModeOn: "客户模式 ON",
+    clearCases: "清除本机个案",
+    caseLabel: "个案",
+    loadDemo: "重载示范",
+    coverTitle: "投资组合检视",
+    coverSub: "Portfolio Review · 客户会议用",
+    client: "客户",
+    reviewDate: "检视日期",
+    rm: "客户经理",
+    risk: "风险取向",
+    currency: "货币",
+    aumLabel: "管理资产总值 AUM",
+    aumHint: "持仓市值合计",
+    snapTitle: "组合快照",
+    totalAssets: "总资产",
+    periodPnl: "期间盈亏",
+    dayChg: "近期升跌",
+    holdingCount: "持仓数目",
+    vsCost: "相对成本",
+    positions: "个产品",
+    allocTitle: "资产配置",
+    holdingsTitle: "持仓明细",
+    all: "全部",
+    colProduct: "产品",
+    colType: "类型",
+    colQty: "数量／名义",
+    colCost: "成本",
+    colMv: "市值",
+    colPnl: "盈亏 $",
+    colPnlPct: "盈亏 %",
+    colDay: "升跌 %",
+    moversTitle: "升跌焦点",
+    gainers: "表现较佳",
+    losers: "表现较弱",
+    oppTitle: "跟进机会",
+    notesTitle: "会议备注／下一步",
+    logout: "登出",
+    searchPh: "搜寻客户或产品…",
+    searchClients: "客户",
+    searchProducts: "产品",
+    searchEmpty: "找不到结果",
+    holdersTitle: "产品持有人",
+    backToReview: "返回客户检视",
+    holdersCount: "位客户持有",
+    yieldLabel: "预期收益率",
+    maturityLabel: "到期",
+    startLabel: "起息",
+    colSwapStart: "起息日",
+    colSwapMaturity: "到期日",
+    colSwapPrincipal: "本金（美元存款金额）",
+    colSwapInterest: "利息（美元收益）",
+    colSwapRate: "利率（组合收益率）",
+    colSwapMaturityAmt: "到期本加息（到期日所得美元）",
+    swapTableTitle: "保本高息 Swap",
+    total: "合计",
+    clientBanner: "客户模式：已隐藏内部销售备注与 RM 专用提示",
+  });
+
 
   function getDemoCases() {
     const src = window.PR_DEMO_CASES || [];
@@ -537,36 +616,94 @@
     });
   }
 
-  function holdingSubline(h) {
-    const bits = [];
-    if (h.start_date) bits.push(t("startLabel") + " " + h.start_date);
-    if (h.maturity_date) bits.push(t("maturityLabel") + " " + h.maturity_date);
-    if (h.tenor_days) bits.push(h.tenor_days + "d");
-    if (h.expected_yield_pct != null) bits.push(t("yieldLabel") + " " + fmtPct(h.expected_yield_pct));
-    if (h.currency_note) bits.push(h.currency_note);
-    return bits.length
-      ? `<div class="holding-sub">${bits.map(escapeHtml).join(" · ")}</div>`
-      : "";
+  function isSwapType(ty) {
+    return ty === "swap" || ty === "Swap";
   }
 
-  function renderHoldings(c) {
-    const list = filteredHoldings(c);
-    const tbody = document.getElementById("holdingsBody");
-    tbody.innerHTML = list
-      .map((h) => {
-        const qtyDigits = h.type === "swap" || h.type === "Swap" ? 2 : undefined;
-        return `<tr>
-          <td><strong>${escapeHtml(h.product_name)}</strong>${holdingSubline(h)}</td>
+  function renderNormalHoldingsTable(list) {
+    if (!list.length) return "";
+    const head = `<thead><tr>
+      <th data-sort="product_name">${t("colProduct")}<span class="sort-ind">↕</span></th>
+      <th data-sort="type">${t("colType")}<span class="sort-ind">↕</span></th>
+      <th data-sort="quantity" class="num">${t("colQty")}<span class="sort-ind">↕</span></th>
+      <th data-sort="cost_value" class="num">${t("colCost")}<span class="sort-ind">↕</span></th>
+      <th data-sort="market_value" class="num">${t("colMv")}<span class="sort-ind">↕</span></th>
+      <th data-sort="pnl_value" class="num">${t("colPnl")}<span class="sort-ind">↕</span></th>
+      <th data-sort="pnl_pct" class="num">${t("colPnlPct")}<span class="sort-ind">↕</span></th>
+      <th data-sort="day_change_pct" class="num">${t("colDay")}<span class="sort-ind">↕</span></th>
+    </tr></thead>`;
+    const body = list
+      .map(
+        (h) => `<tr>
+          <td><strong>${escapeHtml(h.product_name)}</strong></td>
           <td><span class="type-badge type-${escapeHtml(h.type)}">${typeLabel(h.type)}</span></td>
-          <td class="num">${fmtMoneyFull(h.quantity, "", qtyDigits)}</td>
+          <td class="num">${fmtMoneyFull(h.quantity)}</td>
           <td class="num">${fmtMoneyFull(h.cost_value)}</td>
           <td class="num">${fmtMoneyFull(h.market_value)}</td>
           <td class="num ${pnlClass(h.pnl_value)}">${fmtMoneyFull(h.pnl_value)}</td>
           <td class="num ${pnlClass(h.pnl_pct)}">${fmtPct(h.pnl_pct)}</td>
           <td class="num ${pnlClass(h.day_change_pct)}">${fmtPct(h.day_change_pct)}</td>
+        </tr>`
+      )
+      .join("");
+    return `<div class="table-wrap"><table class="holdings">${head}<tbody>${body}</tbody></table></div>`;
+  }
+
+  function renderSwapHoldingsTable(list) {
+    if (!list.length) return "";
+    const head = `<thead><tr>
+      <th>${t("colSwapStart")}</th>
+      <th>${t("colSwapMaturity")}</th>
+      <th class="num">${t("colSwapPrincipal")}</th>
+      <th class="num">${t("colSwapInterest")}</th>
+      <th class="num">${t("colSwapRate")}</th>
+      <th class="num">${t("colSwapMaturityAmt")}</th>
+    </tr></thead>`;
+    const body = list
+      .map((h) => {
+        const principal = h.usd_notional != null ? h.usd_notional : h.quantity;
+        const interest = h.usd_gain != null ? h.usd_gain : h.usd_interest;
+        const rate = h.expected_yield_pct;
+        const matAmt = h.maturity_usd;
+        return `<tr>
+          <td>${escapeHtml(h.start_date || "—")}</td>
+          <td>${escapeHtml(h.maturity_date || "—")}</td>
+          <td class="num">${fmtMoneyFull(principal, "USD", 2)}</td>
+          <td class="num pos">${fmtMoneyFull(interest, "USD", 2)}</td>
+          <td class="num">${fmtPct(rate)}</td>
+          <td class="num">${fmtMoneyFull(matAmt, "USD", 2)}</td>
         </tr>`;
       })
       .join("");
+    const title =
+      list.length && state.typeFilter === "all"
+        ? `<h3 class="swap-table-heading">${t("swapTableTitle")}</h3>`
+        : "";
+    return `${title}<div class="table-wrap"><table class="holdings holdings-swap">${head}<tbody>${body}</tbody></table></div>`;
+  }
+
+  function renderHoldings(c) {
+    const list = filteredHoldings(c);
+    const wrap = document.getElementById("holdingsTables");
+    const swaps = list.filter((h) => isSwapType(h.type));
+    const others = list.filter((h) => !isSwapType(h.type));
+    let html = "";
+    if (others.length) html += renderNormalHoldingsTable(others);
+    if (swaps.length) html += renderSwapHoldingsTable(swaps);
+    if (!html) html = `<p style="color:var(--muted);font-size:13px">${t("searchEmpty")}</p>`;
+    wrap.innerHTML = html;
+    wrap.querySelectorAll("th[data-sort]").forEach((th) => {
+      th.addEventListener("click", () => {
+        const key = th.getAttribute("data-sort");
+        if (state.sortKey === key) {
+          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+        } else {
+          state.sortKey = key;
+          state.sortDir = key === "product_name" || key === "type" ? "asc" : "desc";
+        }
+        renderHoldings(currentCase());
+      });
+    });
   }
 
   function renderMovers(c) {
@@ -833,6 +970,15 @@
   function applyAuthUI() {
     const gate = document.getElementById("loginGate");
     const shell = document.getElementById("appShell");
+    const logout = document.getElementById("btnLogout");
+    if (!AUTH_ENABLED) {
+      state.authenticated = true;
+      if (gate) gate.classList.add("hidden");
+      if (shell) shell.classList.remove("hidden");
+      if (logout) logout.classList.add("hidden");
+      return;
+    }
+    if (logout) logout.classList.remove("hidden");
     if (state.authenticated) {
       gate.classList.add("hidden");
       shell.classList.remove("hidden");
@@ -845,7 +991,7 @@
   function renderAll() {
     applyI18n();
     applyAuthUI();
-    if (!state.authenticated) return;
+    if (AUTH_ENABLED && !state.authenticated) return;
     ensureCurrent();
     const c = currentCase();
     renderCaseSelect();
@@ -1220,7 +1366,7 @@
   }
 
   function init() {
-    state.authenticated = sessionStorage.getItem(AUTH_KEY) === "1";
+    state.authenticated = !AUTH_ENABLED || sessionStorage.getItem(AUTH_KEY) === "1";
     loadCases();
     ensureCurrent();
     if (!state.currentId && state.cases.length) state.currentId = state.cases[0].id;

@@ -8,6 +8,10 @@ Also open locally in a browser.
 
 ## Access (temporary password)
 
+**Login is currently DISABLED** (`AUTH_ENABLED = false` in `assets/app.js`). Set it to `true` to re-enable the password gate.
+
+### When enabled
+
 The whole site is locked behind a **login gate**. Session is kept in `sessionStorage` until the browser tab is closed or you click **登出 / Log out**.
 
 | | |
