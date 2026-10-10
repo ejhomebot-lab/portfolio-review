@@ -192,8 +192,9 @@
       fundAsOf: "估值日",
       fundDiv: "最近派息",
       fundReport: "基金報告",
-      fundReportUnavailable: "此基金暫無直連報告 PDF，已開啟交行基金頁（請搜尋基金名稱）",
-      fundPortalNote: "基金資料經交通銀行香港／環富通公開介面盡力更新 NAV；基金報告優先取自環富通 getFdDocList（年報／中期／月報）。若無 fdId 則開啟交行基金頁。",
+      fundReportUnavailable: "此基金暫無直連報告 PDF；已開啟 Morningstar 搜尋（或請複製基金名稱）",
+      fundReportCopied: "已複製基金名稱，可於 Morningstar／銀行頁搜尋",
+      fundPortalNote: "基金資料經交通銀行香港／環富通公開介面盡力更新 NAV。基金報告一律開啟環富通 getFdDocList 的 PDF（不經交行同意頁）；無 fdId／無 PDF 則改 Morningstar 搜尋。",
       exportGroupCore: "核心報表",
       exportGroupMaturity: "到期／產品",
       exportGroupRisk: "風險／表現",
@@ -350,8 +351,9 @@
       fundAsOf: "As of",
       fundDiv: "Last dividend",
       fundReport: "Fund report",
-      fundReportUnavailable: "No direct report PDF for this fund — opened BOCOM fund portal (search by name)",
-      fundPortalNote: "Fund data via BOCOM HK / ET Wealth. Fund reports prefer getFdDocList (annual / interim / fact sheet). Without fdId, opens the bank fund portal.",
+      fundReportUnavailable: "No direct report PDF — opened Morningstar search (or copy the fund name)",
+      fundReportCopied: "Fund name copied — search on Morningstar / bank portal",
+      fundPortalNote: "Fund data via BOCOM HK / ET Wealth. Fund report always opens the ET Wealth getFdDocList PDF (never the bank agree wall). Without fdId/PDF, falls back to Morningstar search.",
       exportGroupCore: "Core reports",
       exportGroupMaturity: "Maturity / product",
       exportGroupRisk: "Risk / performance",
@@ -488,8 +490,9 @@
     fundAsOf: "估值日",
     fundDiv: "最近派息",
     fundReport: "基金报告",
-    fundReportUnavailable: "此基金暂无直连报告 PDF，已打开交行基金页（请搜寻基金名称）",
-    fundPortalNote: "基金资料经交行／环富通尽力更新；基金报告优先 getFdDocList（年报／中期／月报）。无 fdId 则打开交行基金页。",
+    fundReportUnavailable: "此基金暂无直连报告 PDF；已打开 Morningstar 搜寻（或请复制基金名称）",
+    fundReportCopied: "已复制基金名称，可于 Morningstar／银行页搜寻",
+    fundPortalNote: "基金资料经交行／环富通尽力更新。基金报告一律打开环富通 getFdDocList 的 PDF（不经交行同意页）；无 fdId／无 PDF 则改 Morningstar 搜寻。",
     exportGroupCore: "核心报表",
     exportGroupMaturity: "到期／产品",
     exportGroupRisk: "风险／表现",
@@ -909,6 +912,12 @@
             )}" data-fund-code="${escapeHtml(h.fund_code || "")}">${t("fundInfo")}</button>
             <button type="button" class="fund-link" data-fund-report="${escapeHtml(
               h.fdId || ""
+            )}" data-fund-report-name="${escapeHtml(
+              h.product_name || ""
+            )}" data-fund-report-isin="${escapeHtml(
+              h.isin || h.ISIN || ""
+            )}" data-fund-report-code="${escapeHtml(
+              h.fund_code || ""
             )}">${t("fundReport")}</button>
             <button type="button" class="fund-copy" data-copy-fund="${escapeHtml(
               h.product_name
@@ -999,8 +1008,12 @@
     });
     wrap.querySelectorAll("[data-fund-report]").forEach((btn) => {
       btn.addEventListener("click", () => {
-        const fdId = btn.getAttribute("data-fund-report") || "";
-        openFundReport(fdId);
+        openFundReport({
+          fdId: btn.getAttribute("data-fund-report") || "",
+          name: btn.getAttribute("data-fund-report-name") || "",
+          isin: btn.getAttribute("data-fund-report-isin") || "",
+          fundCode: btn.getAttribute("data-fund-report-code") || "",
+        });
       });
     });
     wrap.querySelectorAll("[data-copy-fund]").forEach((btn) => {
@@ -1788,35 +1801,96 @@
     return { href, sheetName: best.sheetName, asOfDate: best.asOfDate };
   }
 
-  async function openFundReport(fdId) {
-    if (!fdId) {
-      toast(t("fundReportUnavailable"));
-      window.open(BOCOM_FUND_PORTAL, "_blank", "noopener");
-      return;
-    }
-    const docs = await fetchFundDocList(fdId);
-    const best = pickBestFundReportPdf(docs);
-    if (best && best.href) {
-      window.open(best.href, "_blank", "noopener");
-      return;
-    }
-    const summary = await fetchFundSummary(fdId);
-    if (summary) {
-      let prefix = summary.urlPrefix || "https://www02.etwealth.com/wms_chart/fd_sheet/";
-      prefix = String(prefix).replace(/^http:\/\//i, "https://");
-      if (!prefix.endsWith("/")) prefix += "/";
-      for (const key of ["annualReport", "factSheet", "interimReport", "kfs", "prospectus"]) {
-        const rel = summary[key];
-        if (!rel) continue;
-        const href = /^https?:\/\//i.test(rel)
-          ? String(rel).replace(/^http:\/\//i, "https://")
-          : prefix + String(rel).replace(/^\//, "");
-        window.open(href, "_blank", "noopener");
-        return;
+  function morningstarSearchUrl(meta) {
+    const q = (meta && (meta.isin || meta.name || meta.fundCode)) || "";
+    const term = String(q).trim();
+    if (!term) return null;
+    // Prefer Morningstar.com search (HK site redirects / may wall); open in new tab for user browser.
+    return "https://www.morningstar.com/search?query=" + encodeURIComponent(term);
+  }
+
+  function navigateOrOpen(win, href) {
+    if (!href) return false;
+    if (win && !win.closed) {
+      try {
+        win.location.href = href;
+        return true;
+      } catch (e) {
+        /* fall through */
       }
     }
-    toast(t("fundReportUnavailable"));
-    window.open(BOCOM_FUND_PORTAL, "_blank", "noopener");
+    window.open(href, "_blank", "noopener");
+    return true;
+  }
+
+  async function openFundReport(meta) {
+    // Never send 基金報告 to the BOCOM agree/disclaimer wall.
+    const fdId = typeof meta === "string" ? meta : (meta && meta.fdId) || "";
+    const info = typeof meta === "object" && meta ? meta : { fdId };
+    // Open blank tab synchronously so the PDF survives async fetch / popup blockers.
+    let win = null;
+    try {
+      win = window.open("about:blank", "_blank");
+    } catch (e) {
+      win = null;
+    }
+
+    async function fallbackNoPdf() {
+      const ms = morningstarSearchUrl(info);
+      if (ms) {
+        toast(t("fundReportUnavailable"));
+        navigateOrOpen(win, ms);
+        return;
+      }
+      if (win && !win.closed) {
+        try {
+          win.close();
+        } catch (e) {}
+      }
+      const name = info.name || info.fundCode || "";
+      if (name) {
+        try {
+          await navigator.clipboard.writeText(name);
+          toast(t("fundReportCopied"));
+        } catch (e) {
+          toast(t("fundReportUnavailable") + (name ? ": " + name : ""));
+        }
+      } else {
+        toast(t("fundReportUnavailable"));
+      }
+    }
+
+    if (fdId) {
+      const docs = await fetchFundDocList(fdId);
+      const best = pickBestFundReportPdf(docs);
+      if (best && best.href && /\.pdf($|\?)/i.test(best.href)) {
+        navigateOrOpen(win, best.href);
+        return;
+      }
+      if (best && best.href) {
+        // Still prefer ET Wealth doc URL even if extension not .pdf
+        navigateOrOpen(win, best.href);
+        return;
+      }
+      const summary = await fetchFundSummary(fdId);
+      if (summary) {
+        let prefix = summary.urlPrefix || "https://www02.etwealth.com/wms_chart/fd_sheet/";
+        prefix = String(prefix).replace(/^http:\/\//i, "https://");
+        if (!prefix.endsWith("/")) prefix += "/";
+        for (const key of ["annualReport", "factSheet", "interimReport", "kfs", "prospectus"]) {
+          const rel = summary[key];
+          if (!rel) continue;
+          const href = /^https?:\/\//i.test(rel)
+            ? String(rel).replace(/^http:\/\//i, "https://")
+            : prefix + String(rel).replace(/^\//, "");
+          // Only accept PDF-like document paths — never bank portal HTML
+          if (/bankcomm\.com|disclaimer|agree/i.test(href)) continue;
+          navigateOrOpen(win, href);
+          return;
+        }
+      }
+    }
+    await fallbackNoPdf();
   }
 
 

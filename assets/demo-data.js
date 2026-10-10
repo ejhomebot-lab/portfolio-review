@@ -63,6 +63,7 @@ window.PR_DEMO_CASES = [
         product_name: "滙豐環球投資基金 — 超短期債券（每月派息）PM2HKD",
         type: "Fund",
         fund_code: "PM2HKD",
+        isin: "LU2334458945",
         // ISIN LU2334458945 — BOCOM/ET Wealth search returned no fdId mapping
         quantity: 50000,
         cost_value: 500000,
