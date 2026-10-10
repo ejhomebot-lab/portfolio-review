@@ -1144,7 +1144,9 @@
     const btn = document.getElementById("btnAdvSearch");
     if (!panel) return;
     panel.classList.toggle("hidden", !state.advOpen);
-    if (btn) btn.classList.toggle("active-toggle", state.advOpen);
+    document.querySelectorAll("#btnAdvSearch, #btnAdvSearchBar").forEach((b) => {
+      if (b) b.classList.toggle("active-toggle", state.advOpen);
+    });
     if (state.advOpen) {
       populateAdvSelects();
       document.getElementById("advAumMin").value =
@@ -1621,11 +1623,17 @@
       }
     });
 
-    document.getElementById("btnAdvSearch").addEventListener("click", () => {
+    function toggleAdvPanel() {
       state.advOpen = !state.advOpen;
       syncAdvPanel();
       applyI18n();
-    });
+      if (state.advOpen) {
+        document.getElementById("advPanel").scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
+    }
+    document.getElementById("btnAdvSearch").addEventListener("click", toggleAdvPanel);
+    const barBtn = document.getElementById("btnAdvSearchBar");
+    if (barBtn) barBtn.addEventListener("click", toggleAdvPanel);
     document.getElementById("btnAdvApply").addEventListener("click", () => {
       readAdvFiltersFromForm();
       state.advOpen = true;
@@ -1665,8 +1673,8 @@
       if (searchInput.value.trim()) runSearch(searchInput.value);
     });
     document.addEventListener("click", (ev) => {
-      const wrap = document.querySelector(".search-wrap");
-      if (wrap && !wrap.contains(ev.target)) {
+      const cluster = document.querySelector(".search-cluster") || document.querySelector(".search-wrap");
+      if (cluster && !cluster.contains(ev.target)) {
         document.getElementById("searchDropdown").classList.add("hidden");
       }
     });

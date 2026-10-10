@@ -693,11 +693,31 @@ table.holdings td.num { text-align: right; }
 .app-shell.hidden { display: none !important; }
 
 /* —— Search —— */
+.search-cluster {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+  flex: 1 1 280px;
+  min-width: min(100%, 280px);
+  max-width: 440px;
+}
 .search-wrap {
   position: relative;
-  min-width: 200px;
-  flex: 1 1 220px;
-  max-width: 320px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.btn-adv {
+  flex: 0 0 auto;
+  background: rgba(196, 163, 90, 0.2);
+  color: var(--gold-soft);
+  border: 1px solid var(--gold);
+  font-weight: 700;
+  padding: 8px 12px;
+}
+.btn-adv:hover, #btnAdvSearch.active-toggle, #btnAdvSearchBar.active-toggle {
+  background: var(--gold);
+  color: var(--navy);
+  border-color: var(--gold);
 }
 .search-input {
   width: 100%;
@@ -876,11 +896,6 @@ table.holdings td.num { text-align: right; }
   flex-wrap: wrap;
   gap: 8px;
 }
-#btnAdvSearch.active-toggle {
-  background: var(--gold);
-  color: var(--navy);
-  border-color: var(--gold);
-}
 @media (max-width: 900px) {
   .adv-grid { grid-template-columns: 1fr 1fr; }
 }
@@ -888,5 +903,19 @@ table.holdings td.num { text-align: right; }
   .adv-grid { grid-template-columns: 1fr; }
 }
 @media print {
-  .adv-panel, #btnAdvSearch { display: none !important; }
+  .adv-panel, #btnAdvSearch, #btnAdvSearchBar, .search-cluster { display: none !important; }
+}
+
+@media (max-width: 900px) {
+  .header-actions {
+    width: 100%;
+  }
+  .search-cluster {
+    flex: 1 1 100%;
+    max-width: none;
+    order: -1;
+  }
+  .btn-adv {
+    min-height: 40px;
+  }
 }
