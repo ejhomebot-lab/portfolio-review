@@ -53,3 +53,12 @@ Real client data must remain on **bank-approved** systems. Do not put CIF / ID /
 ## Brand
 
 Separate from PF · Premium Financing. Product name: **投資組合檢視 / Portfolio Review**.
+
+
+## v24 notes
+- Fund table: NAV / monthly div % / units / fee / principal after fee + 1Y chart (`getPriceChartData` period=12)
+- Reports download as **Excel (.xlsx)** via SheetJS (CSV still available)
+- Batch multi-client CSV (`---` separators) / XLSX import; Excel template + JSON/ZIP backup
+- BOCOM/ET Wealth clearly labeled third-party reference in disclaimer
+- Mobile header: **更多** menu
+- Auth still off

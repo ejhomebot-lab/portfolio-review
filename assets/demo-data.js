@@ -57,14 +57,20 @@ window.PR_DEMO_CASES = [
     currency: "HKD",
     risk_profile: "Conservative",
     risk_profile_zh: "保守型",
-    notes: "Notion TOTAL AMT HKD 740,400.18。2026-09-07 認購滙豐超短期債券基金（每月派息）HKD 500,000。ET Wealth／交行列表暫未匹配 fdId，基金資料以銀行頁＋複製名稱為主；市值含示範小幅派息累計。",
+    notes: "Notion TOTAL AMT HKD 740,400.18。2026-09-07 認購滙豐超短期債券基金（每月派息）HKD 500,000。ET Wealth／交行列表暫無 PM2HKD／LU2334458945 的 fdId（2026-10 已搜尋）；基金報告改 Morningstar。市值含示範小幅派息累計。",
     holdings: [
       {
         product_name: "滙豐環球投資基金 — 超短期債券（每月派息）PM2HKD",
         type: "Fund",
         fund_code: "PM2HKD",
         isin: "LU2334458945",
-        // ISIN LU2334458945 — BOCOM/ET Wealth search returned no fdId mapping
+        // ET Wealth/BOCOM list: no fdId for PM2HKD / LU2334458945 (searched 2026-10)
+        units: 50000,
+        nav: 10.07,
+        fee_pct: 0.5,
+        fee_amount: 2500,
+        monthly_div_pct: 0.28,
+        principal_after_fee: 497500,
         quantity: 50000,
         cost_value: 500000,
         market_value: 503500,
@@ -144,16 +150,16 @@ window.PR_DEMO_CASES = [
     risk_profile_zh: "均衡型",
     notes: "客戶關注美元利率回落後之再配置；下季檢視人壽保障缺口。",
     holdings: [
-      { product_name: "聯博 (香港) - 美元收益基金 - A2/港元", type: "Fund", fund_code: "AMAIA2HX", fdId: "ETNSI36463", quantity: 12500, cost_value: 2500000, market_value: 2687500, day_change_pct: 0.35, pnl_value: 187500, pnl_pct: 7.5, currency: "HKD" },
-      { product_name: "聯博 (香港) - 美元收益基金 - A2/美元", type: "Fund", fund_code: "AMAIA2UX", fdId: "ETNSI28727", quantity: 8000, cost_value: 1600000, market_value: 1544000, day_change_pct: -0.22, pnl_value: -56000, pnl_pct: -3.5, currency: "USD" },
+      { product_name: "聯博 (香港) - 美元收益基金 - A2/港元", type: "Fund", fund_code: "AMAIA2HX", fdId: "ETNSI36463", units: 12500, nav: 200.0, fee_pct: 1.1, fee_amount: 27500.0, monthly_div_pct: 0.35, principal_after_fee: 2472500.0, isin: "HK0000784949", quantity: 12500, cost_value: 2500000, market_value: 2687500, day_change_pct: 0.35, pnl_value: 187500, pnl_pct: 7.5, currency: "HKD" },
+      { product_name: "聯博 (香港) - 美元收益基金 - A2/美元", type: "Fund", fund_code: "AMAIA2UX", fdId: "ETNSI28727", units: 8000, nav: 200.0, fee_pct: 1.1, fee_amount: 17600.0, monthly_div_pct: 0.0, principal_after_fee: 1582400.0, isin: "", quantity: 8000, cost_value: 1600000, market_value: 1544000, day_change_pct: -0.22, pnl_value: -56000, pnl_pct: -3.5, currency: "USD" },
       { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 2000, cost_value: 580000, market_value: 824800, day_change_pct: -1.25, pnl_value: 244800, pnl_pct: 42.21, currency: "HKD" },
       { product_name: "滙豐控股 (0005.HK)", type: "Stock", quantity: 5000, cost_value: 275000, market_value: 312500, day_change_pct: 0.48, pnl_value: 37500, pnl_pct: 13.64, currency: "HKD" },
       { product_name: "恒生科技 ETF (3033.HK)", type: "Stock", quantity: 10000, cost_value: 420000, market_value: 398000, day_change_pct: -0.85, pnl_value: -22000, pnl_pct: -5.24, currency: "HKD" },
-      { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 1000000, market_value: 972000, day_change_pct: -0.4, pnl_value: -28000, pnl_pct: -2.8, currency: "USD", start_date: "2025-12-20", maturity_date: "2026-12-20" },
+      { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 1000000, market_value: 972000, day_change_pct: -0.4, pnl_value: -28000, pnl_pct: -2.8, currency: "USD", underlying: "NVDA", strike_pct: 85, start_date: "2025-12-20", maturity_date: "2026-12-20" },
       { product_name: "USD/HKD 遠期套保", type: "FX", quantity: 500000, cost_value: 500000, market_value: 512500, day_change_pct: 0.12, pnl_value: 12500, pnl_pct: 2.5, currency: "USD" },
       { product_name: "保本高息 Swap 1M", type: "swap", quantity: 500000, cost_value: 3910000, market_value: 3910000, day_change_pct: 0.01, pnl_value: 0, pnl_pct: 0, currency: "HKD", start_date: "2026-10-05", maturity_date: "2026-11-05", tenor_days: 31, expected_yield_pct: 3.8, usd_notional: 500000, usd_gain: 4500, maturity_usd: 504500, currency_note: "USD 500,000 short tenor" },
-      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 800000, cost_value: 800000, market_value: 806800, day_change_pct: 0.02, pnl_value: 6800, pnl_pct: 0.85, currency: "USD", start_date: "2026-08-26", maturity_date: "2026-11-24" },
-      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 1200000, cost_value: 1200000, market_value: 1214400, day_change_pct: 0.01, pnl_value: 14400, pnl_pct: 1.2, currency: "HKD", start_date: "2026-09-15", maturity_date: "2027-03-15" },
+      { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 800000, cost_value: 800000, market_value: 806800, day_change_pct: 0.02, pnl_value: 6800, pnl_pct: 0.85, currency: "USD", interest_rate_pct: 5.1, start_date: "2026-08-26", maturity_date: "2026-11-24" },
+      { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 1200000, cost_value: 1200000, market_value: 1214400, day_change_pct: 0.01, pnl_value: 14400, pnl_pct: 1.2, currency: "HKD", interest_rate_pct: 3.2, start_date: "2026-09-15", maturity_date: "2027-03-15" },
       { product_name: "萬用壽險（現金價值）", type: "Insurance", quantity: 1, cost_value: 1500000, market_value: 1582000, day_change_pct: 0.05, pnl_value: 82000, pnl_pct: 5.47, currency: "USD" }
     ],
     opportunities: [
@@ -174,7 +180,7 @@ window.PR_DEMO_CASES = [
     risk_profile_zh: "增長型",
     notes: "偏好科技股與主動基金；可談再平衡。",
     holdings: [
-      { product_name: "聯博 (香港) - 美元收益基金 - A2/港元", type: "Fund", fund_code: "AMAIA2HX", fdId: "ETNSI36463", quantity: 6000, cost_value: 1200000, market_value: 1290000, day_change_pct: 0.35, pnl_value: 90000, pnl_pct: 7.5, currency: "HKD" },
+      { product_name: "聯博 (香港) - 美元收益基金 - A2/港元", type: "Fund", fund_code: "AMAIA2HX", fdId: "ETNSI36463", units: 6000, nav: 200.0, fee_pct: 1.1, fee_amount: 13200.0, monthly_div_pct: 0.35, principal_after_fee: 1186800.0, isin: "HK0000784949", quantity: 6000, cost_value: 1200000, market_value: 1290000, day_change_pct: 0.35, pnl_value: 90000, pnl_pct: 7.5, currency: "HKD" },
       { product_name: "騰訊控股 (0700.HK)", type: "Stock", quantity: 3500, cost_value: 980000, market_value: 1443400, day_change_pct: -1.25, pnl_value: 463400, pnl_pct: 47.29, currency: "HKD" },
       { product_name: "恒生科技 ETF (3033.HK)", type: "Stock", quantity: 20000, cost_value: 900000, market_value: 796000, day_change_pct: -0.85, pnl_value: -104000, pnl_pct: -11.56, currency: "HKD" },
       { product_name: "美股掛鈎票據 12M (NVDA)", type: "ELN", quantity: 1, cost_value: 500000, market_value: 486000, day_change_pct: -0.4, pnl_value: -14000, pnl_pct: -2.8, currency: "USD", start_date: "2026-02-28", maturity_date: "2026-12-28" },
@@ -197,8 +203,8 @@ window.PR_DEMO_CASES = [
     risk_profile_zh: "保守型",
     notes: "保守型客戶，存款到期可談短債。",
     holdings: [
-      { product_name: "聯博 (香港) - 美元收益基金 - A2/美元", type: "Fund", fund_code: "AMAIA2UX", fdId: "ETNSI28727", quantity: 4000, cost_value: 800000, market_value: 772000, day_change_pct: -0.22, pnl_value: -28000, pnl_pct: -3.5, currency: "USD" },
-      { product_name: "聯博 (香港) - 美元收益基金 - A2/港元", type: "Fund", fund_code: "AMAIA2HX", fdId: "ETNSI36463", quantity: 2500, cost_value: 500000, market_value: 537500, day_change_pct: 0.35, pnl_value: 37500, pnl_pct: 7.5, currency: "HKD" },
+      { product_name: "聯博 (香港) - 美元收益基金 - A2/美元", type: "Fund", fund_code: "AMAIA2UX", fdId: "ETNSI28727", units: 4000, nav: 200.0, fee_pct: 1.1, fee_amount: 8800.0, monthly_div_pct: 0.0, principal_after_fee: 791200.0, isin: "", quantity: 4000, cost_value: 800000, market_value: 772000, day_change_pct: -0.22, pnl_value: -28000, pnl_pct: -3.5, currency: "USD" },
+      { product_name: "聯博 (香港) - 美元收益基金 - A2/港元", type: "Fund", fund_code: "AMAIA2HX", fdId: "ETNSI36463", units: 2500, nav: 200.0, fee_pct: 1.1, fee_amount: 5500.0, monthly_div_pct: 0.35, principal_after_fee: 494500.0, isin: "HK0000784949", quantity: 2500, cost_value: 500000, market_value: 537500, day_change_pct: 0.35, pnl_value: 37500, pnl_pct: 7.5, currency: "HKD" },
       { product_name: "美金定期存款 5.1% 3M", type: "Deposit", quantity: 1500000, cost_value: 1500000, market_value: 1512750, day_change_pct: 0.02, pnl_value: 12750, pnl_pct: 0.85, currency: "USD", start_date: "2026-08-26", maturity_date: "2026-11-24" },
       { product_name: "港元定期存款 3.2% 6M", type: "Deposit", quantity: 2000000, cost_value: 2000000, market_value: 2024000, day_change_pct: 0.01, pnl_value: 24000, pnl_pct: 1.2, currency: "HKD", start_date: "2026-10-01", maturity_date: "2027-04-01" },
       { product_name: "港元定期存款 3.0% 12M", type: "Deposit", quantity: 1000000, cost_value: 1000000, market_value: 1015000, day_change_pct: 0.01, pnl_value: 15000, pnl_pct: 1.5, currency: "HKD" }

@@ -1106,3 +1106,54 @@ button.brand:focus-visible {
   border: 1px solid var(--border);
   font-family: inherit;
 }
+
+/* --- v24: mobile more menu, fund table, sync hint --- */
+.more-menu-wrap { position: relative; }
+.more-menu { right: 0; min-width: 220px; }
+.sync-hint {
+  background: var(--card, #f7f5f0);
+  border: 1px solid var(--border, #e5dfd3);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin: 0 0 18px;
+  font-size: 13px;
+  color: var(--muted, #667);
+  line-height: 1.55;
+}
+.sync-hint strong { display: block; color: var(--ink, #1a1a1a); margin-bottom: 6px; }
+.sync-hint ol { margin: 6px 0 8px 1.2em; padding: 0; }
+.sync-hint-note { margin: 0; font-size: 12px; }
+.disclaimer-third { margin-top: -8px; opacity: 0.92; font-size: 12px; }
+.home-stat-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+.home-stat-pill {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #eee8dc;
+  color: #444;
+}
+.home-stat-pill.warn { background: #fde8d8; color: #8a3b00; }
+.home-stat-pill.ok { background: #e3f5ea; color: #0d5c32; }
+.fund-chart-row td { background: #faf8f4; padding: 8px 12px 12px !important; }
+.fund-year-chart { width: 100%; max-width: 520px; height: 56px; display: block; }
+.fund-api-status { font-size: 11px; color: #a05a00; margin-top: 4px; }
+.fund-api-status.ok { color: #0d7a4f; }
+.fund-api-status.err { color: #c0392b; }
+.holdings-fund th, .holdings-eln th, .holdings-deposit th { white-space: nowrap; }
+.fund-table-heading, .eln-table-heading, .deposit-table-heading {
+  font-size: 14px; margin: 16px 0 8px; color: var(--ink, #1a1a1a);
+}
+.header-desktop-only { display: inline-flex; }
+@media (max-width: 960px) {
+  .header-desktop-only { display: none !important; }
+  .header-actions .header-primary#btnClientMode,
+  .header-actions .export-menu-wrap.header-primary { display: none; }
+  .more-menu-wrap { display: inline-flex; }
+}
+@media (min-width: 961px) {
+  .more-menu-wrap { display: none; }
+}
+@media (max-width: 720px) {
+  .header-actions .btn-adv { display: none; }
+  .search-cluster { flex: 1; min-width: 0; }
+}

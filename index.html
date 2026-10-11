@@ -4,8 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>投資組合檢視 · Portfolio Review</title>
-  <link rel="stylesheet" href="assets/styles.css?v=23" />
+  <link rel="stylesheet" href="assets/styles.css?v=24" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 </head>
 <body>
   <!-- Login gate -->
@@ -40,7 +42,7 @@
           <span data-i18n="brandSub">客戶投資組合檢視</span>
         </div>
       </button>
-      <div class="header-actions">
+            <div class="header-actions">
         <div class="search-cluster">
           <div class="search-wrap">
             <input type="search" id="globalSearch" class="search-input"
@@ -50,12 +52,12 @@
           </div>
           <button type="button" class="btn btn-adv" id="btnAdvSearch" data-i18n="advSearch" title="Advanced search">進階搜尋</button>
         </div>
-        <button type="button" class="btn btn-ghost" id="btnLang" data-i18n="lang">EN</button>
-        <button type="button" class="btn btn-ghost" id="btnClientMode" data-i18n="clientMode">客戶模式</button>
-        <button type="button" class="btn btn-ghost" id="btnImport" data-i18n="importCsv">匯入 Excel／CSV</button>
-        <div class="export-menu-wrap">
+        <button type="button" class="btn btn-ghost header-primary" id="btnLang" data-i18n="lang">EN</button>
+        <button type="button" class="btn btn-ghost header-primary" id="btnClientMode" data-i18n="clientMode">客戶模式</button>
+        <div class="export-menu-wrap header-primary">
           <button type="button" class="btn btn-ghost" id="btnExportMenu" data-i18n="exportReports" aria-haspopup="true" aria-expanded="false">導出報表</button>
           <div id="exportMenu" class="export-menu hidden" role="menu">
+
             <div class="export-group" data-i18n="exportGroupCore">核心報表</div>
             <button type="button" class="export-item" data-report="maturity90" role="menuitem" data-i18n="reportMaturity90">未來3個月到期客戶報表</button>
             <button type="button" class="export-item" data-report="funds" role="menuitem" data-i18n="reportFunds">基金報表</button>
@@ -77,10 +79,24 @@
             <button type="button" class="export-item" data-report="opportunities" role="menuitem" data-i18n="reportOpps">機會清單導出</button>
           </div>
         </div>
-        <button type="button" class="btn btn-gold" id="btnPdf" data-i18n="exportPdf">匯出 PDF</button>
-        <button type="button" class="btn btn-ghost" id="btnLogout" data-i18n="logout">登出</button>
-        <input type="file" id="fileInput" accept=".csv,text/csv" class="hidden" />
+        <button type="button" class="btn btn-gold header-primary" id="btnPdf" data-i18n="exportPdf">匯出 PDF</button>
+        <div class="more-menu-wrap">
+          <button type="button" class="btn btn-ghost" id="btnMore" data-i18n="moreMenu" aria-haspopup="true" aria-expanded="false">更多</button>
+          <div id="moreMenu" class="export-menu more-menu hidden" role="menu">
+            <button type="button" class="export-item" id="btnImport" role="menuitem" data-i18n="importCsv">匯入 Excel／CSV</button>
+            <button type="button" class="export-item" id="btnDownloadTemplate" role="menuitem" data-i18n="downloadTemplate">下載 Excel 範本</button>
+            <button type="button" class="export-item" id="btnBackup" role="menuitem" data-i18n="backupCases">備份個案（JSON／ZIP）</button>
+            <button type="button" class="export-item" id="btnLogout" role="menuitem" data-i18n="logout">登出</button>
+          </div>
+        </div>
+        <!-- Desktop also shows import outside more -->
+        <button type="button" class="btn btn-ghost header-desktop-only" id="btnImportDesk" data-i18n="importCsv">匯入 Excel／CSV</button>
+        <button type="button" class="btn btn-ghost header-desktop-only" id="btnDownloadTemplateDesk" data-i18n="downloadTemplate">下載 Excel 範本</button>
+        <button type="button" class="btn btn-ghost header-desktop-only" id="btnBackupDesk" data-i18n="backupCases">備份個案</button>
+        <button type="button" class="btn btn-ghost header-desktop-only" id="btnLogoutDesk" data-i18n="logout">登出</button>
+        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls,text/csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="hidden" multiple />
       </div>
+
     </div>
     <nav class="nav-tabs" aria-label="Sections">
       <button type="button" class="nav-tab active" data-target="#sec-cover">Cover</button>
@@ -192,6 +208,16 @@
     <section class="section home-panel" id="sec-home">
       <h2 class="section-title" data-i18n="homeTitle">客戶一覽</h2>
       <p class="home-lead" data-i18n="homeLead">選擇客戶開始投資組合檢視，或使用搜尋／進階篩選。</p>
+      <div class="sync-hint" id="syncHint">
+        <strong data-i18n="syncHintTitle">資料流：Notion → Excel → CSV／XLSX → 本頁</strong>
+        <ol>
+          <li>CRM（Notion）維護客戶與持倉／機會</li>
+          <li>Excel 更新價格、NAV、P&amp;L、到期日</li>
+          <li>匯出 CSV／XLSX（可多客戶，以 --- 或 client_id 分組）後於此匯入</li>
+          <li>可下載範本；本機個案可備份 JSON／ZIP</li>
+        </ol>
+        <p class="sync-hint-note" data-i18n="syncHintNote">基金 NAV／圖表經環富通（ET Wealth）公開介面盡力顯示，屬第三方參考，非銀行正式報價。</p>
+      </div>
       <div id="homeClientList" class="home-client-list"></div>
     </section>
 
@@ -323,7 +349,10 @@
     </div><!-- /reviewSections -->
 
     <p class="disclaimer" data-i18n="disclaimer">
-      本文件只供參考，並非投資建議、要約或招攬。過往表現並不代表將來表現。產品價格、基金 NAV 及結構性產品估值或有延遲或由銀行報價提供。投資涉及風險，請細閱有關銷售文件。資料僅供客戶經理與客戶會面討論之用。
+      本文件只供參考，並非投資建議、要約或招攬。過往表現並不代表將來表現。產品價格、結構性產品估值或有延遲。投資涉及風險，請細閱有關銷售文件。資料僅供客戶經理與客戶會面討論之用。
+    </p>
+    <p class="disclaimer disclaimer-third" data-i18n="disclaimerThird">
+      交通銀行香港基金頁及環富通（ET Wealth）所顯示之 NAV、派息、圖表與基金文件均為第三方公開參考資料，並非本行正式報價或要約，可能延遲、不完整或與銀行系統不一致；請以銀行官方渠道及銷售文件為準。
     </p>
   </main>
   </div><!-- /appShell -->
@@ -339,7 +368,8 @@
     </div>
   </div>
   <div id="toast" class="toast" role="status"></div>
-  <script src="assets/demo-data.js?v=23"></script>
-  <script src="assets/app.js?v=23"></script>
+  <script src="assets/fund-map.js?v=24"></script>
+  <script src="assets/demo-data.js?v=24"></script>
+  <script src="assets/app.js?v=24"></script>
 </body>
 </html>

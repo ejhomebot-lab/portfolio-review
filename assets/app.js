@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v8";
+  const STORAGE_KEY = "pr_cases_v9";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
@@ -121,7 +121,9 @@
       notesTitle: "會議備註／下一步",
       notesPlaceholder: "記錄客戶意向、下次行動、需要準備的材料…",
       disclaimer:
-        "本文件只供參考，並非投資建議、要約或招攬。過往表現並不代表將來表現。產品價格、基金 NAV 及結構性產品估值或有延遲或由銀行報價提供。投資涉及風險，請細閱有關銷售文件。資料僅供客戶經理與客戶會面討論之用。",
+        "本文件只供參考，並非投資建議、要約或招攬。過往表現並不代表將來表現。產品價格、結構性產品估值或有延遲。投資涉及風險，請細閱有關銷售文件。資料僅供客戶經理與客戶會面討論之用。",
+      disclaimerThird:
+        "交通銀行香港基金頁及環富通（ET Wealth）所顯示之 NAV、派息、圖表與基金文件均為第三方公開參考資料，並非本行正式報價或要約，可能延遲、不完整或與銀行系統不一致；請以銀行官方渠道及銷售文件為準。",
       clientBanner: "客戶模式：已隱藏內部銷售備註與 RM 專用提示",
       toastImported: "已匯入並儲存個案",
       toastCleared: "已清除本機個案，已重載示範",
@@ -195,6 +197,38 @@
       fundReportUnavailable: "此基金暫無直連報告 PDF；已開啟 Morningstar 搜尋（或請複製基金名稱）",
       fundReportCopied: "已複製基金名稱，可於 Morningstar／銀行頁搜尋",
       fundPortalNote: "基金資料經交通銀行香港／環富通公開介面盡力更新 NAV。基金報告一律開啟環富通 getFdDocList 的 PDF（不經交行同意頁）；無 fdId／無 PDF 則改 Morningstar 搜尋。",
+
+      moreMenu: "更多",
+      downloadTemplate: "下載 Excel 範本",
+      backupCases: "備份個案（JSON／ZIP）",
+      toastBackup: "已下載個案備份",
+      toastTemplate: "已下載 Excel 範本",
+      toastImportedBatch: "已匯入多個個案",
+      syncHintTitle: "資料流：Notion → Excel → CSV／XLSX → 本頁",
+      syncHintNote: "基金 NAV／圖表經環富通公開介面盡力顯示，屬第三方參考，非銀行正式報價。",
+      homeNearestMat: "最近到期",
+      homeDays: "日",
+      homeOpenOpps: "未完成機會",
+      homeNoMaturity: "無近期到期",
+      colNav: "最新 NAV",
+      colMonthlyDiv: "月派息 %",
+      colUnits: "持有單位",
+      colFee: "費用",
+      colPrincipalNet: "本金（扣費後）",
+      fundChartTitle: "近1年價格",
+      fundApiOk: "基金資料已更新（第三方參考）",
+      fundApiFail: "基金 API 未能更新（顯示本機／示範數值）",
+      fundApiNone: "無 fdId，無法自動抓取 NAV／圖表",
+      fundTableTitle: "基金持倉",
+      elnTableTitle: "股票掛鈎票據（ELN）",
+      depositTableTitle: "定期存款",
+      colUnderlying: "掛鈎標的",
+      colStrike: "行使價 %",
+      colRate: "利率 %",
+      colStart: "起息日",
+      colMaturity: "到期日",
+      reportExcel: "下載 Excel",
+      reportCsv: "下載 CSV",
       exportGroupCore: "核心報表",
       exportGroupMaturity: "到期／產品",
       exportGroupRisk: "風險／表現",
@@ -280,7 +314,9 @@
       notesTitle: "Notes / Next steps",
       notesPlaceholder: "Client intent, next actions, materials to prepare…",
       disclaimer:
-        "For reference only. Not investment advice, an offer or solicitation. Past performance is not indicative of future results. Prices, fund NAVs and structured-product valuations may be delayed or bank-quoted. Investment involves risks. Please read the offering documents. For RM–client meeting discussion only.",
+        "For reference only. Not investment advice, an offer or solicitation. Past performance is not indicative of future results. Prices and structured-product valuations may be delayed. Investment involves risks. Please read the offering documents. For RM–client meeting discussion only.",
+      disclaimerThird:
+        "Fund NAV, dividends, charts and documents from Bank of Communications (HK) / ET Wealth are third-party public reference only — not official bank quotes or offers. Data may be delayed, incomplete or differ from bank systems; rely on official bank channels and offering documents.",
       clientBanner: "Client mode: internal sales notes and RM-only tips are hidden",
       toastImported: "Case imported and saved",
       toastCleared: "Local cases cleared; demo reloaded",
@@ -354,6 +390,38 @@
       fundReportUnavailable: "No direct report PDF — opened Morningstar search (or copy the fund name)",
       fundReportCopied: "Fund name copied — search on Morningstar / bank portal",
       fundPortalNote: "Fund data via BOCOM HK / ET Wealth. Fund report always opens the ET Wealth getFdDocList PDF (never the bank agree wall). Without fdId/PDF, falls back to Morningstar search.",
+
+      moreMenu: "More",
+      downloadTemplate: "Download Excel template",
+      backupCases: "Backup cases (JSON/ZIP)",
+      toastBackup: "Cases backup downloaded",
+      toastTemplate: "Excel template downloaded",
+      toastImportedBatch: "Imported multiple cases",
+      syncHintTitle: "Flow: Notion → Excel → CSV/XLSX → this page",
+      syncHintNote: "Fund NAV/charts via ET Wealth are best-effort third-party reference, not official bank quotes.",
+      homeNearestMat: "Nearest maturity",
+      homeDays: "d",
+      homeOpenOpps: "Open opportunities",
+      homeNoMaturity: "No near maturity",
+      colNav: "NAV",
+      colMonthlyDiv: "Monthly div %",
+      colUnits: "Units",
+      colFee: "Fee",
+      colPrincipalNet: "Principal (after fee)",
+      fundChartTitle: "1Y price",
+      fundApiOk: "Fund data updated (third-party reference)",
+      fundApiFail: "Fund API unavailable (showing local/demo values)",
+      fundApiNone: "No fdId — cannot auto-fetch NAV/chart",
+      fundTableTitle: "Fund holdings",
+      elnTableTitle: "Equity-linked notes (ELN)",
+      depositTableTitle: "Time deposits",
+      colUnderlying: "Underlying",
+      colStrike: "Strike %",
+      colRate: "Rate %",
+      colStart: "Start",
+      colMaturity: "Maturity",
+      reportExcel: "Download Excel",
+      reportCsv: "Download CSV",
       exportGroupCore: "Core reports",
       exportGroupMaturity: "Maturity / product",
       exportGroupRisk: "Risk / performance",
@@ -493,6 +561,38 @@
     fundReportUnavailable: "此基金暂无直连报告 PDF；已打开 Morningstar 搜寻（或请复制基金名称）",
     fundReportCopied: "已复制基金名称，可于 Morningstar／银行页搜寻",
     fundPortalNote: "基金资料经交行／环富通尽力更新。基金报告一律打开环富通 getFdDocList 的 PDF（不经交行同意页）；无 fdId／无 PDF 则改 Morningstar 搜寻。",
+
+    moreMenu: "更多",
+    downloadTemplate: "下载 Excel 范本",
+    backupCases: "备份个案（JSON／ZIP）",
+    toastBackup: "已下载个案备份",
+    toastTemplate: "已下载 Excel 范本",
+    toastImportedBatch: "已导入多个个案",
+    syncHintTitle: "资料流：Notion → Excel → CSV／XLSX → 本页",
+    syncHintNote: "基金 NAV／图表经环富通公开接口尽力显示，属第三方参考，非银行正式报价。",
+    homeNearestMat: "最近到期",
+    homeDays: "日",
+    homeOpenOpps: "未完成机会",
+    homeNoMaturity: "无近期到期",
+    colNav: "最新 NAV",
+    colMonthlyDiv: "月派息 %",
+    colUnits: "持有单位",
+    colFee: "费用",
+    colPrincipalNet: "本金（扣费后）",
+    fundChartTitle: "近1年价格",
+    fundApiOk: "基金资料已更新（第三方参考）",
+    fundApiFail: "基金 API 未能更新（显示本机／示范数值）",
+    fundApiNone: "无 fdId，无法自动抓取 NAV／图表",
+    fundTableTitle: "基金持仓",
+    elnTableTitle: "股票挂钩票据（ELN）",
+    depositTableTitle: "定期存款",
+    colUnderlying: "挂钩标的",
+    colStrike: "行使价 %",
+    colRate: "利率 %",
+    colStart: "起息日",
+    colMaturity: "到期日",
+    reportExcel: "下载 Excel",
+    reportCsv: "下载 CSV",
     exportGroupCore: "核心报表",
     exportGroupMaturity: "到期／产品",
     exportGroupRisk: "风险／表现",
@@ -532,12 +632,35 @@
     colWeight: "占比 %",
     total: "合计",
     clientBanner: "客户模式：已隐藏内部销售备注与 RM 专用提示",
+    disclaimerThird: "交通银行香港基金页及环富通（ET Wealth）所显示之 NAV、派息、图表与基金文件均为第三方公开参考资料，并非本行正式报价或要约，可能延迟、不完整或与银行系统不一致；请以银行官方渠道及销售文件为准。",
   });
 
 
+  function applyFundMap(cases) {
+    (cases || []).forEach((c) => {
+      (c.holdings || []).forEach((h) => {
+        if (h.type !== "Fund") return;
+        const resolved = window.PR_resolveFdId ? window.PR_resolveFdId(h) : "";
+        if (resolved && !h.fdId) h.fdId = resolved;
+        if (h.units == null && h.quantity != null) h.units = h.quantity;
+        if (h.principal_after_fee == null && h.cost_value != null) {
+          const fee =
+            h.fee_amount != null
+              ? Number(h.fee_amount)
+              : h.fee_pct != null
+                ? (Number(h.cost_value) * Number(h.fee_pct)) / 100
+                : 0;
+          h.principal_after_fee = Number(h.cost_value) - fee;
+          if (h.fee_amount == null && fee) h.fee_amount = fee;
+        }
+      });
+    });
+    return cases;
+  }
+
   function getDemoCases() {
     const src = window.PR_DEMO_CASES || [];
-    return JSON.parse(JSON.stringify(src));
+    return applyFundMap(JSON.parse(JSON.stringify(src)));
   }
 
   let state = {
@@ -642,10 +765,14 @@
               (c.holdings || []).some((h) => h.fdId === "ETNSI36463")
           ) &&
           parsed.some((c) => c.id === "demo-lau") &&
-          parsed.some((c) => c.id === "demo-wei-min") &&
+          parsed.some(
+            (c) =>
+              c.id === "demo-wei-min" &&
+              (c.holdings || []).some((h) => h.type === "Fund" && h.units != null)
+          ) &&
           parsed.some((c) => c.segment);
         if (ok) {
-          state.cases = parsed;
+          state.cases = applyFundMap(parsed);
           return;
         }
       }
@@ -889,6 +1016,132 @@
     return ty === "swap" || ty === "Swap";
   }
 
+  function fundPrincipal(h) {
+    if (h.principal_after_fee != null && !isNaN(h.principal_after_fee)) return Number(h.principal_after_fee);
+    const cost = Number(h.cost_value) || 0;
+    const fee =
+      h.fee_amount != null
+        ? Number(h.fee_amount)
+        : h.fee_pct != null
+          ? (cost * Number(h.fee_pct)) / 100
+          : 0;
+    return cost - fee;
+  }
+
+  function fundFeeLabel(h) {
+    if (h.fee_amount != null && h.fee_pct != null) {
+      return fmtMoneyFull(h.fee_amount) + " (" + Number(h.fee_pct).toFixed(2) + "%)";
+    }
+    if (h.fee_amount != null) return fmtMoneyFull(h.fee_amount);
+    if (h.fee_pct != null) return Number(h.fee_pct).toFixed(2) + "%";
+    return "—";
+  }
+
+  function renderFundHoldingsTable(list) {
+    if (!list.length) return "";
+    const head = `<thead><tr>
+      <th>${t("colProduct")}</th>
+      <th class="num">${t("colNav")}</th>
+      <th class="num">${t("colMonthlyDiv")}</th>
+      <th class="num">${t("colUnits")}</th>
+      <th class="num">${t("colFee")}</th>
+      <th class="num">${t("colPrincipalNet")}</th>
+      <th class="num">${t("colMv")}</th>
+      <th class="num">${t("colPnl")}</th>
+      <th class="num">${t("colDay")}</th>
+    </tr></thead>`;
+    const body = list
+      .map((h, idx) => {
+        const fdId = h.fdId || (window.PR_resolveFdId ? window.PR_resolveFdId(h) : "") || "";
+        const units = h.units != null ? h.units : h.quantity;
+        const nav = h.nav;
+        const div = h.monthly_div_pct;
+        const actions = `<div>
+            <button type="button" class="fund-link" data-fund-portal="${escapeHtml(h.product_name)}" data-fund-code="${escapeHtml(h.fund_code || "")}">${t("fundInfo")}</button>
+            <button type="button" class="fund-link" data-fund-report="${escapeHtml(fdId)}" data-fund-report-name="${escapeHtml(h.product_name || "")}" data-fund-report-isin="${escapeHtml(h.isin || "")}" data-fund-report-code="${escapeHtml(h.fund_code || "")}">${t("fundReport")}</button>
+            <button type="button" class="fund-copy" data-copy-fund="${escapeHtml(h.product_name)}">${t("fundCopyName")}</button>
+          </div>
+          <div class="fund-api-status" data-fund-status="${escapeHtml(fdId || "none")}">${fdId ? "…" : t("fundApiNone")}</div>`;
+        const row = `<tr class="fund-main-row" data-fund-row="${idx}">
+          <td><strong>${escapeHtml(h.product_name)}</strong>
+            <div class="holding-sub">${escapeHtml(h.fund_code || "")}${h.isin ? " · " + escapeHtml(h.isin) : ""}${fdId ? " · " + escapeHtml(fdId) : ""}</div>
+            ${actions}
+          </td>
+          <td class="num" data-fund-nav="${escapeHtml(fdId)}">${nav != null ? fmtMoneyFull(nav, "", 4) : "—"}</td>
+          <td class="num" data-fund-div="${escapeHtml(fdId)}">${div != null ? fmtPct(div) : "—"}</td>
+          <td class="num">${fmtMoneyFull(units)}</td>
+          <td class="num" data-fund-fee="${escapeHtml(fdId)}">${fundFeeLabel(h)}</td>
+          <td class="num">${fmtMoneyFull(fundPrincipal(h))}</td>
+          <td class="num">${fmtMoneyFull(h.market_value)}</td>
+          <td class="num ${pnlClass(h.pnl_value)}">${fmtMoneyFull(h.pnl_value)}<div class="holding-sub ${pnlClass(h.pnl_pct)}">${fmtPct(h.pnl_pct)}</div></td>
+          <td class="num ${pnlClass(h.day_change_pct)}">${fmtPct(h.day_change_pct)}</td>
+        </tr>
+        <tr class="fund-chart-row"><td colspan="9">
+          <div class="holding-sub">${t("fundChartTitle")}</div>
+          <div class="fund-enrich-slot" data-fund-enrich="${escapeHtml(fdId)}" data-fund-enrich-name="${escapeHtml(h.product_name || "")}"></div>
+        </td></tr>`;
+        return row;
+      })
+      .join("");
+    return `<h3 class="fund-table-heading">${t("fundTableTitle")}</h3><div class="table-wrap"><table class="holdings holdings-fund">${head}<tbody>${body}</tbody></table></div>`;
+  }
+
+  function renderElnHoldingsTable(list) {
+    if (!list.length) return "";
+    const head = `<thead><tr>
+      <th>${t("colProduct")}</th>
+      <th>${t("colUnderlying")}</th>
+      <th class="num">${t("colStrike")}</th>
+      <th>${t("colStart")}</th>
+      <th>${t("colMaturity")}</th>
+      <th class="num">${t("colCost")}</th>
+      <th class="num">${t("colMv")}</th>
+      <th class="num">${t("colPnlPct")}</th>
+    </tr></thead>`;
+    const body = list
+      .map(
+        (h) => `<tr>
+        <td><strong>${escapeHtml(h.product_name)}</strong></td>
+        <td>${escapeHtml(h.underlying || "—")}</td>
+        <td class="num">${h.strike_pct != null ? fmtPct(h.strike_pct) : "—"}</td>
+        <td>${escapeHtml(h.start_date || "—")}</td>
+        <td>${escapeHtml(h.maturity_date || "—")}</td>
+        <td class="num">${fmtMoneyFull(h.cost_value)}</td>
+        <td class="num">${fmtMoneyFull(h.market_value)}</td>
+        <td class="num ${pnlClass(h.pnl_pct)}">${fmtPct(h.pnl_pct)}</td>
+      </tr>`
+      )
+      .join("");
+    return `<h3 class="eln-table-heading">${t("elnTableTitle")}</h3><div class="table-wrap"><table class="holdings holdings-eln">${head}<tbody>${body}</tbody></table></div>`;
+  }
+
+  function renderDepositHoldingsTable(list) {
+    if (!list.length) return "";
+    const head = `<thead><tr>
+      <th>${t("colProduct")}</th>
+      <th class="num">${t("colRate")}</th>
+      <th>${t("colStart")}</th>
+      <th>${t("colMaturity")}</th>
+      <th class="num">${t("colCost")}</th>
+      <th class="num">${t("colMv")}</th>
+      <th class="num">${t("colPnl")}</th>
+    </tr></thead>`;
+    const body = list
+      .map(
+        (h) => `<tr>
+        <td><strong>${escapeHtml(h.product_name)}</strong></td>
+        <td class="num">${h.interest_rate_pct != null ? fmtPct(h.interest_rate_pct) : "—"}</td>
+        <td>${escapeHtml(h.start_date || "—")}</td>
+        <td>${escapeHtml(h.maturity_date || "—")}</td>
+        <td class="num">${fmtMoneyFull(h.cost_value, h.currency)}</td>
+        <td class="num">${fmtMoneyFull(h.market_value, h.currency)}</td>
+        <td class="num ${pnlClass(h.pnl_value)}">${fmtMoneyFull(h.pnl_value)}</td>
+      </tr>`
+      )
+      .join("");
+    return `<h3 class="deposit-table-heading">${t("depositTableTitle")}</h3><div class="table-wrap"><table class="holdings holdings-deposit">${head}<tbody>${body}</tbody></table></div>`;
+  }
+
   function renderNormalHoldingsTable(list) {
     if (!list.length) return "";
     const head = `<thead><tr>
@@ -903,36 +1156,8 @@
     </tr></thead>`;
     const body = list
       .map((h) => {
-        let fundBits = "";
-        if (h.type === "Fund") {
-          const code = h.fund_code ? ` (${escapeHtml(h.fund_code)})` : "";
-          fundBits = `<div>
-            <button type="button" class="fund-link" data-fund-portal="${escapeHtml(
-              h.product_name
-            )}" data-fund-code="${escapeHtml(h.fund_code || "")}">${t("fundInfo")}</button>
-            <button type="button" class="fund-link" data-fund-report="${escapeHtml(
-              h.fdId || ""
-            )}" data-fund-report-name="${escapeHtml(
-              h.product_name || ""
-            )}" data-fund-report-isin="${escapeHtml(
-              h.isin || h.ISIN || ""
-            )}" data-fund-report-code="${escapeHtml(
-              h.fund_code || ""
-            )}">${t("fundReport")}</button>
-            <button type="button" class="fund-copy" data-copy-fund="${escapeHtml(
-              h.product_name
-            )}">${t("fundCopyName")}</button>
-          </div>`;
-          if (h.fdId) {
-            fundBits += `<div class="fund-enrich-slot" data-fund-enrich="${escapeHtml(
-              h.fdId
-            )}"></div>`;
-          } else {
-            fundBits += `<div class="holding-sub">${escapeHtml(h.product_name)}${code}</div>`;
-          }
-        }
         return `<tr>
-          <td><strong>${escapeHtml(h.product_name)}</strong>${fundBits}</td>
+          <td><strong>${escapeHtml(h.product_name)}</strong></td>
           <td><span class="type-badge type-${escapeHtml(h.type)}">${typeLabel(h.type)}</span></td>
           <td class="num">${fmtMoneyFull(h.quantity)}</td>
           <td class="num">${fmtMoneyFull(h.cost_value)}</td>
@@ -979,28 +1204,7 @@
     return `${title}<div class="table-wrap"><table class="holdings holdings-swap">${head}<tbody>${body}</tbody></table></div>`;
   }
 
-  function renderHoldings(c) {
-    const list = filteredHoldings(c);
-    const wrap = document.getElementById("holdingsTables");
-    const swaps = list.filter((h) => isSwapType(h.type));
-    const others = list.filter((h) => !isSwapType(h.type));
-    let html = "";
-    if (others.length) html += renderNormalHoldingsTable(others);
-    if (swaps.length) html += renderSwapHoldingsTable(swaps);
-    if (!html) html = `<p style="color:var(--muted);font-size:13px">${t("searchEmpty")}</p>`;
-    wrap.innerHTML = html;
-    wrap.querySelectorAll("th[data-sort]").forEach((th) => {
-      th.addEventListener("click", () => {
-        const key = th.getAttribute("data-sort");
-        if (state.sortKey === key) {
-          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
-        } else {
-          state.sortKey = key;
-          state.sortDir = key === "product_name" || key === "type" ? "asc" : "desc";
-        }
-        renderHoldings(currentCase());
-      });
-    });
+  function wireFundButtons(wrap) {
     wrap.querySelectorAll("[data-fund-portal]").forEach((btn) => {
       btn.addEventListener("click", () => {
         window.open(BOCOM_FUND_PORTAL, "_blank", "noopener");
@@ -1027,6 +1231,39 @@
         }
       });
     });
+  }
+
+  function renderHoldings(c) {
+    const list = filteredHoldings(c);
+    const wrap = document.getElementById("holdingsTables");
+    const funds = list.filter((h) => h.type === "Fund");
+    const swaps = list.filter((h) => isSwapType(h.type));
+    const elns = list.filter((h) => h.type === "ELN");
+    const deposits = list.filter((h) => h.type === "Deposit");
+    const others = list.filter(
+      (h) => h.type !== "Fund" && !isSwapType(h.type) && h.type !== "ELN" && h.type !== "Deposit"
+    );
+    let html = "";
+    if (funds.length) html += renderFundHoldingsTable(funds);
+    if (elns.length) html += renderElnHoldingsTable(elns);
+    if (deposits.length) html += renderDepositHoldingsTable(deposits);
+    if (swaps.length) html += renderSwapHoldingsTable(swaps);
+    if (others.length) html += renderNormalHoldingsTable(others);
+    if (!html) html = `<p style="color:var(--muted);font-size:13px">${t("searchEmpty")}</p>`;
+    wrap.innerHTML = html;
+    wrap.querySelectorAll("th[data-sort]").forEach((th) => {
+      th.addEventListener("click", () => {
+        const key = th.getAttribute("data-sort");
+        if (state.sortKey === key) {
+          state.sortDir = state.sortDir === "asc" ? "desc" : "asc";
+        } else {
+          state.sortKey = key;
+          state.sortDir = key === "product_name" || key === "type" ? "asc" : "desc";
+        }
+        renderHoldings(currentCase());
+      });
+    });
+    wireFundButtons(wrap);
     enrichFundCells();
   }
 
@@ -1172,6 +1409,19 @@
     document.getElementById("sec-cover")?.scrollIntoView({ behavior: "smooth" });
   }
 
+  function daysUntil(iso) {
+    if (!iso) return null;
+    const a = reportAsOfDate();
+    const t0 = Date.parse(a + "T00:00:00");
+    const t1 = Date.parse(iso + "T00:00:00");
+    if (isNaN(t0) || isNaN(t1)) return null;
+    return Math.round((t1 - t0) / 86400000);
+  }
+
+  function openOppCount(c) {
+    return (c.opportunities || []).filter((o) => !o.done).length;
+  }
+
   function renderHome() {
     const el = document.getElementById("homeClientList");
     if (!el) return;
@@ -1180,11 +1430,19 @@
       .map((c) => {
         const aum = caseAum(c);
         const mats = caseMaturities(c);
+        const nearest = mats[0];
+        const dLeft = daysUntil(nearest);
+        const opps = openOppCount(c);
         const types = [
           ...new Set((c.holdings || []).map((h) => (h.type === "Swap" ? "swap" : h.type))),
         ]
           .map(typeLabel)
           .join(" · ");
+        const matPill =
+          dLeft == null
+            ? `<span class="home-stat-pill">${t("homeNoMaturity")}</span>`
+            : `<span class="home-stat-pill ${dLeft <= 90 ? "warn" : "ok"}">${t("homeNearestMat")}: ${dLeft}${t("homeDays")} (${nearest})</span>`;
+        const oppPill = `<span class="home-stat-pill ${opps ? "warn" : ""}">${t("homeOpenOpps")}: ${opps}</span>`;
         return `<button type="button" class="adv-client-card" data-home-case="${escapeHtml(c.id)}">
           <div>
             <strong>${escapeHtml(clientDisplayName(c))}</strong>
@@ -1194,9 +1452,9 @@
               <span>${escapeHtml(c.segment || "")}</span>
               <span>AUM ${fmtMoneyFull(aum, c.currency || "HKD")}</span>
               <span class="${pnlClass(casePnl(c).pnl)}">${fmtPct(casePnl(c).pnlPct)}</span>
-              ${mats.length ? `<span>${t("advNextMaturity")}: ${mats[0]}</span>` : ""}
               <span>${escapeHtml(types)}</span>
             </div>
+            <div class="home-stat-pills">${matPill}${oppPill}</div>
           </div>
           <span class="btn-link">${t("openReview")}</span>
         </button>`;
@@ -1277,6 +1535,22 @@
     a.download = filename;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  }
+
+
+  function downloadXlsx(filename, headers, rows, sheetName) {
+    if (typeof XLSX === "undefined") {
+      downloadCsv(String(filename).replace(/\.xlsx$/i, ".csv"), headers, rows);
+      return;
+    }
+    const aoa = [headers].concat(rows.map((r) => r.map((c) => (c == null ? "" : c))));
+    const ws = XLSX.utils.aoa_to_sheet(aoa);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, String(sheetName || "Report").slice(0, 31));
+    let outName = String(filename || "report.xlsx");
+    outName = outName.replace(/\.csv$/i, ".xlsx");
+    if (!/\.xlsx$/i.test(outName)) outName += ".xlsx";
+    XLSX.writeFile(wb, outName);
   }
 
   function buildReport(kind) {
@@ -1625,8 +1899,9 @@
       <div class="table-wrap"><table class="holdings"><thead>${report.tableHead}</thead><tbody>${
       report.htmlRows.join("") || `<tr><td colspan="8">${t("reportEmpty")}</td></tr>`
     }</tbody></table></div>
-      <div style="margin-top:12px;display:flex;gap:8px" class="no-print-actions">
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap" class="no-print-actions">
         <button type="button" class="btn btn-gold" id="btnReportPdf">${t("reportPdf")}</button>
+        <button type="button" class="btn btn-gold" id="btnReportXlsx">${t("reportExcel")}</button>
         <button type="button" class="btn btn-outline" id="btnReportCsv">${t("reportCsv")}</button>
       </div>
     </div>`;
@@ -1643,6 +1918,13 @@
         return;
       }
       downloadCsv(report.filename, report.headers, report.csvRows);
+    };
+    document.getElementById("btnReportXlsx").onclick = () => {
+      if (!report.csvRows.length) {
+        toast(t("reportEmpty"));
+        return;
+      }
+      downloadXlsx(report.filename, report.headers, report.csvRows, report.title || "Report");
     };
     root.scrollIntoView({ behavior: "smooth", block: "start" });
     toast(t("reportGenerated"));
@@ -1725,7 +2007,7 @@
     try {
       const url = `${ETWEALTH_BASE}/getPriceChartData?fdId=${encodeURIComponent(
         fdId
-      )}&jsArray=true&period=6&lang=zh_TW`;
+      )}&jsArray=true&period=12&lang=zh_TW`;
       const res = await fetch(url, { mode: "cors" });
       if (!res.ok) return null;
       const data = await res.json();
@@ -1894,14 +2176,14 @@
   }
 
 
-  function sparkSvg(points) {
+  function sparkSvg(points, w, h) {
     if (!points || points.length < 2) return "";
     const vals = points.map((p) => Number(p[1])).filter((n) => !isNaN(n));
     if (vals.length < 2) return "";
     const min = Math.min(...vals);
     const max = Math.max(...vals);
-    const w = 72;
-    const h = 22;
+    w = w || 72;
+    h = h || 22;
     const span = max - min || 1;
     const coords = vals
       .map((v, i) => {
@@ -1911,40 +2193,73 @@
       })
       .join(" ");
     const up = vals[vals.length - 1] >= vals[0];
-    return `<svg class="fund-spark" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline fill="none" stroke="${
+    return `<svg class="fund-spark fund-year-chart" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><polyline fill="none" stroke="${
       up ? "#0d7a4f" : "#c0392b"
     }" stroke-width="1.5" points="${coords}"/></svg>`;
   }
 
   function enrichFundCells() {
     document.querySelectorAll("[data-fund-enrich]").forEach(async (el) => {
-      const fdId = el.getAttribute("data-fund-enrich");
-      const summary = await fetchFundSummary(fdId);
-      const div = await fetchFundDiv(fdId);
-      const spark = await fetchFundSpark(fdId);
-      if (!summary && !div && !spark) {
-        el.innerHTML = `<span class="holding-sub">${t("fundInfo")}: portal</span>`;
+      const fdId = el.getAttribute("data-fund-enrich") || "";
+            if (!fdId) {
+        el.innerHTML = `<span class="fund-api-status err">${t("fundApiNone")}</span>`;
         return;
       }
-      const nav =
-        summary && summary.fdPrice != null
-          ? `${t("fundNav")} ${summary.fdCcy || ""} ${Number(summary.fdPrice).toFixed(4)}`
-          : "";
-      const asof = summary && summary.asOfDate ? `${t("fundAsOf")} ${summary.asOfDate}` : "";
-      let divTxt = "";
-      if (div) {
-        const amt = div.dividAmt != null ? div.dividAmt : div.amount;
-        const dt = div.exDate || div.payDate || "";
-        if (amt != null) divTxt = `${t("fundDiv")} ${amt}${dt ? " @ " + dt : ""}`;
+      try {
+        const summary = await fetchFundSummary(fdId);
+        const div = await fetchFundDiv(fdId);
+        const spark = await fetchFundSpark(fdId);
+        if (!summary && !div && !spark) {
+          el.innerHTML = `<span class="fund-api-status err">${t("fundApiFail")}</span>`;
+          document.querySelectorAll(`[data-fund-status="${fdId}"]`).forEach((s) => {
+            s.textContent = t("fundApiFail");
+            s.classList.add("err");
+          });
+          return;
+        }
+        if (summary && summary.fdPrice != null) {
+          document.querySelectorAll(`[data-fund-nav="${fdId}"]`).forEach((cell) => {
+            cell.textContent = fmtMoneyFull(summary.fdPrice, "", 4);
+          });
+        }
+        if (summary && summary.managementFee) {
+          document.querySelectorAll(`[data-fund-fee="${fdId}"]`).forEach((cell) => {
+            const cur = cell.textContent;
+            if (!cur || cur === "—") cell.textContent = String(summary.managementFee);
+            else cell.innerHTML = escapeHtml(cell.textContent) + `<div class="holding-sub">${escapeHtml(summary.managementFee)}</div>`;
+          });
+        }
+        let divPct = null;
+        if (div) {
+          const amt = div.dividAmt != null ? Number(div.dividAmt) : null;
+          const px = summary && summary.fdPrice != null ? Number(summary.fdPrice) : null;
+          if (amt != null && px) divPct = (amt / px) * 100;
+        }
+        if (divPct != null) {
+          document.querySelectorAll(`[data-fund-div="${fdId}"]`).forEach((cell) => {
+            cell.textContent = fmtPct(divPct);
+          });
+        }
+        const chart = sparkSvg(spark, 220, 48);
+        const nav =
+          summary && summary.fdPrice != null
+            ? `${t("fundNav")} ${summary.fdCcy || ""} ${Number(summary.fdPrice).toFixed(4)}`
+            : "";
+        const asof = summary && summary.asOfDate ? `${t("fundAsOf")} ${summary.asOfDate}` : "";
+        el.innerHTML = `<div class="fund-enrich">${chart}<span>${[nav, asof].filter(Boolean).map(escapeHtml).join(" · ")}</span>
+          <div class="fund-api-status ok">${t("fundApiOk")}</div></div>`;
+        document.querySelectorAll(`[data-fund-status="${fdId}"]`).forEach((s) => {
+          s.textContent = t("fundApiOk");
+          s.classList.remove("err");
+          s.classList.add("ok");
+        });
+      } catch (e) {
+        el.innerHTML = `<span class="fund-api-status err">${t("fundApiFail")}</span>`;
+        document.querySelectorAll(`[data-fund-status="${fdId}"]`).forEach((s) => {
+          s.textContent = t("fundApiFail");
+          s.classList.add("err");
+        });
       }
-      el.innerHTML = `<div class="fund-enrich">${sparkSvg(spark)}<span>${[
-        nav,
-        asof,
-        divTxt,
-      ]
-        .filter(Boolean)
-        .map(escapeHtml)
-        .join(" · ")}</span></div>`;
     });
   }
 
@@ -2369,10 +2684,14 @@
       state.authenticated = true;
       if (gate) gate.classList.add("hidden");
       if (shell) shell.classList.remove("hidden");
-      if (logout) logout.classList.add("hidden");
+      ["btnLogout", "btnLogoutDesk"].forEach((id) => {
+        document.getElementById(id)?.classList.add("hidden");
+      });
       return;
     }
-    if (logout) logout.classList.remove("hidden");
+    ["btnLogout", "btnLogoutDesk"].forEach((id) => {
+      document.getElementById(id)?.classList.remove("hidden");
+    });
     if (state.authenticated) {
       gate.classList.add("hidden");
       shell.classList.remove("hidden");
@@ -2422,7 +2741,19 @@
 
   /* CSV parsing */
   function parseCsv(text) {
-    const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter((l) => l.trim());
+    const raw = text.replace(/^\uFEFF/, "");
+    const blocks = raw.split(/\r?\n-{3,}\r?\n/);
+    if (blocks.length > 1) {
+      return blocks
+        .map((b) => b.trim())
+        .filter(Boolean)
+        .map((b) => parseCsvSingle(b));
+    }
+    return parseCsvSingle(raw);
+  }
+
+  function parseCsvSingle(text) {
+    const lines = text.split(/\r?\n/).filter((l) => l.trim());
     if (!lines.length) throw new Error("Empty CSV");
     const rows = lines.map(splitCsvLine);
     const header = rows[0].map((h) => h.trim().toLowerCase());
@@ -2544,51 +2875,100 @@
     header.forEach((h, i) => {
       idx[h] = i;
     });
-    const holdings = [];
-    let display_name = "Imported Client";
-    let client_id = "case-" + Date.now();
+    const byClient = new Map();
     dataRows.forEach((row) => {
-      if (!row.length || row.every((c) => !c.trim())) return;
+      if (!row.length || row.every((c) => !String(c).trim())) return;
       const get = (k) => (idx[k] != null ? row[idx[k]] : "");
-      if (get("display_name")) display_name = get("display_name");
-      if (get("client_id")) client_id = get("client_id");
+      const client_id = get("client_id") || "imported";
+      const display_name = get("display_name") || client_id;
+      if (!byClient.has(client_id)) {
+        byClient.set(client_id, {
+          id: "case-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+          client_id,
+          display_name,
+          display_name_en: get("display_name_en") || display_name,
+          review_date: get("review_date") || new Date().toISOString().slice(0, 10),
+          rm_name: get("rm_name") || "Mose Lee",
+          currency: get("currency") || "HKD",
+          risk_profile: get("risk_profile") || "Balanced",
+          notes: get("notes") || "",
+          holdings: [],
+          opportunities: [],
+        });
+      }
+      const c = byClient.get(client_id);
+      if (get("display_name")) c.display_name = get("display_name");
       const h = {
         product_name: get("product_name"),
         type: get("type") || "Fund",
+        fund_code: get("fund_code") || "",
+        isin: get("isin") || "",
+        fdId: get("fdid") || get("fd_id") || "",
+        units: get("units"),
+        nav: get("nav"),
+        fee_pct: get("fee_pct"),
+        fee_amount: get("fee_amount"),
+        monthly_div_pct: get("monthly_div_pct"),
+        principal_after_fee: get("principal_after_fee"),
         quantity: get("quantity"),
         cost_value: get("cost_value"),
         market_value: get("market_value"),
         day_change_pct: get("day_change_pct"),
         pnl_value: get("pnl_value"),
         pnl_pct: get("pnl_pct"),
-        currency: get("currency") || "HKD",
+        currency: get("currency") || c.currency || "HKD",
+        start_date: get("start_date") || "",
+        maturity_date: get("maturity_date") || "",
+        underlying: get("underlying") || "",
+        strike_pct: get("strike_pct"),
+        interest_rate_pct: get("interest_rate_pct"),
       };
       if (h.product_name) {
         normalizeHolding(h);
-        holdings.push(h);
+        c.holdings.push(h);
       }
     });
+    const cases = [...byClient.values()];
+    if (cases.length === 1) return cases[0];
+    if (cases.length > 1) return cases;
     return {
       id: "case-" + Date.now(),
-      client_id,
-      display_name,
-      display_name_en: display_name,
+      client_id: "imported",
+      display_name: "Imported Client",
+      display_name_en: "Imported Client",
       review_date: new Date().toISOString().slice(0, 10),
       rm_name: "Mose Lee",
       currency: "HKD",
       risk_profile: "Balanced",
       notes: "",
-      holdings,
+      holdings: [],
       opportunities: [],
     };
   }
 
   function normalizeHolding(h) {
-    ["quantity", "cost_value", "market_value", "day_change_pct", "pnl_value", "pnl_pct"].forEach(
-      (k) => {
-        if (h[k] != null && h[k] !== "") h[k] = Number(h[k]);
-      }
-    );
+    [
+      "quantity",
+      "cost_value",
+      "market_value",
+      "day_change_pct",
+      "pnl_value",
+      "pnl_pct",
+      "units",
+      "nav",
+      "fee_pct",
+      "fee_amount",
+      "monthly_div_pct",
+      "principal_after_fee",
+      "strike_pct",
+      "interest_rate_pct",
+    ].forEach((k) => {
+      if (h[k] != null && h[k] !== "") h[k] = Number(h[k]);
+    });
+    if (!h.fdId && window.PR_resolveFdId) {
+      const r = window.PR_resolveFdId(h);
+      if (r) h.fdId = r;
+    }
     if ((h.pnl_value == null || isNaN(h.pnl_value)) && h.market_value != null && h.cost_value != null) {
       h.pnl_value = h.market_value - h.cost_value;
     }
@@ -2633,30 +3013,108 @@
       window.print();
     });
 
-    document.getElementById("btnImport").addEventListener("click", () => {
+    function triggerImport() {
       document.getElementById("fileInput").click();
+    }
+    document.getElementById("btnImport")?.addEventListener("click", triggerImport);
+    document.getElementById("btnImportDesk")?.addEventListener("click", triggerImport);
+
+    async function ingestImportedCases(cases) {
+      const list = Array.isArray(cases) ? cases : [cases];
+      applyFundMap(list);
+      list.forEach((cas) => {
+        if (!cas.id) cas.id = "case-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6);
+        state.cases.push(cas);
+      });
+      state.currentId = list[0].id;
+      state.typeFilter = "all";
+      saveCases();
+      renderAll();
+      toast(list.length > 1 ? t("toastImportedBatch") + " (" + list.length + ")" : t("toastImported"));
+    }
+
+    document.getElementById("fileInput").addEventListener("change", async (e) => {
+      const files = e.target.files ? [...e.target.files] : [];
+      if (!files.length) return;
+      try {
+        const all = [];
+        for (const file of files) {
+          const name = (file.name || "").toLowerCase();
+          if (name.endsWith(".xlsx") || name.endsWith(".xls")) {
+            if (typeof XLSX === "undefined") throw new Error("SheetJS not loaded");
+            const buf = await file.arrayBuffer();
+            const wb = XLSX.read(buf, { type: "array" });
+            const sheet = wb.Sheets[wb.SheetNames[0]];
+            const csv = XLSX.utils.sheet_to_csv(sheet);
+            const parsed = parseCsv(csv);
+            if (Array.isArray(parsed)) all.push(...parsed);
+            else all.push(parsed);
+          } else {
+            const textContent = await file.text();
+            const parsed = parseCsv(textContent);
+            if (Array.isArray(parsed)) all.push(...parsed);
+            else all.push(parsed);
+          }
+        }
+        await ingestImportedCases(all);
+      } catch (err) {
+        toast(String(err.message || err));
+      }
+      e.target.value = "";
     });
 
-    document.getElementById("fileInput").addEventListener("change", (e) => {
-      const file = e.target.files && e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        try {
-          const cas = parseCsv(String(reader.result));
-          state.cases.push(cas);
-          state.currentId = cas.id;
-          state.typeFilter = "all";
-          saveCases();
-          renderAll();
-          toast(t("toastImported"));
-        } catch (err) {
-          toast("CSV error: " + (err.message || err));
-        }
-        e.target.value = "";
-      };
-      reader.readAsText(file, "UTF-8");
+    function downloadExcelTemplate() {
+      const headers = [
+        "client_id","display_name","product_name","type","fund_code","isin","fdId",
+        "units","nav","fee_pct","fee_amount","monthly_div_pct","quantity","cost_value",
+        "market_value","pnl_value","pnl_pct","day_change_pct","currency","start_date",
+        "maturity_date","underlying","strike_pct","interest_rate_pct"
+      ];
+      const sample = [
+        ["C-DEMO-01","範本客戶","聯博美元收益 A2/港元","Fund","AMAIA2HX","HK0000784949","ETNSI36463",1000,100.38,1.1,1100,0.35,1000,100000,100380,380,0.38,0.1,"HKD","","","","",""],
+        ["C-DEMO-01","範本客戶","港元定期 3.2% 6M","Deposit","","","","","","","","",500000,500000,508000,8000,1.6,0.01,"HKD","2026-09-15","2027-03-15","","",3.2]
+      ];
+      downloadXlsx("portfolio-review-template.xlsx", headers, sample, "Holdings");
+      toast(t("toastTemplate"));
+    }
+    document.getElementById("btnDownloadTemplate")?.addEventListener("click", downloadExcelTemplate);
+    document.getElementById("btnDownloadTemplateDesk")?.addEventListener("click", downloadExcelTemplate);
+
+    async function backupCases() {
+      const payload = { exported_at: new Date().toISOString(), app: "portfolio-review", cases: state.cases };
+      const json = JSON.stringify(payload, null, 2);
+      if (typeof JSZip !== "undefined") {
+        const zip = new JSZip();
+        zip.file("portfolio-review-cases.json", json);
+        const blob = await zip.generateAsync({ type: "blob" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "portfolio-review-backup.zip";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      } else {
+        const blob = new Blob([json], { type: "application/json" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = "portfolio-review-cases.json";
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+      }
+      toast(t("toastBackup"));
+    }
+    document.getElementById("btnBackup")?.addEventListener("click", backupCases);
+    document.getElementById("btnBackupDesk")?.addEventListener("click", backupCases);
+
+    const moreBtn = document.getElementById("btnMore");
+    const moreMenu = document.getElementById("moreMenu");
+    moreBtn?.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      moreMenu?.classList.toggle("hidden");
+      moreBtn.setAttribute("aria-expanded", moreMenu && !moreMenu.classList.contains("hidden") ? "true" : "false");
     });
+    document.addEventListener("click", () => { moreMenu?.classList.add("hidden"); });
+    moreMenu?.addEventListener("click", (ev) => ev.stopPropagation());
+
 
     document.getElementById("btnClear").addEventListener("click", () => {
       localStorage.removeItem(STORAGE_KEY);
@@ -2713,12 +3171,14 @@
       });
     });
 
-    document.getElementById("btnLogout").addEventListener("click", () => {
+    ["btnLogout", "btnLogoutDesk"].forEach((id) => {
+      document.getElementById(id)?.addEventListener("click", () => {
       sessionStorage.removeItem(AUTH_KEY);
       state.authenticated = false;
       document.getElementById("loginPassword").value = "";
       applyAuthUI();
       applyI18n();
+    });
     });
 
     document.getElementById("btnLoginLang").addEventListener("click", () => {

@@ -212,3 +212,23 @@ Demo overlapping products (see `assets/demo-data.js`):
   - Forward 7.829097; USD gain 31,901.46; maturity USD 3,086,287.85
   - Portfolio / expected yield **4.00%**
 - Opportunity: maturity rollover 2027-01-11; RM-only REV note 2026-10-09 hidden in client mode
+
+
+## Fund holding fields (v24)
+
+| Field | Notes |
+|-------|-------|
+| fund_code / isin / fdId | Resolved via `assets/fund-map.js` when possible |
+| units | Units held |
+| nav | Latest NAV (may enrich from ET Wealth) |
+| fee_pct / fee_amount | Fee; principal_after_fee = cost − fee |
+| monthly_div_pct | Monthly dividend % |
+| principal_after_fee | Principal after fee |
+
+HSBC Ultra Short (PM2HKD / LU2334458945): not on BOCOM/ET Wealth list as of 2026-10 — no fdId.
+
+## Batch import
+
+- Section CSV blocks separated by a line `---` (multi-client)
+- Flat CSV/XLSX grouped by `client_id`
+- Excel template: UI 「下載 Excel 範本」
