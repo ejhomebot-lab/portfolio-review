@@ -1,6 +1,50 @@
 /* Multi-client demo portfolios — overlapping products for cross-client search */
 window.PR_DEMO_CASES = [
   {
+    id: "demo-shen-li",
+    segment: "Private",
+    client_id: "****6778",
+    // Full Notion client no. masked above for public UI; internal ref ends …6778
+    display_name: "沈立",
+    display_name_en: "Shen Li",
+    review_date: "2026-10-15",
+    rm_name: "Mose Lee",
+    currency: "HKD",
+    risk_profile: "Balanced",
+    risk_profile_zh: "均衡型",
+    // Notion TOTAL AMT ~12,281,441.99; current book = HKD swap principal below
+    notes: "保本高息 Swap（6M）：2026-10-15 → 2027-04-15（182 日）。USD 名義 1,640,639.33 @ spot 7.8430 = HKD 本金 12,867,534.27；HKD FD 3.57%；遠期 7.812772（spread -441）；組合預期收益率 4.30%／最優 4.6595%。到期 HKD 13,096,590.48／USD 1,676,305.22。Notion TOTAL AMT 約 12,281,441.99（或稍舊於本筆交易）。",
+    holdings: [
+      {
+        product_name: "保本高息 Swap 6M",
+        type: "swap",
+        quantity: 1640639.33,
+        cost_value: 12867534.27,
+        market_value: 12867534.27,
+        day_change_pct: 0.02,
+        pnl_value: 0,
+        pnl_pct: 0,
+        currency: "HKD",
+        start_date: "2026-10-15",
+        maturity_date: "2027-04-15",
+        tenor_days: 182,
+        expected_yield_pct: 4.3,
+        usd_notional: 1640639.33,
+        spot_fx: 7.8430,
+        forward_fx: 7.812772,
+        hkd_fd_rate_pct: 3.57,
+        hkd_interest: 229056.21,
+        maturity_hkd: 13096590.48,
+        usd_gain: 35665.89,
+        maturity_usd: 1676305.22,
+        currency_note: "USD 1,640,639.33 @ 7.8430 ↔ HKD"
+      }
+    ],
+    opportunities: [
+      { id: "sl-o1", title: "Swap 到期續作（2027-04-15）", category: "Maturity", due_date: "2027-04-15", priority: "High", amount: 12867534.27, talking_point: "6M 保本高息 Swap 將於 2027-04-15 到期（預期組合收益率 4.30%／到期 HKD 約 13.10M）。可預先談 rollover 或轉其他保本高息結構。", hide_in_client_mode: false, done: false }
+    ]
+  },
+  {
     id: "demo-hong-yiu",
     segment: "Private",
     client_id: "****4935",
