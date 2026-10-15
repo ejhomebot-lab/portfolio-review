@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v9";
+  const STORAGE_KEY = "pr_cases_v10";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
@@ -769,6 +769,13 @@
             (c) =>
               c.id === "demo-wei-min" &&
               (c.holdings || []).some((h) => h.type === "Fund" && h.units != null)
+          ) &&
+          parsed.some(
+            (c) =>
+              c.id === "demo-shen-li" &&
+              (c.holdings || []).some(
+                (h) => h.type === "swap" && h.maturity_date === "2027-04-15"
+              )
           ) &&
           parsed.some((c) => c.segment);
         if (ok) {
