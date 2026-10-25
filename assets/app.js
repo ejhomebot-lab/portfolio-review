@@ -2,7 +2,7 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "pr_cases_v10";
+  const STORAGE_KEY = "pr_cases_v11";
   /** Set true to re-enable password gate (mose2026 / SHA-256 below). */
   const AUTH_ENABLED = false;
   const AUTH_KEY = "pr_auth_v1";
@@ -91,7 +91,7 @@
       clientModeOn: "客戶模式 ON",
       clearCases: "清除本機個案",
       caseLabel: "個案",
-      loadDemo: "重載示範",
+      loadDemo: "重設空白",
       coverTitle: "投資組合檢視",
       coverSub: "Portfolio Review · 客戶會議用",
       client: "客戶",
@@ -132,7 +132,7 @@
         "交通銀行香港基金頁及環富通（ET Wealth）所顯示之 NAV、派息、圖表與基金文件均為第三方公開參考資料，並非本行正式報價或要約，可能延遲、不完整或與銀行系統不一致；請以銀行官方渠道及銷售文件為準。",
       clientBanner: "客戶模式：已隱藏內部銷售備註與 RM 專用提示",
       toastImported: "已匯入並儲存個案",
-      toastCleared: "已清除本機個案，已重載示範",
+      toastCleared: "已清除本機個案",
       toastSaved: "備註已儲存",
       due: "到期",
       amount: "金額",
@@ -294,6 +294,7 @@
       toastImportMerge: "新增 {n} 客戶、更新 {h} 持倉",
       alertBoardTitle: "今日跟進",
       alertEmpty: "暫時無緊急項目",
+      emptyClients: "尚未有客戶資料 — 請匯入 CSV／Excel 或使用快速加單",
       alertMatHigh: "即將到期",
       alertMatMed: "90日內到期",
       alertOpp: "銷售機會",
@@ -326,7 +327,7 @@
       clientModeOn: "Client mode ON",
       clearCases: "Clear local cases",
       caseLabel: "Case",
-      loadDemo: "Reload demo",
+      loadDemo: "Reset empty",
       coverTitle: "Portfolio Review",
       coverSub: "For client meeting discussion",
       client: "Client",
@@ -367,7 +368,7 @@
         "Fund NAV, dividends, charts and documents from Bank of Communications (HK) / ET Wealth are third-party public reference only — not official bank quotes or offers. Data may be delayed, incomplete or differ from bank systems; rely on official bank channels and offering documents.",
       clientBanner: "Client mode: internal sales notes and RM-only tips are hidden",
       toastImported: "Case imported and saved",
-      toastCleared: "Local cases cleared; demo reloaded",
+      toastCleared: "Local cases cleared",
       toastSaved: "Notes saved",
       due: "Due",
       amount: "Amount",
@@ -529,6 +530,7 @@
       toastImportMerge: "Added {n} clients, updated {h} holdings",
       alertBoardTitle: "Follow-ups today",
       alertEmpty: "Nothing urgent right now",
+      emptyClients: "No clients yet — import CSV/Excel or use Quick Add",
       alertMatHigh: "Near maturity",
       alertMatMed: "Due in 90d",
       alertOpp: "Opportunity",
@@ -560,7 +562,7 @@
     clientModeOn: "客户模式 ON",
     clearCases: "清除本机个案",
     caseLabel: "个案",
-    loadDemo: "重载示范",
+    loadDemo: "重设空白",
     coverTitle: "投资组合检视",
     coverSub: "Portfolio Review · 客户会议用",
     client: "客户",
@@ -685,6 +687,7 @@
     toastImportMerge: "新增 {n} 客户、更新 {h} 持仓",
     alertBoardTitle: "今日跟进",
     alertEmpty: "暂时无紧急项目",
+    emptyClients: "尚未有客户资料 — 请汇入 CSV／Excel 或使用快速加单",
     alertMatHigh: "即将到期",
     alertMatMed: "90日内到期",
     alertOpp: "销售机会",
@@ -880,36 +883,8 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
-        const ok =
-          Array.isArray(parsed) &&
-          parsed.length >= 2 &&
-          parsed.some(
-            (c) =>
-              c.id === "demo-hong-yiu" &&
-              (c.holdings || []).some(
-                (h) => h.type === "swap" && h.maturity_date === "2027-01-05"
-              )
-          ) &&
-          parsed.some(
-            (c) =>
-              c.id === "demo-chen" &&
-              (c.holdings || []).some((h) => h.fdId === "ETNSI36463")
-          ) &&
-          parsed.some((c) => c.id === "demo-lau") &&
-          parsed.some(
-            (c) =>
-              c.id === "demo-wei-min" &&
-              (c.holdings || []).some((h) => h.type === "Fund" && h.units != null)
-          ) &&
-          parsed.some(
-            (c) =>
-              c.id === "demo-shen-li" &&
-              (c.holdings || []).some(
-                (h) => h.type === "swap" && h.maturity_date === "2027-04-15"
-              )
-          ) &&
-          parsed.some((c) => c.segment);
-        if (ok) {
+        // Empty array is a valid fresh state (no sample clients).
+        if (Array.isArray(parsed)) {
           state.cases = applyFundMap(parsed);
           return;
         }
@@ -924,10 +899,14 @@
   }
 
   function currentCase() {
-    return state.cases.find((c) => c.id === state.currentId) || state.cases[0];
+    return state.cases.find((c) => c.id === state.currentId) || state.cases[0] || null;
   }
 
   function ensureCurrent() {
+    if (!state.cases.length) {
+      state.currentId = null;
+      return;
+    }
     if (!state.currentId || !state.cases.find((c) => c.id === state.currentId)) {
       state.currentId = state.cases[0].id;
     }
@@ -1641,6 +1620,11 @@
     const el = document.getElementById("homeClientList");
     if (!el) return;
     const list = state.cases.slice().sort((a, b) => caseAum(b) - caseAum(a));
+    if (!list.length) {
+      el.innerHTML = `<div class="alert-empty">${t("emptyClients")}</div>`;
+      renderAlertBoard();
+      return;
+    }
     el.innerHTML = list
       .map((c) => {
         const aum = caseAum(c);
@@ -3227,6 +3211,15 @@
       if (dashEl) dashEl.classList.add("hidden");
       renderProductHolders(state.holdersProduct);
     } else {
+      if (!c) {
+        state.viewMode = "home";
+        if (homeEl) homeEl.classList.remove("hidden");
+        if (reviewEl) reviewEl.classList.add("hidden");
+        if (holdersEl) holdersEl.classList.add("hidden");
+        if (dashEl) dashEl.classList.add("hidden");
+        renderHome();
+        return;
+      }
       state.viewMode = "review";
       if (homeEl) homeEl.classList.add("hidden");
       if (holdersEl) holdersEl.classList.add("hidden");
@@ -3745,8 +3738,8 @@
     document.getElementById("btnClear").addEventListener("click", () => {
       localStorage.removeItem(STORAGE_KEY);
       state.cases = getDemoCases();
-      state.currentId = state.cases[0].id;
-      state.viewMode = "review";
+      state.currentId = state.cases[0] ? state.cases[0].id : null;
+      state.viewMode = "home";
       saveCases();
       renderAll();
       toast(t("toastCleared"));
@@ -3754,10 +3747,11 @@
 
     document.getElementById("btnDemo").addEventListener("click", () => {
       state.cases = getDemoCases();
-      state.currentId = state.cases[0].id;
-      state.viewMode = "review";
+      state.currentId = state.cases[0] ? state.cases[0].id : null;
+      state.viewMode = "home";
       saveCases();
       renderAll();
+      toast(t("toastCleared"));
     });
 
     document.getElementById("caseSelect").addEventListener("change", (e) => {
