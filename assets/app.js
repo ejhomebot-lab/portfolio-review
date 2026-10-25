@@ -11,6 +11,12 @@
   const BOCOM_FUND_PORTAL =
     "https://www.hk.bankcomm.com/hk/shtml/hk/tw/2004980/2005004/2008356/2631959.shtml?channelId=2004980";
   const ETWEALTH_BASE = "https://fc11.etwealth.com/wfc-bocom-v3/ws";
+  /** Alert board thresholds (RM desk / home). */
+  const ALERT_MATURITY_HIGH_DAYS = 30;
+  const ALERT_MATURITY_MED_DAYS = 90;
+  const ALERT_DAY_MOVE_PCT = 1;
+  const ALERT_PNL_LOSS_PCT = -5;
+
   const fundEnrichCache = {};
   const fundDocCache = {};
   const TYPE_COLORS = {
@@ -266,6 +272,48 @@
       advSortMaturity: "最近到期",
       colSegment: "層級",
       colWeight: "佔比 %",
+
+      uploadTitle: "拖放或點擊匯入 Excel／CSV",
+      uploadHint: "可一次多檔；相同 client_id 會合併持倉，不會清掉其他產品。",
+      quickAddTitle: "快速新增一筆",
+      quickAddLead: "無需 Excel：為現有客戶加持倉，或開新客。",
+      qaNameZh: "客戶名稱（中）",
+      qaNameEn: "英文名（可選）",
+      qaClientId: "客戶編號（可選）",
+      qaProduct: "產品名稱",
+      qaType: "類型",
+      qaCurrency: "貨幣",
+      qaMv: "市值／本金",
+      qaCost: "成本（可選）",
+      qaStart: "起息日",
+      qaMaturity: "到期日",
+      qaYield: "預期收益 %",
+      qaUsd: "USD 名義（swap）",
+      qaSubmit: "新增並開啟",
+      toastQuickAdded: "已新增持倉並開啟客戶",
+      toastImportMerge: "新增 {n} 客戶、更新 {h} 持倉",
+      alertBoardTitle: "今日跟進",
+      alertEmpty: "暫時無緊急項目",
+      alertMatHigh: "即將到期",
+      alertMatMed: "90日內到期",
+      alertOpp: "銷售機會",
+      alertMover: "價格異動",
+      alertLoss: "浮虧",
+      alertDaysLeft: "剩餘 {d} 日",
+      rmDesk: "業績台",
+      rmDeskTitle: "業績台 · RM Desk",
+      backHome: "返回客戶一覽",
+      dashAum: "全書 AUM",
+      dashClients: "客戶數",
+      dashOpps: "未完成機會",
+      dashMaturing: "90日內到期",
+      dashMovers: "異動持倉",
+      dashTopClients: "AUM 前十客戶",
+      dashOpenOpps: "未完成機會清單",
+      dashNearMat: "90日內到期持倉",
+      dashLosers: "全書浮虧持倉",
+      dashClientModeBlock: "客戶模式下不可用業績台",
+      toastOppDone: "已更新機會狀態",
       total: "合計",
     },
     en: {
@@ -459,6 +507,48 @@
       advSortMaturity: "Nearest maturity",
       colSegment: "Segment",
       colWeight: "Weight %",
+
+      uploadTitle: "Drop or click to import Excel/CSV",
+      uploadHint: "Multi-file OK; same client_id merges holdings without wiping the book.",
+      quickAddTitle: "Quick add one deal",
+      quickAddLead: "No Excel needed: append a holding to an existing client or create a new one.",
+      qaNameZh: "Client name (ZH)",
+      qaNameEn: "English name (optional)",
+      qaClientId: "Client ID (optional)",
+      qaProduct: "Product name",
+      qaType: "Type",
+      qaCurrency: "Currency",
+      qaMv: "Market value / principal",
+      qaCost: "Cost (optional)",
+      qaStart: "Start date",
+      qaMaturity: "Maturity",
+      qaYield: "Expected yield %",
+      qaUsd: "USD notional (swap)",
+      qaSubmit: "Add & open",
+      toastQuickAdded: "Holding added — opening client",
+      toastImportMerge: "Added {n} clients, updated {h} holdings",
+      alertBoardTitle: "Follow-ups today",
+      alertEmpty: "Nothing urgent right now",
+      alertMatHigh: "Near maturity",
+      alertMatMed: "Due in 90d",
+      alertOpp: "Opportunity",
+      alertMover: "Price move",
+      alertLoss: "Unrealized loss",
+      alertDaysLeft: "{d}d left",
+      rmDesk: "RM Desk",
+      rmDeskTitle: "RM Desk",
+      backHome: "Back to clients",
+      dashAum: "Book AUM",
+      dashClients: "Clients",
+      dashOpps: "Open opportunities",
+      dashMaturing: "Maturing ≤90d",
+      dashMovers: "Book movers",
+      dashTopClients: "Top 10 AUM clients",
+      dashOpenOpps: "Open opportunities",
+      dashNearMat: "Holdings maturing ≤90d",
+      dashLosers: "Book-wide losers",
+      dashClientModeBlock: "RM Desk is hidden in client mode",
+      toastOppDone: "Opportunity updated",
       total: "Total",
     },
   };
@@ -574,6 +664,47 @@
     homeDays: "日",
     homeOpenOpps: "未完成机会",
     homeNoMaturity: "无近期到期",
+    uploadTitle: "拖放或点击汇入 Excel／CSV",
+    uploadHint: "可一次多档；相同 client_id 会合并持仓，不会清掉其他产品。",
+    quickAddTitle: "快速新增一笔",
+    quickAddLead: "无需 Excel：为现有客户加持仓，或开新客。",
+    qaNameZh: "客户名称（中）",
+    qaNameEn: "英文名（可选）",
+    qaClientId: "客户编号（可选）",
+    qaProduct: "产品名称",
+    qaType: "类型",
+    qaCurrency: "货币",
+    qaMv: "市值／本金",
+    qaCost: "成本（可选）",
+    qaStart: "起息日",
+    qaMaturity: "到期日",
+    qaYield: "预期收益 %",
+    qaUsd: "USD 名义（swap）",
+    qaSubmit: "新增并开启",
+    toastQuickAdded: "已新增持仓并开启客户",
+    toastImportMerge: "新增 {n} 客户、更新 {h} 持仓",
+    alertBoardTitle: "今日跟进",
+    alertEmpty: "暂时无紧急项目",
+    alertMatHigh: "即将到期",
+    alertMatMed: "90日内到期",
+    alertOpp: "销售机会",
+    alertMover: "价格异动",
+    alertLoss: "浮亏",
+    alertDaysLeft: "剩余 {d} 日",
+    rmDesk: "业绩台",
+    rmDeskTitle: "业绩台 · RM Desk",
+    backHome: "返回客户一览",
+    dashAum: "全书 AUM",
+    dashClients: "客户数",
+    dashOpps: "未完成机会",
+    dashMaturing: "90日内到期",
+    dashMovers: "异动持仓",
+    dashTopClients: "AUM 前十客户",
+    dashOpenOpps: "未完成机会清单",
+    dashNearMat: "90日内到期持仓",
+    dashLosers: "全书浮亏持仓",
+    dashClientModeBlock: "客户模式下不可用业绩台",
+    toastOppDone: "已更新机会状态",
     colNav: "最新 NAV",
     colMonthlyDiv: "月派息 %",
     colUnits: "持有单位",
@@ -673,7 +804,7 @@
     sortDir: "desc",
     chart: null,
     authenticated: false,
-    viewMode: "home", // home | review | holders
+    viewMode: "home", // home | review | holders | dash
     holdersProduct: null,
     advOpen: false,
     advFilters: {
@@ -856,6 +987,14 @@
       cm.textContent = state.clientMode ? t("clientModeOn") : t("clientMode");
       cm.classList.toggle("active-toggle", state.clientMode);
     }
+    const desk = document.getElementById("btnDesk");
+    if (desk) {
+      desk.classList.toggle("hidden", !!state.clientMode);
+      desk.classList.toggle("active-toggle", state.viewMode === "dash" && !state.clientMode);
+    }
+    ["uploadZone", "quickAddCard", "alertBoard"].forEach((id) => {
+      document.getElementById(id)?.classList.toggle("rm-only-hidden", !!state.clientMode);
+    });
     document.documentElement.lang =
       state.lang === "en" ? "en" : state.lang === "zh-Hans" ? "zh-Hans" : "zh-Hant";
     if (state.advOpen) {
@@ -1396,6 +1535,75 @@
     return d.toISOString().slice(0, 10);
   }
 
+
+  function holdingMatchKey(h) {
+    return String(h.product_name || "").trim().toLowerCase() + "|" + String(h.start_date || "").trim();
+  }
+
+  function findCaseByClient(clientId, displayName) {
+    const cid = clientId != null ? String(clientId).trim().toLowerCase() : "";
+    const nm = displayName != null ? String(displayName).trim().toLowerCase() : "";
+    if (cid) {
+      const byId = state.cases.find((c) => String(c.client_id || "").trim().toLowerCase() === cid);
+      if (byId) return byId;
+    }
+    if (nm) {
+      return state.cases.find((c) => {
+        const a = String(c.display_name || "").trim().toLowerCase();
+        const b = String(c.display_name_en || "").trim().toLowerCase();
+        return a === nm || b === nm;
+      });
+    }
+    return null;
+  }
+
+  function mergeImportedCases(list) {
+    let newClients = 0;
+    let newHoldings = 0;
+    let updatedHoldings = 0;
+    list.forEach((incoming) => {
+      if (!incoming) return;
+      const existing = findCaseByClient(incoming.client_id, incoming.display_name);
+      if (!existing) {
+        if (!incoming.id) {
+          incoming.id = "case-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6);
+        }
+        if (!incoming.holdings) incoming.holdings = [];
+        if (!incoming.opportunities) incoming.opportunities = [];
+        state.cases.push(incoming);
+        newClients++;
+        newHoldings += (incoming.holdings || []).length;
+        return;
+      }
+      ["display_name", "display_name_en", "segment", "risk_profile", "risk_profile_zh", "rm_name", "currency", "notes"].forEach((k) => {
+        if (incoming[k]) existing[k] = incoming[k];
+      });
+      if (incoming.review_date) existing.review_date = incoming.review_date;
+      if (!existing.holdings) existing.holdings = [];
+      (incoming.holdings || []).forEach((h) => {
+        normalizeHolding(h);
+        const key = holdingMatchKey(h);
+        const idx = existing.holdings.findIndex((x) => holdingMatchKey(x) === key);
+        if (idx >= 0) {
+          existing.holdings[idx] = Object.assign({}, existing.holdings[idx], h);
+          updatedHoldings++;
+        } else {
+          existing.holdings.push(h);
+          newHoldings++;
+        }
+      });
+      if (!existing.opportunities) existing.opportunities = [];
+      (incoming.opportunities || []).forEach((o) => {
+        const title = String(o.title || o.product || "").toLowerCase();
+        const exists = existing.opportunities.some(
+          (x) => String(x.title || x.product || "").toLowerCase() === title && title
+        );
+        if (!exists) existing.opportunities.push(o);
+      });
+    });
+    return { newClients, newHoldings, updatedHoldings };
+  }
+
   function goHome() {
     state.viewMode = "home";
     state.holdersProduct = null;
@@ -1470,7 +1678,283 @@
     el.querySelectorAll("[data-home-case]").forEach((btn) => {
       btn.addEventListener("click", () => openClientReview(btn.getAttribute("data-home-case")));
     });
+    renderAlertBoard();
   }
+
+  function collectAlertItems() {
+    const items = [];
+    state.cases.forEach((c) => {
+      (c.holdings || []).forEach((h) => {
+        const dLeft = daysUntil(h.maturity_date);
+        if (dLeft != null && dLeft >= 0 && dLeft <= ALERT_MATURITY_HIGH_DAYS) {
+          items.push({
+            kind: "matHigh",
+            severity: 1,
+            caseId: c.id,
+            client: clientDisplayName(c),
+            product: h.product_name || "",
+            metric: t("alertDaysLeft").replace("{d}", String(dLeft)),
+            metricClass: "neg",
+            tag: t("alertMatHigh"),
+            tagClass: "high",
+            sort: dLeft,
+          });
+        } else if (dLeft != null && dLeft > ALERT_MATURITY_HIGH_DAYS && dLeft <= ALERT_MATURITY_MED_DAYS) {
+          items.push({
+            kind: "matMed",
+            severity: 2,
+            caseId: c.id,
+            client: clientDisplayName(c),
+            product: h.product_name || "",
+            metric: t("alertDaysLeft").replace("{d}", String(dLeft)),
+            metricClass: "",
+            tag: t("alertMatMed"),
+            tagClass: "medium",
+            sort: dLeft,
+          });
+        }
+        const day = Number(h.day_change_pct);
+        if (!isNaN(day) && Math.abs(day) >= ALERT_DAY_MOVE_PCT) {
+          items.push({
+            kind: "mover",
+            severity: 3,
+            caseId: c.id,
+            client: clientDisplayName(c),
+            product: h.product_name || "",
+            metric: fmtPct(day),
+            metricClass: day >= 0 ? "pos" : "neg",
+            tag: t("alertMover"),
+            tagClass: "mover",
+            sort: -Math.abs(day),
+          });
+        }
+        const pnl = Number(h.pnl_pct);
+        if (!isNaN(pnl) && pnl <= ALERT_PNL_LOSS_PCT) {
+          items.push({
+            kind: "loss",
+            severity: 2,
+            caseId: c.id,
+            client: clientDisplayName(c),
+            product: h.product_name || "",
+            metric: fmtPct(pnl),
+            metricClass: "neg",
+            tag: t("alertLoss"),
+            tagClass: "loss",
+            sort: pnl,
+          });
+        }
+      });
+      (c.opportunities || []).forEach((o) => {
+        if (o.done) return;
+        if (state.clientMode && o.hide_in_client_mode) return;
+        items.push({
+          kind: "opp",
+          severity: 2,
+          caseId: c.id,
+          client: clientDisplayName(c),
+          product: o.title || o.product || typeLabel(o.type) || "",
+          metric: o.due_date || "",
+          metricClass: "",
+          tag: t("alertOpp"),
+          tagClass: "opp",
+          sort: o.due_date ? Date.parse(o.due_date + "T00:00:00") || 9e15 : 9e15,
+        });
+      });
+    });
+    items.sort((a, b) => a.severity - b.severity || (a.sort > b.sort ? 1 : a.sort < b.sort ? -1 : 0));
+    return items;
+  }
+
+  function renderAlertBoard() {
+    const body = document.getElementById("alertBoardBody");
+    const countEl = document.getElementById("alertBoardCount");
+    const badge = document.getElementById("homeAlertBadge");
+    if (!body) return;
+    const items = collectAlertItems();
+    if (countEl) countEl.textContent = String(items.length);
+    if (badge) {
+      badge.textContent = String(items.length);
+      badge.classList.toggle("hidden", !items.length || state.clientMode);
+    }
+    if (!items.length) {
+      body.innerHTML = `<div class="alert-empty">${t("alertEmpty")}</div>`;
+      return;
+    }
+    body.innerHTML = items
+      .slice(0, 40)
+      .map(
+        (it) => `<button type="button" class="alert-row" data-alert-case="${escapeHtml(it.caseId)}">
+        <span class="alert-tag ${it.tagClass}">${escapeHtml(it.tag)}</span>
+        <span class="alert-main"><strong>${escapeHtml(it.client)}</strong><span>${escapeHtml(it.product)}</span></span>
+        <span class="alert-metric ${it.metricClass}">${escapeHtml(it.metric)}</span>
+      </button>`
+      )
+      .join("");
+    body.querySelectorAll("[data-alert-case]").forEach((btn) => {
+      btn.addEventListener("click", () => openClientReview(btn.getAttribute("data-alert-case")));
+    });
+  }
+
+  function goDash() {
+    if (state.clientMode) {
+      toast(t("dashClientModeBlock"));
+      return;
+    }
+    state.viewMode = "dash";
+    state.holdersProduct = null;
+    state.advOpen = false;
+    document.getElementById("exportMenu")?.classList.add("hidden");
+    document.getElementById("btnExportMenu")?.classList.remove("active-toggle");
+    renderAll();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function bookStats() {
+    let aum = 0;
+    let openOpps = 0;
+    let maturing = 0;
+    let movers = 0;
+    state.cases.forEach((c) => {
+      aum += caseAum(c);
+      openOpps += openOppCount(c);
+      (c.holdings || []).forEach((h) => {
+        const d = daysUntil(h.maturity_date);
+        if (d != null && d >= 0 && d <= ALERT_MATURITY_MED_DAYS) maturing++;
+        const day = Number(h.day_change_pct);
+        const pnl = Number(h.pnl_pct);
+        if ((!isNaN(day) && Math.abs(day) >= ALERT_DAY_MOVE_PCT) || (!isNaN(pnl) && pnl <= ALERT_PNL_LOSS_PCT)) {
+          movers++;
+        }
+      });
+    });
+    return { aum, clients: state.cases.length, openOpps, maturing, movers };
+  }
+
+  function renderDash() {
+    const metricsEl = document.getElementById("dashMetrics");
+    const tablesEl = document.getElementById("dashTables");
+    if (!metricsEl || !tablesEl) return;
+    const s = bookStats();
+    metricsEl.innerHTML = [
+      ["dashAum", fmtMoneyFull(s.aum, "HKD")],
+      ["dashClients", String(s.clients)],
+      ["dashOpps", String(s.openOpps)],
+      ["dashMaturing", String(s.maturing)],
+      ["dashMovers", String(s.movers)],
+    ]
+      .map(([k, v]) => `<div class="dash-metric"><div class="label">${t(k)}</div><div class="value">${v}</div></div>`)
+      .join("");
+
+    const top = state.cases
+      .slice()
+      .sort((a, b) => caseAum(b) - caseAum(a))
+      .slice(0, 10);
+    const topHtml = top.length
+      ? `<div class="table-wrap"><table><thead><tr><th>${t("colClient")}</th><th class="num">AUM</th><th class="num">${t("colPnlPct")}</th><th></th></tr></thead><tbody>${top
+          .map((c) => {
+            const p = casePnl(c);
+            return `<tr>
+            <td>${escapeHtml(clientDisplayName(c))}</td>
+            <td class="num">${fmtMoneyFull(caseAum(c), c.currency || "HKD")}</td>
+            <td class="num ${pnlClass(p.pnlPct)}">${fmtPct(p.pnlPct)}</td>
+            <td><button type="button" class="btn-link" data-dash-case="${escapeHtml(c.id)}">${t("openReview")}</button></td>
+          </tr>`;
+          })
+          .join("")}</tbody></table></div>`
+      : `<div class="dash-empty">${t("alertEmpty")}</div>`;
+
+    const oppRows = [];
+    state.cases.forEach((c) => {
+      (c.opportunities || []).forEach((o, oi) => {
+        if (o.done) return;
+        if (o.hide_in_client_mode && state.clientMode) return;
+        oppRows.push({ c, o, oi });
+      });
+    });
+    oppRows.sort((a, b) => String(a.o.due_date || "9999").localeCompare(String(b.o.due_date || "9999")));
+    const dueLabel = t("due");
+    const oppHtml = oppRows.length
+      ? `<div class="table-wrap"><table><thead><tr><th></th><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${dueLabel}</th></tr></thead><tbody>${oppRows
+          .map(({ c, o, oi }) => {
+            const title = o.title || o.product || typeLabel(o.type) || "—";
+            return `<tr class="dash-opp-row">
+            <td><label><input type="checkbox" data-dash-opp-case="${escapeHtml(c.id)}" data-dash-opp-idx="${oi}" ${o.done ? "checked" : ""}/></label></td>
+            <td><button type="button" class="btn-link" data-dash-case="${escapeHtml(c.id)}">${escapeHtml(clientDisplayName(c))}</button></td>
+            <td>${escapeHtml(title)}${o.hide_in_client_mode ? ` <span class="rm-only-tag">${t("rmOnly")}</span>` : ""}</td>
+            <td>${escapeHtml(o.due_date || "—")}</td>
+          </tr>`;
+          })
+          .join("")}</tbody></table></div>`
+      : `<div class="dash-empty">${t("alertEmpty")}</div>`;
+
+    const mats = collectMaturityRows(ALERT_MATURITY_MED_DAYS, null);
+    // attach case ids
+    const matHtml = mats.length
+      ? `<div class="table-wrap"><table><thead><tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th>${t("colMaturity")}</th><th class="num">${t("colMv")}</th><th></th></tr></thead><tbody>${mats
+          .slice(0, 30)
+          .map((r) => {
+            const cas = state.cases.find(
+              (c) => (c.client_id || "") === (r.client_id || "") || clientDisplayName(c) === r.client
+            );
+            const id = cas ? cas.id : "";
+            return `<tr>
+            <td>${escapeHtml(r.client)}</td>
+            <td>${escapeHtml(r.product)}</td>
+            <td>${escapeHtml(r.maturity)}</td>
+            <td class="num">${fmtMoneyFull(r.market_value)}</td>
+            <td>${id ? `<button type="button" class="btn-link" data-dash-case="${escapeHtml(id)}">${t("openReview")}</button>` : ""}</td>
+          </tr>`;
+          })
+          .join("")}</tbody></table></div>`
+      : `<div class="dash-empty">${t("alertEmpty")}</div>`;
+
+    const losers = [];
+    state.cases.forEach((c) => {
+      (c.holdings || []).forEach((h) => {
+        const pnl = Number(h.pnl_pct);
+        if (!isNaN(pnl) && pnl < 0) losers.push({ c, h, pnl });
+      });
+    });
+    losers.sort((a, b) => a.pnl - b.pnl);
+    const lossHtml = losers.length
+      ? `<div class="table-wrap"><table><thead><tr><th>${t("colClient")}</th><th>${t("colProduct")}</th><th class="num">${t("colPnlPct")}</th><th class="num">${t("colDay")}</th><th></th></tr></thead><tbody>${losers
+          .slice(0, 25)
+          .map(
+            ({ c, h, pnl }) => `<tr>
+            <td>${escapeHtml(clientDisplayName(c))}</td>
+            <td>${escapeHtml(h.product_name || "")}</td>
+            <td class="num ${pnlClass(pnl)}">${fmtPct(pnl)}</td>
+            <td class="num ${pnlClass(h.day_change_pct)}">${fmtPct(h.day_change_pct)}</td>
+            <td><button type="button" class="btn-link" data-dash-case="${escapeHtml(c.id)}">${t("openReview")}</button></td>
+          </tr>`
+          )
+          .join("")}</tbody></table></div>`
+      : `<div class="dash-empty">${t("alertEmpty")}</div>`;
+
+    tablesEl.innerHTML = `
+      <div class="dash-block"><h3>${t("dashTopClients")}</h3>${topHtml}</div>
+      <div class="dash-block"><h3>${t("dashOpenOpps")}</h3>${oppHtml}</div>
+      <div class="dash-block"><h3>${t("dashNearMat")}</h3>${matHtml}</div>
+      <div class="dash-block"><h3>${t("dashLosers")}</h3>${lossHtml}</div>`;
+
+    tablesEl.querySelectorAll("[data-dash-case]").forEach((btn) => {
+      btn.addEventListener("click", () => openClientReview(btn.getAttribute("data-dash-case")));
+    });
+    tablesEl.querySelectorAll("[data-dash-opp-case]").forEach((cb) => {
+      cb.addEventListener("change", () => {
+        const caseId = cb.getAttribute("data-dash-opp-case");
+        const idx = Number(cb.getAttribute("data-dash-opp-idx"));
+        const cas = state.cases.find((x) => x.id === caseId);
+        if (!cas || !cas.opportunities || !cas.opportunities[idx]) return;
+        cas.opportunities[idx].done = !!cb.checked;
+        saveCases();
+        toast(t("toastOppDone"));
+        renderDash();
+        renderAlertBoard();
+      });
+    });
+  }
+
 
   function collectMaturityRows(withinDays, typeFilterFn) {
     const start = reportAsOfDate();
@@ -2720,20 +3204,33 @@
     const homeEl = document.getElementById("sec-home");
     const reviewEl = document.getElementById("reviewSections");
     const holdersEl = document.getElementById("sec-product-holders");
+    const dashEl = document.getElementById("sec-dash");
+    if (state.viewMode === "dash" && state.clientMode) {
+      state.viewMode = "home";
+    }
     if (state.viewMode === "home") {
       if (homeEl) homeEl.classList.remove("hidden");
       if (reviewEl) reviewEl.classList.add("hidden");
       if (holdersEl) holdersEl.classList.add("hidden");
+      if (dashEl) dashEl.classList.add("hidden");
       renderHome();
+    } else if (state.viewMode === "dash") {
+      if (homeEl) homeEl.classList.add("hidden");
+      if (reviewEl) reviewEl.classList.add("hidden");
+      if (holdersEl) holdersEl.classList.add("hidden");
+      if (dashEl) dashEl.classList.remove("hidden");
+      renderDash();
     } else if (state.viewMode === "holders" && state.holdersProduct) {
       if (homeEl) homeEl.classList.add("hidden");
       if (reviewEl) reviewEl.classList.add("hidden");
       if (holdersEl) holdersEl.classList.remove("hidden");
+      if (dashEl) dashEl.classList.add("hidden");
       renderProductHolders(state.holdersProduct);
     } else {
       state.viewMode = "review";
       if (homeEl) homeEl.classList.add("hidden");
       if (holdersEl) holdersEl.classList.add("hidden");
+      if (dashEl) dashEl.classList.add("hidden");
       if (reviewEl) reviewEl.classList.remove("hidden");
       renderCover(c);
       renderSnapshot(c);
@@ -2969,6 +3466,8 @@
       "principal_after_fee",
       "strike_pct",
       "interest_rate_pct",
+      "expected_yield_pct",
+      "usd_notional",
     ].forEach((k) => {
       if (h[k] != null && h[k] !== "") h[k] = Number(h[k]);
     });
@@ -3029,23 +3528,32 @@
     async function ingestImportedCases(cases) {
       const list = Array.isArray(cases) ? cases : [cases];
       applyFundMap(list);
-      list.forEach((cas) => {
-        if (!cas.id) cas.id = "case-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6);
-        state.cases.push(cas);
-      });
-      state.currentId = list[0].id;
+      const stats = mergeImportedCases(list);
+      const first = list[0];
+      const matched = first
+        ? findCaseByClient(first.client_id, first.display_name) ||
+          state.cases.find((c) => c.id === first.id)
+        : null;
+      if (matched) state.currentId = matched.id;
+      else if (first && first.id) state.currentId = first.id;
       state.typeFilter = "all";
+      state.viewMode = "home";
       saveCases();
       renderAll();
-      toast(list.length > 1 ? t("toastImportedBatch") + " (" + list.length + ")" : t("toastImported"));
+      const holdN = stats.newHoldings + stats.updatedHoldings;
+      toast(
+        t("toastImportMerge")
+          .replace("{n}", String(stats.newClients))
+          .replace("{h}", String(holdN))
+      );
     }
 
-    document.getElementById("fileInput").addEventListener("change", async (e) => {
-      const files = e.target.files ? [...e.target.files] : [];
-      if (!files.length) return;
+    async function processImportFiles(files) {
+      const list = files ? [...files] : [];
+      if (!list.length) return;
       try {
         const all = [];
-        for (const file of files) {
+        for (const file of list) {
           const name = (file.name || "").toLowerCase();
           if (name.endsWith(".xlsx") || name.endsWith(".xls")) {
             if (typeof XLSX === "undefined") throw new Error("SheetJS not loaded");
@@ -3067,8 +3575,119 @@
       } catch (err) {
         toast(String(err.message || err));
       }
+    }
+
+    document.getElementById("fileInput").addEventListener("change", async (e) => {
+      await processImportFiles(e.target.files);
       e.target.value = "";
     });
+
+    const uploadZone = document.getElementById("uploadZone");
+    const btnUploadZone = document.getElementById("btnUploadZone");
+    function openFilePicker(ev) {
+      if (ev) ev.preventDefault();
+      document.getElementById("fileInput").click();
+    }
+    btnUploadZone?.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      openFilePicker(ev);
+    });
+    uploadZone?.addEventListener("click", openFilePicker);
+    uploadZone?.addEventListener("keydown", (ev) => {
+      if (ev.key === "Enter" || ev.key === " ") openFilePicker(ev);
+    });
+    ["dragenter", "dragover"].forEach((evt) => {
+      uploadZone?.addEventListener(evt, (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        uploadZone.classList.add("dragover");
+      });
+    });
+    ["dragleave", "drop"].forEach((evt) => {
+      uploadZone?.addEventListener(evt, (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        uploadZone.classList.remove("dragover");
+      });
+    });
+    uploadZone?.addEventListener("drop", async (ev) => {
+      const files = ev.dataTransfer?.files;
+      if (files && files.length) await processImportFiles(files);
+    });
+
+    document.getElementById("quickAddForm")?.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const fd = new FormData(ev.target);
+      const display_name = String(fd.get("display_name") || "").trim();
+      const display_name_en = String(fd.get("display_name_en") || "").trim();
+      const client_id = String(fd.get("client_id") || "").trim();
+      const product_name = String(fd.get("product_name") || "").trim();
+      if (!display_name || !product_name) return;
+      let type = String(fd.get("type") || "Fund");
+      const currency = String(fd.get("currency") || "HKD");
+      const mv = Number(fd.get("market_value"));
+      const costRaw = fd.get("cost_value");
+      const cost = costRaw === "" || costRaw == null ? mv : Number(costRaw);
+      const start_date = String(fd.get("start_date") || "");
+      const maturity_date = String(fd.get("maturity_date") || "");
+      const expected_yield_pct = fd.get("expected_yield_pct") === "" || fd.get("expected_yield_pct") == null
+        ? null
+        : Number(fd.get("expected_yield_pct"));
+      const usd_notional = fd.get("usd_notional") === "" || fd.get("usd_notional") == null
+        ? null
+        : Number(fd.get("usd_notional"));
+      const holding = {
+        product_name,
+        type,
+        currency,
+        market_value: mv,
+        cost_value: cost,
+        quantity: mv,
+        start_date,
+        maturity_date,
+        expected_yield_pct,
+        usd_notional,
+        interest_rate_pct: expected_yield_pct,
+        day_change_pct: 0,
+        pnl_value: (mv || 0) - (cost || 0),
+        pnl_pct: cost ? (((mv || 0) - cost) / cost) * 100 : 0,
+      };
+      normalizeHolding(holding);
+      let cas = findCaseByClient(client_id, display_name);
+      if (!cas) {
+        cas = {
+          id: "case-" + Date.now() + "-" + Math.random().toString(36).slice(2, 6),
+          client_id: client_id || "C-" + Date.now().toString().slice(-6),
+          display_name,
+          display_name_en: display_name_en || display_name,
+          review_date: new Date().toISOString().slice(0, 10),
+          rm_name: "Mose Lee",
+          currency,
+          risk_profile: "Balanced",
+          segment: "",
+          notes: "",
+          holdings: [],
+          opportunities: [],
+        };
+        state.cases.push(cas);
+      } else {
+        if (display_name) cas.display_name = display_name;
+        if (display_name_en) cas.display_name_en = display_name_en;
+        if (client_id) cas.client_id = client_id;
+      }
+      if (!cas.holdings) cas.holdings = [];
+      const key = holdingMatchKey(holding);
+      const idx = cas.holdings.findIndex((x) => holdingMatchKey(x) === key);
+      if (idx >= 0) cas.holdings[idx] = Object.assign({}, cas.holdings[idx], holding);
+      else cas.holdings.push(holding);
+      saveCases();
+      ev.target.reset();
+      toast(t("toastQuickAdded"));
+      openClientReview(cas.id);
+    });
+
+    document.getElementById("btnDesk")?.addEventListener("click", () => goDash());
+    document.getElementById("btnDashHome")?.addEventListener("click", () => goHome());
 
     function downloadExcelTemplate() {
       const headers = [

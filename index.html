@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>投資組合檢視 · Portfolio Review</title>
-  <link rel="stylesheet" href="assets/styles.css?v=26" />
+  <link rel="stylesheet" href="assets/styles.css?v=27" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -54,6 +54,7 @@
         </div>
         <button type="button" class="btn btn-ghost header-primary" id="btnLang" data-i18n="lang">EN</button>
         <button type="button" class="btn btn-ghost header-primary" id="btnClientMode" data-i18n="clientMode">客戶模式</button>
+        <button type="button" class="btn btn-ghost header-primary" id="btnDesk" data-i18n="rmDesk">業績台</button>
         <div class="export-menu-wrap header-primary">
           <button type="button" class="btn btn-ghost" id="btnExportMenu" data-i18n="exportReports" aria-haspopup="true" aria-expanded="false">導出報表</button>
           <div id="exportMenu" class="export-menu hidden" role="menu">
@@ -206,8 +207,66 @@
 
     
     <section class="section home-panel" id="sec-home">
-      <h2 class="section-title" data-i18n="homeTitle">客戶一覽</h2>
+      <div class="home-title-row">
+        <h2 class="section-title" data-i18n="homeTitle">客戶一覽</h2>
+        <span id="homeAlertBadge" class="home-alert-badge hidden">0</span>
+      </div>
       <p class="home-lead" data-i18n="homeLead">選擇客戶開始投資組合檢視，或使用搜尋／進階篩選。</p>
+
+      <div class="upload-zone" id="uploadZone" tabindex="0" role="button" aria-label="Upload">
+        <div class="upload-zone-inner">
+          <strong data-i18n="uploadTitle">拖放或點擊匯入 Excel／CSV</strong>
+          <p data-i18n="uploadHint">可一次多檔；相同 client_id 會合併持倉，不會清掉其他產品。</p>
+          <button type="button" class="btn btn-gold btn-sm" id="btnUploadZone" data-i18n="importCsv">匯入 Excel／CSV</button>
+        </div>
+      </div>
+
+      <div class="quick-add-card" id="quickAddCard">
+        <h3 class="quick-add-title" data-i18n="quickAddTitle">快速新增一筆</h3>
+        <p class="quick-add-lead" data-i18n="quickAddLead">無需 Excel：為現有客戶加持倉，或開新客。</p>
+        <form id="quickAddForm" class="quick-add-form" autocomplete="off">
+          <label><span data-i18n="qaNameZh">客戶名稱（中）</span><input name="display_name" required placeholder="沈立" /></label>
+          <label><span data-i18n="qaNameEn">英文名（可選）</span><input name="display_name_en" placeholder="SHEN LI" /></label>
+          <label><span data-i18n="qaClientId">客戶編號（可選）</span><input name="client_id" placeholder="****6778" /></label>
+          <label><span data-i18n="qaProduct">產品名稱</span><input name="product_name" required placeholder="6M 保本高息" /></label>
+          <label><span data-i18n="qaType">類型</span>
+            <select name="type">
+              <option value="Fund">Fund</option>
+              <option value="Stock">Stock</option>
+              <option value="ELN">ELN</option>
+              <option value="FX">FX</option>
+              <option value="Deposit">Deposit</option>
+              <option value="Insurance">Insurance</option>
+              <option value="swap" selected>swap</option>
+            </select>
+          </label>
+          <label><span data-i18n="qaCurrency">貨幣</span>
+            <select name="currency">
+              <option value="HKD">HKD</option>
+              <option value="USD" selected>USD</option>
+              <option value="CNY">CNY</option>
+            </select>
+          </label>
+          <label><span data-i18n="qaMv">市值／本金</span><input name="market_value" type="number" step="any" required placeholder="12867453" /></label>
+          <label><span data-i18n="qaCost">成本（可選）</span><input name="cost_value" type="number" step="any" placeholder="同市值" /></label>
+          <label><span data-i18n="qaStart">起息日</span><input name="start_date" type="date" /></label>
+          <label><span data-i18n="qaMaturity">到期日</span><input name="maturity_date" type="date" /></label>
+          <label><span data-i18n="qaYield">預期收益 % </span><input name="expected_yield_pct" type="number" step="any" placeholder="4.30" /></label>
+          <label><span data-i18n="qaUsd">USD 名義（swap）</span><input name="usd_notional" type="number" step="any" placeholder="1640639.33" /></label>
+          <div class="quick-add-actions">
+            <button type="submit" class="btn btn-gold" data-i18n="qaSubmit">新增並開啟</button>
+          </div>
+        </form>
+      </div>
+
+      <section class="alert-board" id="alertBoard">
+        <div class="alert-board-head">
+          <h3 data-i18n="alertBoardTitle">今日跟進</h3>
+          <span id="alertBoardCount" class="alert-count-pill">0</span>
+        </div>
+        <div id="alertBoardBody" class="alert-board-body"></div>
+      </section>
+
       <div class="sync-hint" id="syncHint">
         <strong data-i18n="syncHintTitle">資料流：Notion → Excel → CSV／XLSX → 本頁</strong>
         <ol>
@@ -219,6 +278,15 @@
         <p class="sync-hint-note" data-i18n="syncHintNote">基金 NAV／圖表經環富通（ET Wealth）公開介面盡力顯示，屬第三方參考，非銀行正式報價。</p>
       </div>
       <div id="homeClientList" class="home-client-list"></div>
+    </section>
+
+    <section class="section dash-panel hidden" id="sec-dash">
+      <div class="toolbar" style="margin-bottom:12px">
+        <h2 class="section-title" style="margin:0" data-i18n="rmDeskTitle">業績台 · RM Desk</h2>
+        <button type="button" class="btn btn-outline btn-sm" id="btnDashHome" data-i18n="backHome">返回客戶一覽</button>
+      </div>
+      <div id="dashMetrics" class="dash-metrics"></div>
+      <div id="dashTables" class="dash-tables"></div>
     </section>
 
     <div id="clientBanner" class="client-mode-banner hidden" data-i18n="clientBanner">
@@ -368,8 +436,8 @@
     </div>
   </div>
   <div id="toast" class="toast" role="status"></div>
-  <script src="assets/fund-map.js?v=26"></script>
-  <script src="assets/demo-data.js?v=26"></script>
-  <script src="assets/app.js?v=26"></script>
+  <script src="assets/fund-map.js?v=27"></script>
+  <script src="assets/demo-data.js?v=27"></script>
+  <script src="assets/app.js?v=27"></script>
 </body>
 </html>
